@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Raziur Rahman | PhD Researcher</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+<style>
+body {
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  background: radial-gradient(circle at top, #0f172a, #020617);
+  color: #e5e7eb;
+}
+
+/* HERO */
+header {
+  text-align: center;
+  padding: 120px 20px;
+}
+
+header h1 {
+  font-size: 3.2rem;
+  margin: 0;
+}
+
+header p {
+  color: #94a3b8;
+  margin-top: 10px;
+}
+
+.btn {
+  padding: 10px 18px;
+  background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+  color: #000;
+  border-radius: 8px;
+  margin: 5px;
+  display: inline-block;
+  text-decoration: none;
+}
+
+/* NAV */
+nav {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  padding: 15px;
+  background: rgba(2,6,23,0.7);
+  backdrop-filter: blur(10px);
+  position: sticky;
+  top: 0;
+}
+
+/* SECTION */
+section {
+  max-width: 1100px;
+  margin: auto;
+  padding: 80px 20px;
+}
+
+h2 {
+  color: #38bdf8;
+}
+
+/* CARD */
+.card {
+  background: rgba(17,24,39,0.7);
+  padding: 25px;
+  border-radius: 16px;
+  margin-bottom: 20px;
+  border: 1px solid #1f2937;
+  backdrop-filter: blur(12px);
+  transition: 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(56,189,248,0.15);
+}
+
+/* GRID */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+/* TIMELINE */
+.timeline {
+  border-left: 2px solid #38bdf8;
+  padding-left: 20px;
+}
+
+.timeline div {
+  margin-bottom: 20px;
+}
+
+footer {
+  text-align: center;
+  padding: 30px;
+  color: #6b7280;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>Raziur Rahman</h1>
+  <p>PhD Researcher | 6TiSCH | Smart City IoT Systems</p>
+
+  <p style="max-width:600px;margin:auto;">
+    Designing adaptive, scalable, and energy-efficient scheduling frameworks 
+    for next-generation smart city IoT networks.
+  </p>
+
+  <div style="margin-top:20px;">
+    <a href="Curriculum_Vitae__2_.pdf" class="btn">CV</a>
+    <a href="2. Summary of Research Proposal.pdf" class="btn">Proposal</a>
+    <a href="https://github.com/rahmanraziur" class="btn">GitHub</a>
+  </div>
+</header>
+
+<nav>
+  <a href="#about">About</a>
+  <a href="#research">Research</a>
+  <a href="#timeline">Timeline</a>
+  <a href="#publications">Publications</a>
+  <a href="#contact">Contact</a>
+</nav>
+
+<section id="about">
+  <h2>About</h2>
+  <div class="card" data-aos="fade-up">
+    <p>
+      Joint PhD researcher at BITS Pilani Hyderabad and La Trobe University, 
+      working on resource allocation in 6TiSCH-based IoT networks.
+    </p>
+    <p>
+      Supervised by Prof. Nikumani Choudhury and Prof. Wei Xiang. 
+      Part of ASCRIN research network.
+    </p>
+  </div>
+</section>
+
+<section id="research">
+  <h2>Research Contributions</h2>
+
+  <div class="grid">
+
+    <div class="card" data-aos="fade-up">
+      <h3>ASTAR</h3>
+      <p>
+        Dual-slotframe adaptive scheduling framework enabling dynamic scaling 
+        under bursty IoT traffic with minimal overhead.
+      </p>
+    </div>
+
+    <div class="card" data-aos="fade-up">
+      <h3>FlexiFrame</h3>
+      <p>
+        Adaptive slotframe resizing for efficient resource allocation.
+      </p>
+    </div>
+
+    <div class="card" data-aos="fade-up">
+      <h3>TARA</h3>
+      <p>
+        Topology-aware scheduling for load balancing and reliability.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<section id="timeline">
+  <h2>Research Timeline</h2>
+
+  <div class="timeline">
+    <div data-aos="fade-up">
+      <b>2024–Present</b><br>
+      PhD Research — 6TiSCH Resource Allocation
+    </div>
+
+    <div data-aos="fade-up">
+      <b>2025</b><br>
+      FlexiFrame & TARA accepted (IEEE)
+    </div>
+
+    <div data-aos="fade-up">
+      <b>2026</b><br>
+      ASTAR development and journal submission
+    </div>
+  </div>
+</section>
+
+<section id="publications">
+  <h2>Publications</h2>
+  <div class="card" data-aos="fade-up">
+    <ul>
+      <li>FlexiFrame — IEEE GLOBECOM 2025 (Accepted)</li>
+      <li>TARA — IEEE ANTS 2025 (Accepted)</li>
+    </ul>
+  </div>
+</section>
+
+<section id="contact">
+  <h2>Contact</h2>
+  <div class="card" data-aos="fade-up">
+    <p>Email: p20230482@hyderabad.bits-pilani.ac.in</p>
+    <p><a href="https://github.com/rahmanraziur">GitHub</a></p>
+  </div>
+</section>
+
+<footer>
+  © 2026 Raziur Rahman
+</footer>
+
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script>
+AOS.init();
+</script>
+
+</body>
+</html>
