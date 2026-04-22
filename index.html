@@ -117,6 +117,36 @@ h2 {
 
 
 
+/*Reseacrh Interest*/
+
+
+.interest-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.interest-list li {
+  padding: 10px 0;
+  border-bottom: 1px solid #1f2937;
+  position: relative;
+  padding-left: 20px;
+}
+
+.interest-list li::before {
+  content: "▸";
+  position: absolute;
+  left: 0;
+  color: #38bdf8;
+}
+
+.interest-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 30px;
+}
+
+
+
 /* TIMELINE */
 .timeline {
   border-left: 2px solid #38bdf8;
@@ -280,6 +310,29 @@ footer {
       </p>
   </div>
 </section>
+
+
+
+<section id="interests">
+  <h2>Research Interests</h2>
+
+  <div class="card">
+    <ul class="interest-list">
+      <li>6TiSCH-based IoT Networking</li>
+      <li>Smart City Communication Systems</li>
+      <li>Low-Power Wireless Networks (IEEE 802.15.4, TSCH)</li>
+      <li>Resource Allocation & Scheduling</li>
+      <li>Mobility-Aware IoT Networks</li>
+      <li>Latency, Reliability & Energy Optimization</li>
+      <li>Distributed & Hybrid Scheduling Mechanisms</li>
+      <li>Edge Computing for IoT Systems</li>
+    </ul>
+  </div>
+</section>
+
+
+
+
 
 <section id="research">
   <h2>Research Contributions</h2>
@@ -495,10 +548,13 @@ window.onload = () => {
 };
 
 
+</script>
 
 
 
 <script>
+
+
 // SMART CITY 6TiSCH ANIMATION
 
 const canvas = document.getElementById("net");
