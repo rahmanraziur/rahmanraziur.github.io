@@ -29,8 +29,7 @@ body.light .card {
 
 /* HERO */
 header {
-  text-align: center;
-  padding: 120px 20px;
+  padding: 0;
 }
 
 header h1 {
@@ -149,10 +148,12 @@ footer {
   padding: 100px 40px;
   max-width: 1100px;
   margin: auto;
+  gap: 40px;   /* ADD THIS */
 }
 
 .hero-left {
   max-width: 600px;
+  text-align: left;   /* ADD THIS */
 }
 
 .hero h1 {
@@ -188,9 +189,11 @@ footer {
     text-align: center;
   }
 
-  .hero-right {
-    margin-top: 20px;
-  }
+.hero-right {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 }
 
 .hero-links a:hover {
@@ -246,7 +249,7 @@ footer {
           <a href="https://www.linkedin.com/in/raziur247">LinkedIn</a>
           <a href="https://scholar.google.com/citations?user=ae-asNAAAAAJ&hl=en">Google Scholar</a>
         </div>
-
+          </div>
   <div class="hero-right">
     <img src="profile.png" alt="Raziur Rahman">
   </div>
@@ -313,27 +316,27 @@ footer {
   <div class="timeline">
 
     <div data-aos="fade-up">
-      <b>Aug 2024 – Dec 2024</b><br>
+      <b>Aug 2024 - Dec 2024</b><br>
       Coursework at BITS Pilani Hyderabad
     </div>
 
     <div data-aos="fade-up">
       <b>Jan 2025</b><br>
-      PhD Qualifying Examination — Cleared
+      PhD Qualifying Examination - Cleared
     </div>
 
     <div data-aos="fade-up">
       <b>Apr 2025</b><br>
-      PhD Proposal Seminar — BITS Pilani Hyderabad
+      PhD Proposal Seminar - BITS Pilani Hyderabad Campus
     </div>
 
     <div data-aos="fade-up">
-      <b>May 2025 – Dec 2026</b><br>
-      Research at BITS Pilani Hyderabad — 6TiSCH Scheduling & Resource Allocation
+      <b>May 2025 - Dec 2026</b><br>
+      Research at BITS Pilani Hyderabad - 6TiSCH Scheduling & Resource Allocation
     </div>
 
     <div data-aos="fade-up">
-      <b>Jan 2027 – Dec 2027 (Planned)</b><br>
+      <b>Jan 2027 - Dec 2027 (Planned)</b><br>
       Research at La Trobe University, Melbourne
     </div>
 
@@ -396,25 +399,25 @@ footer {
   <div class="grid">
 
     <div class="card">
-      <b>Aug 2024 – Dec 2024</b><br>
-      CS F342 — Computer Architecture
+      <b>Aug 2024 - Dec 2024</b><br>
+      CS F342 - Computer Architecture
     </div>
 
     <div class="card">
-      <b>Jan 2025 – May 2025</b><br>
-      CS F303 — Computer Networks<br>
-      CS F372 — Operating Systems
+      <b>Jan 2025 - May 2025</b><br>
+      CS F303 - Computer Networks<br>
+      CS F372 - Operating Systems
     </div>
 
     <div class="card">
-      <b>Aug 2025 – Dec 2025</b><br>
-      CS F213 — Object Oriented Programming<br>
-      CS F372 — Operating Systems
+      <b>Aug 2025 - Dec 2025</b><br>
+      CS F213 - Object Oriented Programming<br>
+      CS F372 - Operating Systems
     </div>
 
     <div class="card">
-      <b>Jan 2026 – May 2026</b><br>
-      CS F303 — Computer Networks
+      <b>Jan 2026 - May 2026</b><br>
+      CS F303 - Computer Networks
     </div>
 
   </div>
@@ -491,25 +494,42 @@ window.onload = () => {
   animate("projects", 3);
 };
 
-// 6TiSCH SMART CITY ANIMATION
+
+
+
+
+<script>
+// SMART CITY 6TiSCH ANIMATION
+
 const canvas = document.getElementById("net");
 const ctx = canvas.getContext("2d");
 
 const width = canvas.width;
 const height = canvas.height;
 
-// Grid nodes (city layout)
-let nodes = [];
+// Root node (RPL root)
+const root = { x: width / 2, y: 40 };
+
+// Gateway node
+const gateway = { x: width / 2, y: 120 };
+
+// Static nodes (grid)
+let staticNodes = [];
 let spacing = 120;
 
 for (let x = spacing; x < width; x += spacing) {
-  for (let y = spacing; y < height; y += spacing) {
-    nodes.push({ x, y });
+  for (let y = 200; y < height; y += spacing) {
+    staticNodes.push({ x, y });
   }
 }
 
-// Gateway (root)
-const gateway = { x: width / 2, y: 40 };
+// Mobile nodes
+let mobileNodes = Array.from({ length: 5 }, () => ({
+  x: Math.random() * width,
+  y: Math.random() * height,
+  dx: (Math.random() - 0.5) * 1.5,
+  dy: (Math.random() - 0.5) * 1.5
+}));
 
 // Packets
 let packets = [];
@@ -517,8 +537,8 @@ let packets = [];
 function draw() {
   ctx.clearRect(0, 0, width, height);
 
-  // Links
-  nodes.forEach(n => {
+  // --- LINKS (static → gateway → root)
+  staticNodes.forEach(n => {
     ctx.strokeStyle = "rgba(56,189,248,0.2)";
     ctx.beginPath();
     ctx.moveTo(n.x, n.y);
@@ -526,20 +546,57 @@ function draw() {
     ctx.stroke();
   });
 
-  // Gateway
+  ctx.strokeStyle = "rgba(34,197,94,0.3)";
+  ctx.beginPath();
+  ctx.moveTo(gateway.x, gateway.y);
+  ctx.lineTo(root.x, root.y);
+  ctx.stroke();
+
+  // --- ROOT
+  ctx.fillStyle = "#ef4444";
+  ctx.beginPath();
+  ctx.arc(root.x, root.y, 10, 0, Math.PI * 2);
+  ctx.fill();
+
+  // --- GATEWAY
   ctx.fillStyle = "#22c55e";
   ctx.beginPath();
   ctx.arc(gateway.x, gateway.y, 8, 0, Math.PI * 2);
   ctx.fill();
 
-  // Nodes
-  nodes.forEach(n => {
+  // --- STATIC NODES
+  staticNodes.forEach(n => {
     ctx.fillStyle = "#38bdf8";
     ctx.beginPath();
     ctx.arc(n.x, n.y, 4, 0, Math.PI * 2);
     ctx.fill();
 
-    // Generate packets
+    // generate packet
+    if (Math.random() < 0.008) {
+      packets.push({
+        x: n.x,
+        y: n.y,
+        targetX: gateway.x,
+        targetY: gateway.y
+      });
+    }
+  });
+
+  // --- MOBILE NODES
+  mobileNodes.forEach(n => {
+    ctx.fillStyle = "#a855f7";
+    ctx.beginPath();
+    ctx.arc(n.x, n.y, 5, 0, Math.PI * 2);
+    ctx.fill();
+
+    // move
+    n.x += n.dx;
+    n.y += n.dy;
+
+    if (n.x < 0 || n.x > width) n.dx *= -1;
+    if (n.y < 0 || n.y > height) n.dy *= -1;
+
+    // mobile packet
     if (Math.random() < 0.01) {
       packets.push({
         x: n.x,
@@ -550,26 +607,36 @@ function draw() {
     }
   });
 
-  // Animate packets
+  // --- PACKETS (to gateway → root)
   packets.forEach(p => {
-    p.x += (p.targetX - p.x) * 0.05;
-    p.y += (p.targetY - p.y) * 0.05;
+    let dx = (p.targetX - p.x) * 0.05;
+    let dy = (p.targetY - p.y) * 0.05;
+
+    p.x += dx;
+    p.y += dy;
 
     ctx.fillStyle = "#facc15";
     ctx.beginPath();
     ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
     ctx.fill();
+
+    // once reached gateway → go to root
+    if (Math.hypot(p.x - gateway.x, p.y - gateway.y) < 5) {
+      p.targetX = root.x;
+      p.targetY = root.y;
+    }
   });
 
-  // Remove arrived packets
+  // cleanup
   packets = packets.filter(p =>
-    Math.hypot(p.x - gateway.x, p.y - gateway.y) > 5
+    Math.hypot(p.x - root.x, p.y - root.y) > 5
   );
 
   requestAnimationFrame(draw);
 }
 
 draw();
+
 
 
 </script>
