@@ -107,12 +107,16 @@ h2 {
   box-shadow: 0 20px 40px rgba(56,189,248,0.15);
 }
 
-/* GRID */
+
+/*GRID*/
+
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 20px;
 }
+
+
 
 /* TIMELINE */
 .timeline {
@@ -137,19 +141,116 @@ footer {
   padding: 30px;
   color: #6b7280;
 }
+
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 100px 40px;
+  max-width: 1100px;
+  margin: auto;
+}
+
+.hero-left {
+  max-width: 600px;
+}
+
+.hero h1 {
+  font-size: 3rem;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  color: #38bdf8;
+  font-weight: 500;
+}
+
+.affiliation {
+  color: #94a3b8;
+  margin-top: 10px;
+}
+
+.hero-links a {
+  margin-right: 15px;
+  text-decoration: none;
+  color: #38bdf8;
+}
+
+.hero-right img {
+  width: 160px;
+  border-radius: 50%;
+  border: 3px solid #38bdf8;
+}
+
+@media (max-width: 768px) {
+  .hero {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .hero-right {
+    margin-top: 20px;
+  }
+}
+
+.hero-links a:hover {
+  text-decoration: underline;
+}
+
+
+.pub-link {
+  margin-right: 12px;
+  text-decoration: none;
+  color: #38bdf8;
+  font-size: 0.95rem;
+}
+
+.pub-link:hover {
+  text-decoration: underline;
+}
+
+.pub-title {
+  color: #e5e7eb;
+  text-decoration: none;
+}
+
+.pub-title:hover {
+  color: #38bdf8;
+}
+
+
 </style>
 </head>
 
 <body>
 
-<header>
-  <h1>Raziur Rahman</h1>
-  <p>PhD Researcher | 6TiSCH | Smart City IoT Systems</p>
+<header class="hero">
 
-  <p style="max-width:600px;margin:auto;">
-    Designing adaptive, scalable, and energy-efficient scheduling frameworks 
-    for next-generation smart city IoT networks.
-  </p>
+  <div class="hero-left">
+    <h1>Raziur Rahman</h1>
+
+    <p class="subtitle">
+      Joint Doctoral Researcher • 6TiSCH • Smart City IoT Systems
+    </p>
+
+    <p class="affiliation">
+      BITS Pilani Hyderabad & La Trobe University
+    </p>
+
+    <p style="margin-top:15px; max-width:500px;">
+      Designing adaptive scheduling frameworks for scalable and reliable IoT networks
+    </p>
+        <div class="hero-links">
+          <a href="mailto:p20230482@hyderabad.bits-pilani.ac.in">Email</a>
+          <a href="https://github.com/rahmanraziur">GitHub</a>
+          <a href="https://www.linkedin.com/in/raziur247">LinkedIn</a>
+          <a href="https://scholar.google.com/citations?user=ae-asNAAAAAJ&hl=en">Google Scholar</a>
+        </div>
+
+  <div class="hero-right">
+    <img src="profile.png" alt="Raziur Rahman">
+  </div>
+
 </header>
 
 <nav>
@@ -165,14 +266,15 @@ footer {
 <section id="about">
   <h2>About</h2>
   <div class="card" data-aos="fade-up">
-    <p>
-      Joint PhD researcher at BITS Pilani Hyderabad and La Trobe University, 
-      working on resource allocation in 6TiSCH-based IoT networks.
-    </p>
-    <p>
-      Supervised by Prof. Nikumani Choudhury and Prof. Wei Xiang. 
-      Part of ASCRIN research network.
-    </p>
+       <p>
+      I am a Joint PhD researcher at BITS Pilani Hyderabad and La Trobe University, focusing on adaptive scheduling and resource allocation
+       in 6TiSCH-based IoT networks for smart city applications. My work aims to enable scalable, energy-efficient, and reliable communication under dynamic and bursty network conditions.
+      </p>
+
+      <p>
+      I am supervised by Prof. Nikumani Choudhury (BITS Pilani Hyderabad) and Prof. Wei Xiang (La Trobe University), and contribute to 
+      the Asian Smart Cities Research and Innovation Network (ASCRIN) research network.
+      </p>
   </div>
 </section>
 
@@ -182,21 +284,20 @@ footer {
   <div class="grid">
 
     <div class="card" data-aos="fade-up">
-      <h3>ASTAR</h3>
+      <h3>ASCP (IEEE ICC 2026) </h3>
       <p>
-        Dual-slotframe adaptive scheduling framework enabling dynamic scaling 
-        under bursty IoT traffic.
+        An analytical model and control policy for slotframe adaptation, enabling predictable latency and efficient resource utilization in 6TiSCH networks.
       </p>
     </div>
 
     <div class="card" data-aos="fade-up">
-      <h3>FlexiFrame</h3>
-      <p>Adaptive slotframe resizing for efficient resource allocation.</p>
+      <h3>FlexiFrame (IEEE GLOBECOM 2025)</h3>
+      <p>An adaptive slotframe scheduling mechanism that dynamically adjusts slotframe size based on traffic load to improve energy efficiency and latency in 6TiSCH networks.</p>
     </div>
 
     <div class="card" data-aos="fade-up">
-      <h3>TARA</h3>
-      <p>Topology-aware scheduling for load balancing.</p>
+      <h3>TARA (IEEE ANTS 2025) </h3>
+      <p>A topology-aware scheduling approach that allocates resources based on node position and traffic load to enhance reliability and load balancing in multi-hop IoT networks.</p>
     </div>
 
   </div>
@@ -210,22 +311,35 @@ footer {
   <h2>Research Timeline</h2>
 
   <div class="timeline">
+
     <div data-aos="fade-up">
-      <b>2024–Present</b><br>
-      PhD Research — 6TiSCH Resource Allocation
+      <b>Aug 2024 – Dec 2024</b><br>
+      Coursework at BITS Pilani Hyderabad
     </div>
 
     <div data-aos="fade-up">
-      <b>2025</b><br>
-      FlexiFrame & TARA accepted (IEEE)
+      <b>Jan 2025</b><br>
+      PhD Qualifying Examination — Cleared
     </div>
 
     <div data-aos="fade-up">
-      <b>2026</b><br>
-      ASTAR development and journal submission
+      <b>Apr 2025</b><br>
+      PhD Proposal Seminar — BITS Pilani Hyderabad
     </div>
+
+    <div data-aos="fade-up">
+      <b>May 2025 – Dec 2026</b><br>
+      Research at BITS Pilani Hyderabad — 6TiSCH Scheduling & Resource Allocation
+    </div>
+
+    <div data-aos="fade-up">
+      <b>Jan 2027 – Dec 2027 (Planned)</b><br>
+      Research at La Trobe University, Melbourne
+    </div>
+
   </div>
 </section>
+
 
 
 
@@ -237,35 +351,115 @@ footer {
     <div class="card">
       <h3>FlexiFrame</h3>
       <p>Adaptive Slotframe Scheduling for 6TiSCH</p>
-      <span style="color:#94a3b8;">IEEE GLOBECOM 2025</span>
+      <span style="color:#94a3b8;">
+        IEEE GLOBECOM • 2025 • Taipei, Taiwan
+      </span><br><br>
+
+      <a href="#">Paper (Coming Soon)</a>>
+      <a href="#" class="pub-link">Code</a>
     </div>
 
     <div class="card">
       <h3>TARA</h3>
       <p>Topology-Aware Scheduling</p>
-      <span style="color:#94a3b8;">IEEE ANTS 2025</span>
+      <span style="color:#94a3b8;">
+        IEEE ANTS • 2025 • New Delhi, India
+      </span><br><br>
+
+      <a href="https://ieeexplore.ieee.org/abstract/document/11429748" class="pub-link">Paper</a>
     </div>
 
     <div class="card">
-      <h3>ASTAR</h3>
-      <p>Dual-slotframe adaptive scheduling</p>
-      <span style="color:#94a3b8;">Under Preparation</span>
+      <h3>ASCP</h3>
+      <p>Analytical Slotframe Control Policy</p>
+      <span style="color:#94a3b8;">
+        IEEE ICC • 2026 • Glasgow, UK
+      </span><br><br>
+
+      <a href="#">Paper (Coming Soon)</a>
     </div>
 
   </div>
 </section>
 
-<section id="contact">
-  <h2>Contact</h2>
-  <div class="card" data-aos="fade-up">
-    <p>Email: p20230482@hyderabad.bits-pilani.ac.in</p>
 
-    <p>
-      <a href="Curriculum_Vitae__2_.pdf">Download CV</a> |
-      <a href="https://github.com/rahmanraziur">GitHub</a>
-    </p>
+
+
+
+
+<section id="teaching">
+  <h2>Teaching Assistantship</h2>
+
+  <p style="color:#94a3b8; margin-bottom:20px;">
+    Teaching Assistant at BITS Pilani Hyderabad Campus
+  </p>
+
+  <div class="grid">
+
+    <div class="card">
+      <b>Aug 2024 – Dec 2024</b><br>
+      CS F342 — Computer Architecture
+    </div>
+
+    <div class="card">
+      <b>Jan 2025 – May 2025</b><br>
+      CS F303 — Computer Networks<br>
+      CS F372 — Operating Systems
+    </div>
+
+    <div class="card">
+      <b>Aug 2025 – Dec 2025</b><br>
+      CS F213 — Object Oriented Programming<br>
+      CS F372 — Operating Systems
+    </div>
+
+    <div class="card">
+      <b>Jan 2026 – May 2026</b><br>
+      CS F303 — Computer Networks
+    </div>
+
   </div>
 </section>
+
+
+
+
+
+
+
+
+
+
+<section id="contact">
+  <h2>Contact</h2>
+
+  <div class="card" data-aos="fade-up">
+
+    <p><b>Email:</b> p20230482@hyderabad.bits-pilani.ac.in</p>
+
+    <p>
+      <b>Address:</b><br>
+      I014, Research & Innovation Lab-2<br>
+      Department of CSIS<br>
+      BITS Pilani Hyderabad Campus
+    </p>
+
+    <p>
+      <a href="https://github.com/rahmanraziur">GitHub</a> |
+      <a href="https://www.linkedin.com/in/raziur247">LinkedIn</a>
+    </p>
+
+  </div>
+</section>
+
+
+
+
+
+
+
+
+
 
 <footer>
   © 2026 Raziur Rahman
