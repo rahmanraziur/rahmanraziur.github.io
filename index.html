@@ -302,7 +302,7 @@ footer {
 
   </div>
 
-  <h3 style="text-align:center;margin-top:40px;">Live Network Visualization</h3>
+  <h3 style="text-align:center;margin-top:40px;">6TiSCH Smart City Network Visualization</h3>
   <canvas id="net" width="800" height="400"></canvas>
 
 </section>
@@ -355,8 +355,7 @@ footer {
         IEEE GLOBECOM • 2025 • Taipei, Taiwan
       </span><br><br>
 
-      <a href="#">Paper (Coming Soon)</a>>
-      <a href="#" class="pub-link">Code</a>
+      <a href="#">Paper (Coming Soon)</a>
     </div>
 
     <div class="card">
@@ -492,48 +491,87 @@ window.onload = () => {
   animate("projects", 3);
 };
 
-// NETWORK ANIMATION
-const c = document.getElementById("net");
-const ctx = c.getContext("2d");
+// 6TiSCH SMART CITY ANIMATION
+const canvas = document.getElementById("net");
+const ctx = canvas.getContext("2d");
 
-let nodes = Array.from({length: 15}, () => ({
-  x: Math.random()*800,
-  y: Math.random()*400,
-  dx: Math.random()-0.5,
-  dy: Math.random()-0.5
-}));
+const width = canvas.width;
+const height = canvas.height;
+
+// Grid nodes (city layout)
+let nodes = [];
+let spacing = 120;
+
+for (let x = spacing; x < width; x += spacing) {
+  for (let y = spacing; y < height; y += spacing) {
+    nodes.push({ x, y });
+  }
+}
+
+// Gateway (root)
+const gateway = { x: width / 2, y: 40 };
+
+// Packets
+let packets = [];
 
 function draw() {
-  ctx.clearRect(0,0,800,400);
+  ctx.clearRect(0, 0, width, height);
 
-  nodes.forEach(a=>{
-    nodes.forEach(b=>{
-      let d = Math.hypot(a.x-b.x,a.y-b.y);
-      if(d<120){
-        ctx.strokeStyle="rgba(56,189,248,0.2)";
-        ctx.beginPath();
-        ctx.moveTo(a.x,a.y);
-        ctx.lineTo(b.x,b.y);
-        ctx.stroke();
-      }
-    });
-
-    ctx.fillStyle="#38bdf8";
+  // Links
+  nodes.forEach(n => {
+    ctx.strokeStyle = "rgba(56,189,248,0.2)";
     ctx.beginPath();
-    ctx.arc(a.x,a.y,3,0,6.28);
+    ctx.moveTo(n.x, n.y);
+    ctx.lineTo(gateway.x, gateway.y);
+    ctx.stroke();
+  });
+
+  // Gateway
+  ctx.fillStyle = "#22c55e";
+  ctx.beginPath();
+  ctx.arc(gateway.x, gateway.y, 8, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Nodes
+  nodes.forEach(n => {
+    ctx.fillStyle = "#38bdf8";
+    ctx.beginPath();
+    ctx.arc(n.x, n.y, 4, 0, Math.PI * 2);
     ctx.fill();
 
-    a.x+=a.dx;
-    a.y+=a.dy;
-
-    if(a.x<0||a.x>800) a.dx*=-1;
-    if(a.y<0||a.y>400) a.dy*=-1;
+    // Generate packets
+    if (Math.random() < 0.01) {
+      packets.push({
+        x: n.x,
+        y: n.y,
+        targetX: gateway.x,
+        targetY: gateway.y
+      });
+    }
   });
+
+  // Animate packets
+  packets.forEach(p => {
+    p.x += (p.targetX - p.x) * 0.05;
+    p.y += (p.targetY - p.y) * 0.05;
+
+    ctx.fillStyle = "#facc15";
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+    ctx.fill();
+  });
+
+  // Remove arrived packets
+  packets = packets.filter(p =>
+    Math.hypot(p.x - gateway.x, p.y - gateway.y) > 5
+  );
 
   requestAnimationFrame(draw);
 }
 
 draw();
+
+
 </script>
 
 </body>
