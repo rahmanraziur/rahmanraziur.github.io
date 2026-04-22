@@ -318,9 +318,9 @@ footer {
 
   <div class="card">
     <ul class="interest-list">
-      <li>6TiSCH-based IoT Networking</li>
+      <li>6TiSCH-based IoT Networks</li>
       <li>Smart City Communication Systems</li>
-      <li>Low-Power Wireless Networks (IEEE 802.15.4, TSCH)</li>
+      <li>Low-Power Wireless Networks (IEEE 802.15.4 TSCH)</li>
       <li>Resource Allocation & Scheduling</li>
       <li>Mobility-Aware IoT Networks</li>
       <li>Latency, Reliability & Energy Optimization</li>
@@ -375,7 +375,7 @@ footer {
 
     <div data-aos="fade-up">
       <b>Jan 2025</b><br>
-      PhD Qualifying Examination - Cleared
+      PhD Qualifying Examination
     </div>
 
     <div data-aos="fade-up">
@@ -553,9 +553,7 @@ window.onload = () => {
 
 
 <script>
-
-
-// SMART CITY 6TiSCH ANIMATION
+// MULTI-HOP 6TiSCH TREE ANIMATION
 
 const canvas = document.getElementById("net");
 const ctx = canvas.getContext("2d");
@@ -563,29 +561,38 @@ const ctx = canvas.getContext("2d");
 const width = canvas.width;
 const height = canvas.height;
 
-// Root node (RPL root)
-const root = { x: width / 2, y: 40 };
+// Root node
+const root = { x: width / 2, y: 40, level: 0 };
 
-// Gateway node
-const gateway = { x: width / 2, y: 120 };
+// Create layered nodes (tree)
+let nodes = [];
+let levels = 4;
+let nodesPerLevel = 5;
 
-// Static nodes (grid)
-let staticNodes = [];
-let spacing = 120;
-
-for (let x = spacing; x < width; x += spacing) {
-  for (let y = 200; y < height; y += spacing) {
-    staticNodes.push({ x, y });
+for (let l = 1; l <= levels; l++) {
+  for (let i = 0; i < nodesPerLevel; i++) {
+    nodes.push({
+      x: (i + 1) * width / (nodesPerLevel + 1),
+      y: 80 + l * 70,
+      level: l,
+      parent: null
+    });
   }
 }
 
-// Mobile nodes
-let mobileNodes = Array.from({ length: 5 }, () => ({
-  x: Math.random() * width,
-  y: Math.random() * height,
-  dx: (Math.random() - 0.5) * 1.5,
-  dy: (Math.random() - 0.5) * 1.5
-}));
+// Assign parents (nearest node in upper level)
+nodes.forEach(n => {
+  let candidates = nodes.filter(p => p.level === n.level - 1);
+  if (n.level === 1) {
+    n.parent = root;
+  } else {
+    n.parent = candidates.reduce((closest, p) => {
+      let d1 = Math.hypot(n.x - p.x, n.y - p.y);
+      let d2 = Math.hypot(n.x - closest.x, n.y - closest.y);
+      return d1 < d2 ? p : closest;
+    });
+  }
+});
 
 // Packets
 let packets = [];
@@ -593,80 +600,44 @@ let packets = [];
 function draw() {
   ctx.clearRect(0, 0, width, height);
 
-  // --- LINKS (static → gateway → root)
-  staticNodes.forEach(n => {
+  // Draw links (tree edges)
+  nodes.forEach(n => {
     ctx.strokeStyle = "rgba(56,189,248,0.2)";
     ctx.beginPath();
     ctx.moveTo(n.x, n.y);
-    ctx.lineTo(gateway.x, gateway.y);
+    ctx.lineTo(n.parent.x, n.parent.y);
     ctx.stroke();
   });
 
-  ctx.strokeStyle = "rgba(34,197,94,0.3)";
-  ctx.beginPath();
-  ctx.moveTo(gateway.x, gateway.y);
-  ctx.lineTo(root.x, root.y);
-  ctx.stroke();
-
-  // --- ROOT
+  // Draw root
   ctx.fillStyle = "#ef4444";
   ctx.beginPath();
   ctx.arc(root.x, root.y, 10, 0, Math.PI * 2);
   ctx.fill();
 
-  // --- GATEWAY
-  ctx.fillStyle = "#22c55e";
+  // Draw nodes
+  nodes.forEach(n => {
+  ctx.fillStyle = `hsl(${200 - n.level*20}, 80%, 60%)`;
   ctx.beginPath();
-  ctx.arc(gateway.x, gateway.y, 8, 0, Math.PI * 2);
+  ctx.arc(n.x, n.y, 4, 0, Math.PI * 2);
   ctx.fill();
 
-  // --- STATIC NODES
-  staticNodes.forEach(n => {
-    ctx.fillStyle = "#38bdf8";
-    ctx.beginPath();
-    ctx.arc(n.x, n.y, 4, 0, Math.PI * 2);
-    ctx.fill();
-
-    // generate packet
-    if (Math.random() < 0.008) {
+    // Generate packets only from leaf nodes
+    if (n.level === levels && Math.random() < 0.02) {
       packets.push({
         x: n.x,
         y: n.y,
-        targetX: gateway.x,
-        targetY: gateway.y
+        current: n
       });
     }
   });
 
-  // --- MOBILE NODES
-  mobileNodes.forEach(n => {
-    ctx.fillStyle = "#a855f7";
-    ctx.beginPath();
-    ctx.arc(n.x, n.y, 5, 0, Math.PI * 2);
-    ctx.fill();
-
-    // move
-    n.x += n.dx;
-    n.y += n.dy;
-
-    if (n.x < 0 || n.x > width) n.dx *= -1;
-    if (n.y < 0 || n.y > height) n.dy *= -1;
-
-    // mobile packet
-    if (Math.random() < 0.01) {
-      packets.push({
-        x: n.x,
-        y: n.y,
-        targetX: gateway.x,
-        targetY: gateway.y
-      });
-    }
-  });
-
-  // --- PACKETS (to gateway → root)
+  // Move packets hop-by-hop
   packets.forEach(p => {
-    let dx = (p.targetX - p.x) * 0.05;
-    let dy = (p.targetY - p.y) * 0.05;
+    let target = p.current.parent;
+
+    let dx = (target.x - p.x) * 0.05;
+    let dy = (target.y - p.y) * 0.05;
 
     p.x += dx;
     p.y += dy;
@@ -676,25 +647,23 @@ function draw() {
     ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
     ctx.fill();
 
-    // once reached gateway → go to root
-    if (Math.hypot(p.x - gateway.x, p.y - gateway.y) < 5) {
-      p.targetX = root.x;
-      p.targetY = root.y;
+    // Reached parent → go to next hop
+    if (Math.hypot(p.x - target.x, p.y - target.y) < 5) {
+      if (target === root) {
+        p.done = true;
+      } else {
+        p.current = target;
+      }
     }
   });
 
-  // cleanup
-  packets = packets.filter(p =>
-    Math.hypot(p.x - root.x, p.y - root.y) > 5
-  );
+  // Remove delivered packets
+  packets = packets.filter(p => !p.done);
 
   requestAnimationFrame(draw);
 }
 
 draw();
-
-
-
 </script>
 
 </body>
