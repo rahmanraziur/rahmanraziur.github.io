@@ -21,6 +21,18 @@ body {
   color: #e5e7eb;
 }
 
+body::before {
+  content: "";
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  z-index: -1;
+}
+
 /* LIGHT MODE */
 body.light {
   background: #f9fafb;
@@ -337,6 +349,7 @@ footer {
   <a href="#research">Research</a>
   <a href="#timeline">Timeline</a>
   <a href="#publications">Publications</a>
+  <a href="#education">Education</a> 
   <a href="#contact">Contact</a>
 
   <button id="themeToggle">🌙</button>
@@ -346,7 +359,7 @@ footer {
   <h2>About</h2>
   <div class="card" data-aos="fade-up">
        <p>
-      I am a Joint PhD researcher at BITS Pilani Hyderabad and La Trobe University, and a member of the Asian Smart Cities Research and Innovation Network (ASCRIN).
+      I am a Joint PhD researcher at BITS Pilani Hyderabad Campus and La Trobe University, Melbourne under the Asian Smart Cities Research and Innovation Network (ASCRIN) initiative.
       My research focuses on adaptive scheduling and resource allocation in 6TiSCH-based IoT networks for smart city applications,
       aiming to enable scalable, energy-efficient, and reliable communication under dynamic and bursty traffic conditions.
 
@@ -419,7 +432,7 @@ footer {
 
     <div data-aos="fade-up">
       <b>Aug 2024 - Dec 2024</b><br>
-      Coursework at BITS Pilani Hyderabad
+      Coursework at BITS Pilani Hyderabad Campus
     </div>
 
     <div data-aos="fade-up">
@@ -528,7 +541,36 @@ footer {
 
 
 
+<section id="education">
+  <h2>Education</h2>
 
+  <div class="timeline">
+
+    <div data-aos="fade-up">
+      <b>2024 – Present</b><br>
+      <b>Joint PhD</b> — BITS Pilani Hyderabad Campus & La Trobe University, Melbourne<br>
+      <span style="color:#94a3b8;">
+        Thesis: Resource Allocation in 6TiSCH-based Smart City IoT Networks
+      </span>
+    </div>
+
+    <div data-aos="fade-up">
+      <b>2016 – 2018</b><br>
+      <b>M.Tech (ECE)</b> — NEHU
+    </div>
+
+    <div data-aos="fade-up">
+      <b>2011 – 2015</b><br>
+      <b>B.Tech (ECE)</b> — LPU
+    </div>
+
+    <div data-aos="fade-up">
+      <b>2016</b><br>
+      GATE Qualified
+    </div>
+
+  </div>
+</section>
 
 
 
