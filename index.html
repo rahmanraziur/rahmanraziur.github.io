@@ -191,7 +191,8 @@ footer {
   max-width: 1100px;
   margin: 40px auto;
   gap: 30px;                     /* balanced spacing */
-
+  position: relative;   /* 🔥 required */
+  overflow: hidden;
   background: rgba(2,6,23,0.6);
   backdrop-filter: blur(12px);
   border-radius: 18px;
@@ -208,6 +209,7 @@ footer {
 .hero h1 {
   font-size: 3.2rem;
   margin-bottom: 10px;
+  letter-spacing: -0.5px;
 }
 
 .subtitle {
@@ -224,7 +226,8 @@ footer {
 .hero-tagline {
   margin-top: 15px;
   color: #cbd5e1;
-  line-height: 1.6;
+  line-height: 1.7;
+  font-size: 1.02rem;
 }
 
 /* BADGES (NEW) */
@@ -240,7 +243,15 @@ footer {
   border: 1px solid rgba(56,189,248,0.3);
   border-radius: 6px;
   font-size: 0.8rem;
+  transition: all 0.25s ease;
 }
+
+
+.hero-badges span:hover {
+  background: rgba(56,189,248,0.25);
+  transform: translateY(-2px);
+}
+
 
 /* LINKS */
 .hero-links {
@@ -267,7 +278,7 @@ footer {
   padding: 8px;
   border-radius: 50%;
   background: radial-gradient(circle, rgba(56,189,248,0.5), transparent);
-  box-shadow: 0 0 40px rgba(56,189,248,0.25);
+  box-shadow: 0 0 50px rgba(56,189,248,0.25);
 }
 
 
@@ -280,7 +291,18 @@ footer {
   border: 3px solid #38bdf8;
   object-fit: cover;
 }
-
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 20% 30%,
+    rgba(56,189,248,0.08),
+    transparent 60%
+  );
+  pointer-events: none;
+  border-radius: 18px;
+}
 
 
 /* MOBILE */
