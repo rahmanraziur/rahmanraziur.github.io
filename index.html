@@ -180,44 +180,33 @@ footer {
   color: #6b7280;
 }
 
+
+
 /* HERO */
 .hero {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 100px 40px;
+  padding: 80px 50px;            /* slightly tighter */
   max-width: 1100px;
-  margin: 40px auto 0;
-  gap: 15px;   /* reduced from 40px */
+  margin: 40px auto;
+  gap: 30px;                     /* balanced spacing */
 
   background: rgba(2,6,23,0.6);
-  backdrop-filter: blur(10px);
-  border-radius: 16px;
-  border: 1px solid rgba(56,189,248,0.1);
+  backdrop-filter: blur(12px);
+  border-radius: 18px;
+  border: 1px solid rgba(56,189,248,0.15);
 }
 
-/* LEFT (flexible instead of fixed 70%) */
+/* LEFT */
 .hero-left {
-  flex: 1;              /* 🔥 key change */
-  max-width: none;     /* allows expansion but keeps it readable */
-  text-align: left;
-}
-
-.hero-left p {
-  max-width: 650px;     /* slightly wider text */
-}
-
-/* RIGHT (auto instead of fixed 30%) */
-.hero-right {
-  flex: 0 0 auto;       /* 🔥 key change */
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  flex: 1;
+  max-width: 800px;
 }
 
 /* TEXT */
 .hero h1 {
-  font-size: 3rem;
+  font-size: 3.2rem;
   margin-bottom: 10px;
 }
 
@@ -228,12 +217,38 @@ footer {
 
 .affiliation {
   color: #94a3b8;
-  margin-top: 10px;
+  margin-top: 6px;
+}
+
+/* TAGLINE (NEW) */
+.hero-tagline {
+  margin-top: 15px;
+  color: #cbd5e1;
+  line-height: 1.6;
+}
+
+/* BADGES (NEW) */
+.hero-badges {
+  margin-top: 15px;
+}
+
+.hero-badges span {
+  display: inline-block;
+  margin: 6px 8px 0 0;
+  padding: 6px 12px;
+  background: rgba(56,189,248,0.12);
+  border: 1px solid rgba(56,189,248,0.3);
+  border-radius: 6px;
+  font-size: 0.8rem;
 }
 
 /* LINKS */
+.hero-links {
+  margin-top: 18px;
+}
+
 .hero-links a {
-  margin-right: 15px;
+  margin-right: 18px;
   text-decoration: none;
   color: #38bdf8;
 }
@@ -242,15 +257,31 @@ footer {
   text-decoration: underline;
 }
 
+/* RIGHT */
+.hero-right {
+  flex: 0 0 auto;
+}
+
+/* PROFILE WRAPPER (NEW glow effect) */
+.profile-wrapper {
+  padding: 8px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(56,189,248,0.5), transparent);
+  box-shadow: 0 0 40px rgba(56,189,248,0.25);
+}
+
+
+
 /* IMAGE */
-.hero-right img {
-  width: 140px;
-  height: 140px;
-  object-fit: cover;
+.profile-wrapper img {
+  width: 150px;
+  height: 150px;
   border-radius: 50%;
   border: 3px solid #38bdf8;
-  box-shadow: 0 0 25px rgba(56,189,248,0.4);
+  object-fit: cover;
 }
+
+
 
 /* MOBILE */
 @media (max-width: 768px) {
@@ -310,6 +341,7 @@ footer {
 <header class="hero">
 
   <div class="hero-left">
+
     <h1>Raziur Rahman</h1>
 
     <p class="subtitle">
@@ -317,25 +349,33 @@ footer {
     </p>
 
     <p class="affiliation">
-      BITS Pilani Hyderabad Campus & La Trobe University, Melbourne
+      BITS Pilani Hyderabad • La Trobe University, Melbourne
     </p>
 
-    <p style="margin-top:15px;">
-      Adaptive scheduling and resource allocation for scalable 6TiSCH-based smart city IoT networks.
+    <p class="hero-tagline">
+      Designing adaptive scheduling and resource allocation mechanisms for scalable, 
+      energy-efficient 6TiSCH-based smart city IoT networks.
     </p>
 
-    <p style="margin-top:10px; font-size:0.9rem; color:#38bdf8;">
-    IEEE GLOBECOM 2025 • IEEE ANTS 2025 • IEEE ICC 2026
-    </p>
-        <div class="hero-links">
-          <a href="mailto:p20230482@hyderabad.bits-pilani.ac.in">Email</a>
-          <a href="https://github.com/rahmanraziur">GitHub</a>
-          <a href="https://www.linkedin.com/in/raziur247">LinkedIn</a>
-          <a href="https://scholar.google.com/citations?user=ae-asNAAAAAJ&hl=en">Google Scholar</a>
-        </div>
-          </div>
+    <div class="hero-badges">
+      <span>IEEE GLOBECOM 2025</span>
+      <span>IEEE ANTS 2025</span>
+      <span>IEEE ICC 2026</span>
+    </div>
+
+    <div class="hero-links">
+      <a href="mailto:p20230482@hyderabad.bits-pilani.ac.in">Email</a>
+      <a href="https://github.com/rahmanraziur">GitHub</a>
+      <a href="https://www.linkedin.com/in/raziur247">LinkedIn</a>
+      <a href="https://scholar.google.com/citations?user=ae-asNAAAAAJ&hl=en">Scholar</a>
+    </div>
+
+  </div>
+
   <div class="hero-right">
-    <img src="profile.png" alt="Raziur Rahman">
+    <div class="profile-wrapper">
+      <img src="profile.png" alt="Raziur Rahman">
+    </div>
   </div>
 
 </header>
@@ -412,7 +452,7 @@ footer {
   </div>
 
 <h3 style="text-align:center;margin-top:40px;">
-  6TiSCH Smart City Network (Live Multi-hop Visualization)
+  Live Multi-hop Visualization of a 6TiSCH-based IoT Network
 </h3>
 <canvas id="net" width="800" height="400"></canvas>
  
