@@ -187,8 +187,8 @@ footer {
   justify-content: space-between;
   padding: 100px 40px;
   max-width: 1100px;
-  margin: 40px auto 0;   /* cleaner */
-  gap: 40px;
+  margin: 40px auto 0;
+  gap: 20px;   /* reduced from 40px */
 
   background: rgba(2,6,23,0.6);
   backdrop-filter: blur(10px);
@@ -196,22 +196,20 @@ footer {
   border: 1px solid rgba(56,189,248,0.1);
 }
 
-
-/* LEFT (70%) */
+/* LEFT (flexible instead of fixed 70%) */
 .hero-left {
-  flex: 0 0 70%;
-  max-width: 70%;
+  flex: 1;              /* 🔥 key change */
+  max-width: 700px;     /* allows expansion but keeps it readable */
   text-align: left;
 }
 
 .hero-left p {
-  max-width: 550px;
+  max-width: 650px;     /* slightly wider text */
 }
 
-/* RIGHT (30%) */
+/* RIGHT (auto instead of fixed 30%) */
 .hero-right {
-  flex: 0 0 30%;
-  max-width: 30%;
+  flex: 0 0 auto;       /* 🔥 key change */
   display: flex;
   justify-content: center;
   align-items: center;
