@@ -71,6 +71,13 @@ nav {
   position: sticky;
   top: 0;
   z-index: 1000;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+
+nav::-webkit-scrollbar {
+  display: none;
 }
 
 nav a {
@@ -331,6 +338,82 @@ footer {
   }
 }
 
+
+
+/* ===== ADD THIS BELOW YOUR EXISTING MOBILE BLOCK ===== */
+@media (max-width: 768px) {
+
+  /* TEXT SCALING */
+  .hero h1 {
+    font-size: 2rem;
+  }
+
+  .subtitle {
+    font-size: 0.95rem;
+  }
+
+  .hero-tagline {
+    font-size: 0.9rem;
+  }
+
+  /* HERO SPACING */
+  .hero {
+    padding: 40px 20px;
+    margin: 20px 10px;
+  }
+
+  /* PROFILE IMAGE */
+  .profile-wrapper img {
+    width: 110px;
+    height: 110px;
+  }
+
+  /* NAVBAR FIX (THIS IS A BIG ONE) */
+  nav {
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px;
+  }
+
+  nav a {
+    font-size: 0.85rem;
+  }
+
+  #themeToggle {
+    position: static;
+  }
+
+  /* SECTION PADDING */
+  section {
+    padding: 50px 15px;
+  }
+
+  /* CARDS */
+  .card {
+    padding: 18px;
+  }
+
+  /* GRID STACK */
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* CANVAS (CRITICAL FIX) */
+  canvas {
+    width: 100%;
+    height: auto;
+  }
+
+  /* BADGES */
+  .hero-badges span {
+    font-size: 0.7rem;
+    padding: 5px 10px;
+  }
+}
+
+
+
+
 /* PUBLICATIONS */
 .pub-link {
   margin-right: 12px;
@@ -476,7 +559,7 @@ footer {
 <h3 style="text-align:center;margin-top:40px;">
   Live Multi-hop Visualization of a 6TiSCH-based IoT Network
 </h3>
-<canvas id="net" width="800" height="400"></canvas>
+<canvas id="net"></canvas>
  
 </section>
 
@@ -680,12 +763,90 @@ function animate(id, end) {
 
 <script>
 // ===== SMART CITY 6TiSCH (ICON + MULTI-HOP + HETEROGENEOUS) =====
+// ===== SMART CITY 6TiSCH (ICON + MULTI-HOP + HETEROGENEOUS) =====
 
 const canvas = document.getElementById("net");
 const ctx = canvas.getContext("2d");
 
-const width = canvas.width;
-const height = canvas.height;
+// ---------- GLOBAL STATE ----------
+let nodes = [];
+let staticNodes = [];
+let mobileNodes = [];
+let packets = [];
+let time = 0;
+
+const root = { x: 0, y: 40, level: 0 };
+let levels = 3;
+let perLevel = 4;
+
+// ---------- RESIZE ----------
+function resizeCanvas() {
+  canvas.width = canvas.parentElement.clientWidth;
+  canvas.height = 300;
+
+  initNetwork();   // 🔥 regenerate everything
+}
+
+window.addEventListener("resize", resizeCanvas);
+
+// ---------- INIT NETWORK ----------
+function initNetwork() {
+
+  nodes = [];
+  staticNodes = [];
+  mobileNodes = [];
+
+  // ROOT
+  root.x = canvas.width / 2;
+
+  // TREE NODES
+  for (let l = 1; l <= levels; l++) {
+    for (let i = 0; i < perLevel; i++) {
+      nodes.push({
+        x: (i + 1) * canvas.width / (perLevel + 1),
+        y: 100 + l * 80,
+        level: l,
+        parent: null
+      });
+    }
+  }
+
+  // Assign parents
+  nodes.forEach(n => {
+    if (n.level === 1) {
+      n.parent = root;
+    } else {
+      let upper = nodes.filter(p => p.level === n.level - 1);
+      n.parent = upper.reduce((a, b) =>
+        Math.hypot(n.x - a.x, n.y - a.y) <
+        Math.hypot(n.x - b.x, n.y - b.y) ? a : b
+      );
+    }
+  });
+
+  // STATIC NODES
+  let spacing = 120;
+  for (let x = spacing; x < canvas.width; x += spacing) {
+    for (let y = 350; y < canvas.height; y += spacing) {
+      staticNodes.push({
+        x, y,
+        parent: nodes.reduce((a, b) =>
+          Math.hypot(x - a.x, y - a.y) <
+          Math.hypot(x - b.x, y - b.y) ? a : b
+        )
+      });
+    }
+  }
+
+  // MOBILE NODES
+  mobileNodes = Array.from({ length: 5 }, () => ({
+    x: Math.random() * canvas.width,
+    y: 300 + Math.random() * 150,
+    dx: (Math.random() - 0.5) * 1.5,
+    dy: (Math.random() - 0.5) * 1.5,
+    parent: null
+  }));
+}
 
 // ---------- ICON FUNCTIONS ----------
 function drawSquare(x, y, size, color) {
@@ -716,73 +877,12 @@ function drawRoot(x, y) {
   ctx.stroke();
 }
 
-// ---------- ROOT ----------
-const root = { x: width / 2, y: 40, level: 0 };
-
-// ---------- TREE NODES ----------
-let nodes = [];
-let levels = 3;
-let perLevel = 4;
-
-for (let l = 1; l <= levels; l++) {
-  for (let i = 0; i < perLevel; i++) {
-    nodes.push({
-      x: (i + 1) * width / (perLevel + 1),
-      y: 100 + l * 80,
-      level: l,
-      parent: null
-    });
-  }
-}
-
-// Assign parents
-nodes.forEach(n => {
-  if (n.level === 1) {
-    n.parent = root;
-  } else {
-    let upper = nodes.filter(p => p.level === n.level - 1);
-    n.parent = upper.reduce((a, b) =>
-      Math.hypot(n.x - a.x, n.y - a.y) <
-      Math.hypot(n.x - b.x, n.y - b.y) ? a : b
-    );
-  }
-});
-
-// ---------- STATIC NODES ----------
-let staticNodes = [];
-let spacing = 120;
-
-for (let x = spacing; x < width; x += spacing) {
-  for (let y = 350; y < height; y += spacing) {
-    staticNodes.push({
-      x, y,
-      parent: nodes.reduce((a, b) =>
-        Math.hypot(x - a.x, y - a.y) <
-        Math.hypot(x - b.x, y - b.y) ? a : b
-      )
-    });
-  }
-}
-
-// ---------- MOBILE NODES ----------
-let mobileNodes = Array.from({ length: 5 }, () => ({
-  x: Math.random() * width,
-  y: 300 + Math.random() * 150,
-  dx: (Math.random() - 0.5) * 1.5,
-  dy: (Math.random() - 0.5) * 1.5,
-  parent: null
-}));
-
-// ---------- PACKETS ----------
-let packets = [];
-let time = 0;
-
 // ---------- DRAW LOOP ----------
 function draw() {
-  ctx.clearRect(0, 0, width, height);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
   time++;
 
-  // --- TREE LINKS
+  // TREE LINKS
   nodes.forEach(n => {
     ctx.strokeStyle = "rgba(56,189,248,0.2)";
     ctx.beginPath();
@@ -791,7 +891,7 @@ function draw() {
     ctx.stroke();
   });
 
-  // --- STATIC LINKS
+  // STATIC LINKS
   staticNodes.forEach(n => {
     ctx.strokeStyle = "rgba(100,100,255,0.1)";
     ctx.beginPath();
@@ -800,53 +900,44 @@ function draw() {
     ctx.stroke();
   });
 
-  // ---------- ROOT ----------
+  // ROOT
   drawRoot(root.x, root.y);
 
-  // ---------- PARENT NODES ----------
+  // TREE NODES
   nodes.forEach(n => {
     drawSquare(n.x, n.y, 8, "#22c55e");
   });
 
-  // ---------- STATIC NODES ----------
+  // STATIC NODES
   staticNodes.forEach(n => {
     drawSquare(n.x, n.y, 5, "#38bdf8");
 
-    // periodic traffic
-    if (time % 120 === 0) {
-      packets.push({ x: n.x, y: n.y, current: n });
-    }
-
-    // event traffic
-    if (Math.random() < 0.002) {
+    if (time % 120 === 0 || Math.random() < 0.002) {
       packets.push({ x: n.x, y: n.y, current: n });
     }
   });
 
-  // ---------- MOBILE NODES ----------
+  // MOBILE NODES
   mobileNodes.forEach(n => {
     drawTriangle(n.x, n.y, 4, "#a855f7");
 
-    // movement
     n.x += n.dx;
     n.y += n.dy;
 
-    if (n.x < 0 || n.x > width) n.dx *= -1;
-    if (n.y < 250 || n.y > height) n.dy *= -1;
+    if (n.x < 0 || n.x > canvas.width) n.dx *= -1;
+    if (n.y < 250 || n.y > canvas.height) n.dy *= -1;
 
-    // dynamic parent
     n.parent = nodes.reduce((a, b) =>
       Math.hypot(n.x - a.x, n.y - a.y) <
       Math.hypot(n.x - b.x, n.y - b.y) ? a : b
     );
 
-    // burst traffic
     if (Math.random() < 0.01) {
       packets.push({ x: n.x, y: n.y, current: n });
     }
   });
 
-  // ---------- PACKETS ----------
+  // PACKETS
   packets.forEach(p => {
     let target = p.current.parent || root;
 
@@ -872,7 +963,11 @@ function draw() {
   requestAnimationFrame(draw);
 }
 
+// ---------- START ----------
+resizeCanvas();
 draw();
+
+
 </script>
 
 </body>
