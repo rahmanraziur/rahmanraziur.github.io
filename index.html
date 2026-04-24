@@ -1033,72 +1033,41 @@ function draw(timestamp) {
   });
 
 // ===== STATIC + LOAD =====
-// ===== STATIC + LOAD =====
-// ===== STATIC NODES (VISIBLE + CLEAN GLOW + EMOJI) =====
+// ===== STATIC NODES (EMOJI ONLY - NO CIRCLE) =====
 staticNodes.forEach(n=>{
 
-  // ===== LOAD GLOW =====
+  // ===== LOAD GLOW (optional, subtle behind emoji) =====
   if (n.load > 0.01) {
-    ctx.globalAlpha = Math.min(0.5, n.load);
+    ctx.globalAlpha = Math.min(0.4, n.load);
     ctx.beginPath();
     ctx.arc(n.x, n.y, 12, 0, Math.PI*2);
-    ctx.fillStyle = "rgba(255,0,0,0.6)";
+    ctx.fillStyle = "rgba(255,0,0,0.5)";
     ctx.fill();
     ctx.globalAlpha = 1;
   }
 
-  // ===== DEVICE TYPE COLORS =====
-  let c, icon = "";
+  // ===== ICON SELECTION =====
+  let icon = "";
 
-  if (n.type === "traffic") {
-    c = "#f59e0b";
-    icon = "🚦";
-  }
-  else if (n.type === "temperature") {
-    c = "#ef4444";
-    icon = "🌡️";
-  }
-  else if (n.type === "humidity") {
-    c = "#06b6d4";
-    icon = "💧";
-  }
-  else if (n.type === "light") {
-    c = "#fde047";
-    icon = "💡";
-  }
-  else if (n.type === "fire") {
-    c = "#dc2626";
-    icon = "🔥";
-  }
-  else {
-    c = "#38bdf8";
-    icon = "📡";
-  }
+  if (n.type === "traffic") icon = "🚦";
+  else if (n.type === "temperature") icon = "🌡️";
+  else if (n.type === "humidity") icon = "💧";
+  else if (n.type === "light") icon = "💡";
+  else if (n.type === "fire") icon = "🔥";
+  else icon = "📡";
 
-  // ===== GLOW =====
-  ctx.shadowColor = c;
-  ctx.shadowBlur = 10;
-
-  // ===== NODE CORE =====
-  ctx.fillStyle = c;
-  ctx.beginPath();
-  ctx.arc(n.x, n.y, 7, 0, Math.PI*2);
-  ctx.fill();
-
-  // ===== EMOJI (placed inside node) =====
-  ctx.shadowBlur = 0; // prevent glow on text
-  ctx.font = "9px Arial";
+  // ===== DRAW EMOJI NODE =====
+  ctx.font = "14px Arial";   // 🔥 bigger for visibility
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
-  ctx.fillStyle = "#000"; // dark for contrast
-  ctx.fillText(icon, n.x, n.y + 1);
 
-  // ===== BORDER =====
-  ctx.strokeStyle = "#ffffff22";
-  ctx.lineWidth = 1;
-  ctx.beginPath();
-  ctx.arc(n.x, n.y, 7, 0, Math.PI*2);
-  ctx.stroke();
+  // subtle glow (optional)
+  ctx.shadowColor = "#ffffff";
+  ctx.shadowBlur = 6;
+
+  ctx.fillText(icon, n.x, n.y);
+
+  ctx.shadowBlur = 0;
 
 });
 
