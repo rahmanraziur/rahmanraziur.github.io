@@ -413,6 +413,20 @@ footer {
 
 
 
+.btn {
+  padding: 10px 18px;
+  background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+  color: #000;
+  border-radius: 8px;
+  margin: 5px;
+  display: inline-block;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+}
+
+
+
 
 /* PUBLICATIONS */
 .pub-link {
@@ -559,6 +573,15 @@ footer {
 <h3 style="text-align:center;margin-top:40px;">
   Live Multi-hop Visualization of a 6TiSCH-based IoT Network
 </h3>
+
+<div style="text-align:center;font-size:0.8rem;color:#94a3b8; margin-top:10px;">
+  🟥 Gateway • 🟩 Router • 🔵 Sensors • 🚑 Ambulance • 📶 Channels • 🔥 Event Traffic
+</div>
+
+<div style="text-align:center; margin-top:10px;">
+  <button class="btn" onclick="triggerFire()">🔥 Fire Event</button>
+</div>
+
 <canvas id="net"></canvas>
  
 </section>
@@ -762,8 +785,8 @@ function animate(id, end) {
 </script>
 
 <script>
-// ===== SMART CITY 6TiSCH (ICON + MULTI-HOP + HETEROGENEOUS) =====
-// ===== SMART CITY 6TiSCH (ICON + MULTI-HOP + HETEROGENEOUS) =====
+
+// ===== SMART CITY 6TiSCH (FINAL CLEAN VERSION) =====
 
 const canvas = document.getElementById("net");
 const ctx = canvas.getContext("2d");
@@ -773,20 +796,32 @@ let nodes = [];
 let staticNodes = [];
 let mobileNodes = [];
 let packets = [];
-let time = 0;
 
-const root = { x: 0, y: 40, level: 0 };
-let levels = 3;
-let perLevel = 4;
+const root = { x: 0, y: 60 };
+
+// ===== TSCH =====
+const SLOTFRAME = 21;
+const CHANNELS = 5;
+const CSF_SLOTS = [0,1,2];
+
+let ASN = 0;
+let lastSlotTime = 0;
+const SLOT_DURATION = 120;
+
+// DEVICE TYPES
+const TYPES = ["traffic","temperature","humidity","light","fire"];
 
 // ---------- RESIZE ----------
 function resizeCanvas() {
-  canvas.width = canvas.parentElement.clientWidth;
-  canvas.height = 300;
+  const dpr = window.devicePixelRatio || 1;
 
-  initNetwork();   // 🔥 regenerate everything
+  canvas.width = canvas.parentElement.clientWidth * dpr;
+  canvas.height = 320 * dpr;
+
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+  initNetwork();
 }
-
 window.addEventListener("resize", resizeCanvas);
 
 // ---------- INIT NETWORK ----------
@@ -796,178 +831,259 @@ function initNetwork() {
   staticNodes = [];
   mobileNodes = [];
 
-  // ROOT
   root.x = canvas.width / 2;
 
-  // TREE NODES
-  for (let l = 1; l <= levels; l++) {
-    for (let i = 0; i < perLevel; i++) {
-      nodes.push({
-        x: (i + 1) * canvas.width / (perLevel + 1),
-        y: 100 + l * 80,
-        level: l,
-        parent: null
-      });
-    }
-  }
+  const level1 = [
+    { x: canvas.width * 0.25, y: 140, parent: root },
+    { x: canvas.width * 0.5,  y: 140, parent: root },
+    { x: canvas.width * 0.75, y: 140, parent: root }
+  ];
+  nodes.push(...level1);
 
-  // Assign parents
-  nodes.forEach(n => {
-    if (n.level === 1) {
-      n.parent = root;
-    } else {
-      let upper = nodes.filter(p => p.level === n.level - 1);
-      n.parent = upper.reduce((a, b) =>
-        Math.hypot(n.x - a.x, n.y - a.y) <
-        Math.hypot(n.x - b.x, n.y - b.y) ? a : b
-      );
-    }
+  const carNode = { x: canvas.width * 0.3, y: 240, parent: level1[0] };
+  nodes.push(carNode);
+
+  mobileNodes.push({
+    x: canvas.width * 0.15,
+    y: 260,
+    dx: 1.2,
+    type: "ambulance",
+    priority: "high",
+    parent: level1[0]
   });
 
-  // STATIC NODES
-  let spacing = 120;
-  for (let x = spacing; x < canvas.width; x += spacing) {
-    for (let y = 350; y < canvas.height; y += spacing) {
-      staticNodes.push({
-        x, y,
-        parent: nodes.reduce((a, b) =>
-          Math.hypot(x - a.x, y - a.y) <
-          Math.hypot(x - b.x, y - b.y) ? a : b
-        )
-      });
-    }
-  }
+  nodes.push({ x: canvas.width * 0.5, y: 240, parent: level1[1] });
 
-  // MOBILE NODES
-  mobileNodes = Array.from({ length: 5 }, () => ({
-    x: Math.random() * canvas.width,
-    y: 300 + Math.random() * 150,
-    dx: (Math.random() - 0.5) * 1.5,
-    dy: (Math.random() - 0.5) * 1.5,
-    parent: null
-  }));
-}
+  const rightParent = { x: canvas.width * 0.75, y: 240, parent: level1[2] };
+  nodes.push(rightParent);
 
-// ---------- ICON FUNCTIONS ----------
-function drawSquare(x, y, size, color) {
-  ctx.fillStyle = color;
-  ctx.fillRect(x - size/2, y - size/2, size, size);
-}
-
-function drawTriangle(x, y, size, color) {
-  ctx.fillStyle = color;
-  ctx.beginPath();
-  ctx.moveTo(x, y - size);
-  ctx.lineTo(x - size, y + size);
-  ctx.lineTo(x + size, y + size);
-  ctx.closePath();
-  ctx.fill();
-}
-
-function drawRoot(x, y) {
-  ctx.strokeStyle = "#ef4444";
-  ctx.lineWidth = 2;
-
-  ctx.beginPath();
-  ctx.arc(x, y, 10, 0, Math.PI * 2);
-  ctx.stroke();
-
-  ctx.beginPath();
-  ctx.arc(x, y, 5, 0, Math.PI * 2);
-  ctx.stroke();
-}
-
-// ---------- DRAW LOOP ----------
-function draw() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  time++;
-
-  // TREE LINKS
-  nodes.forEach(n => {
-    ctx.strokeStyle = "rgba(56,189,248,0.2)";
-    ctx.beginPath();
-    ctx.moveTo(n.x, n.y);
-    ctx.lineTo(n.parent.x, n.parent.y);
-    ctx.stroke();
+  [0.65, 0.72, 0.78, 0.85].forEach(p => {
+    staticNodes.push({
+      x: canvas.width * p,
+      y: 310,
+      type: TYPES[Math.floor(Math.random()*TYPES.length)],
+      parent: rightParent
+    });
   });
 
-  // STATIC LINKS
+  staticNodes.push({
+    x: canvas.width * 0.3,
+    y: 310,
+    type: "traffic",
+    parent: carNode
+  });
+}
+
+// ---------- SLOT TRAFFIC ----------
+function generateSlotTraffic() {
+
   staticNodes.forEach(n => {
-    ctx.strokeStyle = "rgba(100,100,255,0.1)";
-    ctx.beginPath();
-    ctx.moveTo(n.x, n.y);
-    ctx.lineTo(n.parent.x, n.parent.y);
-    ctx.stroke();
-  });
+    let prob = 0.05;
+    if (n.type === "traffic") prob = 0.15;
+    if (n.type === "fire") prob = Math.random()<0.01 ? 0.9 : 0.01;
 
-  // ROOT
-  drawRoot(root.x, root.y);
-
-  // TREE NODES
-  nodes.forEach(n => {
-    drawSquare(n.x, n.y, 8, "#22c55e");
-  });
-
-  // STATIC NODES
-  staticNodes.forEach(n => {
-    drawSquare(n.x, n.y, 5, "#38bdf8");
-
-    if (time % 120 === 0 || Math.random() < 0.002) {
-      packets.push({ x: n.x, y: n.y, current: n });
+    if (Math.random() < prob) {
+      packets.push({ x:n.x, y:n.y, current:n, type:n.type });
     }
   });
 
-  // MOBILE NODES
   mobileNodes.forEach(n => {
-    drawTriangle(n.x, n.y, 4, "#a855f7");
-
-    n.x += n.dx;
-    n.y += n.dy;
-
-    if (n.x < 0 || n.x > canvas.width) n.dx *= -1;
-    if (n.y < 250 || n.y > canvas.height) n.dy *= -1;
-
-    n.parent = nodes.reduce((a, b) =>
-      Math.hypot(n.x - a.x, n.y - a.y) <
-      Math.hypot(n.x - b.x, n.y - b.y) ? a : b
-    );
-
-    if (Math.random() < 0.01) {
-      packets.push({ x: n.x, y: n.y, current: n });
+    if (Math.random() < 0.4) {
+      packets.push({ x:n.x, y:n.y, current:n, priority:n.priority });
     }
   });
+}
 
-  // PACKETS
-  packets.forEach(p => {
-    let target = p.current.parent || root;
-
-    p.x += (target.x - p.x) * 0.05;
-    p.y += (target.y - p.y) * 0.05;
-
-    ctx.fillStyle = "#facc15";
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, 2.5, 0, Math.PI * 2);
-    ctx.fill();
-
-    if (Math.hypot(p.x - target.x, p.y - target.y) < 5) {
-      if (target === root) {
-        p.done = true;
-      } else {
-        p.current = target;
+// ---------- FIRE EVENT ----------
+function triggerFire() {
+  staticNodes.forEach(n => {
+    if (n.type === "fire") {
+      for (let i = 0; i < 20; i++) {
+        packets.push({
+          x: n.x,
+          y: n.y,
+          current: n,
+          priority: "high"
+        });
       }
     }
   });
+}
 
-  packets = packets.filter(p => !p.done);
+// ---------- DRAW ----------
+function draw(timestamp) {
+
+  if (timestamp - lastSlotTime > SLOT_DURATION) {
+    ASN++;
+    lastSlotTime = timestamp;
+    generateSlotTraffic();
+  }
+
+  // 🔥 subtle trail effect (makes animation smoother)
+  ctx.fillStyle = "rgba(2,6,23,0.15)";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // ===== SLOTFRAME VISUAL =====
+  const currentSlot = ASN % SLOTFRAME;
+
+  ctx.fillStyle = "#94a3b8";
+  ctx.font = "12px Inter";
+
+  const viewWidth = canvas.parentElement.clientWidth;
+  const margin = viewWidth < 500 ? 130 : 100;
+  ctx.fillText(`ASN: ${ASN}`, canvas.width - margin, 20);
+  ctx.fillText(`Slot: ${currentSlot}`, canvas.width - margin, 35);
+
+  const barWidth = SLOTFRAME * 5;
+  const barStart = Math.max(10, canvas.width - barWidth - 20);
+
+  for (let i = 0; i < SLOTFRAME; i++) {
+    ctx.fillStyle = i === currentSlot ? "#22c55e" : "rgba(255,255,255,0.1)";
+    ctx.fillRect(barStart + i*5, 45, 4, 8);
+  }
+
+  // ===== CLOUD (soft + modern) =====
+
+// glow background
+const cloudGradient = ctx.createRadialGradient(root.x, 20, 5, root.x, 20, 25);
+cloudGradient.addColorStop(0, "rgba(148,163,184,0.9)");
+cloudGradient.addColorStop(1, "rgba(148,163,184,0.05)");
+
+ctx.fillStyle = cloudGradient;
+ctx.beginPath();
+ctx.arc(root.x, 20, 20, 0, Math.PI*2);
+ctx.fill();
+
+// core
+ctx.fillStyle = "#cbd5f5";
+ctx.beginPath();
+ctx.arc(root.x, 20, 10, 0, Math.PI*2);
+ctx.fill();
+
+// uplink (gradient line)
+const uplink = ctx.createLinearGradient(root.x, 40, root.x, root.y);
+uplink.addColorStop(0, "rgba(255,255,255,0.4)");
+uplink.addColorStop(1, "rgba(56,189,248,0.2)");
+
+ctx.strokeStyle = uplink;
+ctx.lineWidth = 1.5;
+
+ctx.beginPath();
+ctx.moveTo(root.x, 40);
+ctx.lineTo(root.x, root.y);
+ctx.stroke();
+
+
+// ===== LINKS (clean + slightly animated + TSCH-aware) =====
+function drawLink(a, b, active=false) {
+
+  // ===== CONTROL vs DATA (dashed links) =====
+  if (CSF_SLOTS.includes(ASN % SLOTFRAME)) {
+    ctx.setLineDash([4, 4]);   // control slots → dashed
+  } else {
+    ctx.setLineDash([]);       // data slots → solid
+  }
+
+  // ===== LINK STYLE =====
+  if (active) {
+    const pulse = 0.5 + 0.5 * Math.sin(ASN * 0.3);
+    ctx.strokeStyle = `rgba(34,197,94,${0.6 + pulse*0.4})`;
+    ctx.lineWidth = 2;
+  } else {
+    ctx.strokeStyle = "rgba(56,189,248,0.08)";
+    ctx.lineWidth = 1;
+  }
+
+  ctx.beginPath();
+  ctx.moveTo(a.x, a.y);
+  ctx.lineTo(b.x, b.y);
+  ctx.stroke();
+
+  // ⚠️ VERY IMPORTANT: reset dash so other elements stay normal
+  ctx.setLineDash([]);
+}
+  const activeSlot = ASN % SLOTFRAME;
+
+  nodes.forEach((n,i)=> drawLink(n,n.parent,(i % SLOTFRAME)===activeSlot));
+  staticNodes.forEach(n=> drawLink(n,n.parent));
+  mobileNodes.forEach(n=> drawLink(n,n.parent));
+
+  // ROOT
+  ctx.fillStyle = "#ef4444";
+  ctx.beginPath();
+  ctx.arc(root.x, root.y, 7, 0, Math.PI*2);
+  ctx.fill();
+
+  // TREE NODES
+  nodes.forEach(n=>{
+    ctx.fillStyle="#22c55e";
+    ctx.fillRect(n.x-4,n.y-4,8,8);
+  });
+
+  // STATIC NODES
+  staticNodes.forEach(n=>{
+
+    if(n.type==="traffic") ctx.fillStyle="#f59e0b";
+    else if(n.type==="temperature") ctx.fillStyle="#ef4444";
+    else if(n.type==="humidity") ctx.fillStyle="#06b6d4";
+    else if(n.type==="light") ctx.fillStyle="#fde047";
+    else if(n.type==="fire") ctx.fillStyle="#dc2626";
+
+    ctx.beginPath();
+    ctx.arc(n.x,n.y,5,0,Math.PI*2);
+    ctx.fill();
+  });
+
+  // MOBILE
+  mobileNodes.forEach(n=>{
+    ctx.fillStyle="#fff";
+    ctx.fillRect(n.x-6,n.y-4,12,8);
+
+    ctx.fillStyle="red";
+    ctx.fillRect(n.x-1,n.y-4,2,8);
+    ctx.fillRect(n.x-4,n.y-1,8,2);
+
+    n.x += n.dx;
+    if(n.x<50 || n.x>canvas.width-50) n.dx*=-1;
+  });
+
+  // PACKETS
+  packets.forEach(p=>{
+    let target = p.current.parent || root;
+
+    p.x += (target.x - p.x)*0.08;
+    p.y += (target.y - p.y)*0.08;
+
+    if (CSF_SLOTS.includes(ASN % SLOTFRAME)) {
+      ctx.fillStyle = "#f59e0b";
+    } else if(p.priority==="high"){
+      ctx.fillStyle="#ff0000";
+    } else {
+      const ch = ASN % CHANNELS;
+      ctx.fillStyle=`hsl(${ch*70},90%,60%)`;
+    }
+
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,2.5,0,Math.PI*2);
+    ctx.fill();
+
+    if(Math.hypot(p.x-target.x,p.y-target.y)<5){
+      if(target===root) p.done=true;
+      else p.current=target;
+    }
+  });
+
+  packets = packets.filter(p=>!p.done);
+
+  const MAX = window.innerWidth<768 ? 40 : 120;
+  if(packets.length>MAX) packets.shift();
 
   requestAnimationFrame(draw);
 }
 
 // ---------- START ----------
 resizeCanvas();
-draw();
-
-
+requestAnimationFrame(draw);
 </script>
 
 </body>
