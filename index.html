@@ -571,7 +571,7 @@ footer {
   </div>
 
 <h3 style="text-align:center;margin-top:40px;">
-  Live Multi-hop Visualization of a 6TiSCH-based IoT Network
+  Live Multi-hop Visualization of a 6TiSCH-based Smart City IoT Network
 </h3>
 
 <div style="text-align:center;font-size:0.8rem;color:#94a3b8; margin-top:10px;">
@@ -783,7 +783,9 @@ function animate(id, end) {
 
 <script>
 
-// ===== SMART CITY 6TiSCH (FINAL + EVENT + CONGESTION) =====
+
+
+// ===== SMART CITY 6TiSCH (FINAL ULTRA VERSION) =====
 
 const canvas = document.getElementById("net");
 const ctx = canvas.getContext("2d");
@@ -793,6 +795,7 @@ let nodes = [];
 let staticNodes = [];
 let mobileNodes = [];
 let packets = [];
+let uplinkParticles = [];
 
 const root = { x: 0, y: 60 };
 
@@ -848,7 +851,7 @@ function initNetwork() {
     x: canvas.width * 0.15,
     y: 260,
     dx: 1.2,
-    type: "mobile nodes",
+    type: "ambulance",
     priority: "high",
     parent: level1[0]
   });
@@ -858,7 +861,7 @@ function initNetwork() {
   const rightParent = { x: canvas.width * 0.75, y: 240, parent: level1[2] };
   nodes.push(rightParent);
 
-  // 🔥 ensure one fire node always exists
+  // ensure fire node exists
   [0.65, 0.72, 0.78, 0.85].forEach((p, i) => {
     staticNodes.push({
       x: canvas.width * p,
@@ -886,8 +889,6 @@ function generateSlotTraffic() {
     let prob = 0.05;
 
     if (n.type === "traffic") prob = 0.15;
-
-    // 🔥 fire event burst
     if (n.type === "fire" && fireActive) prob = 0.6;
 
     if (Math.random() < prob) {
@@ -901,7 +902,7 @@ function generateSlotTraffic() {
 
       n.load = Math.min(1, n.load + 0.2);
     } else {
-      n.load *= 0.95; // decay
+      n.load *= 0.95;
     }
   });
 
@@ -911,7 +912,6 @@ function generateSlotTraffic() {
     }
   });
 
-  // 🔥 reduce event over time
   if (fireActive) {
     fireTimer--;
     if (fireTimer <= 0) fireActive = false;
@@ -921,7 +921,7 @@ function generateSlotTraffic() {
 // ---------- FIRE EVENT ----------
 function triggerFire() {
   fireActive = true;
-  fireTimer = 50; // lasts ~50 slots
+  fireTimer = 50;
 }
 
 // ---------- DRAW ----------
@@ -955,16 +955,50 @@ function draw(timestamp) {
     ctx.fillRect(barStart + i*5, 45, 4, 8);
   }
 
-  // CLOUD
-  const grad = ctx.createRadialGradient(root.x,20,5,root.x,20,25);
-  grad.addColorStop(0,"rgba(148,163,184,0.9)");
-  grad.addColorStop(1,"rgba(148,163,184,0.05)");
-  ctx.fillStyle = grad;
+  // ===== CLOUD (ANIMATED) =====
+  const pulse = 0.5 + 0.5 * Math.sin(ASN * 0.2);
+
+  const glow = ctx.createRadialGradient(root.x,20,5,root.x,20,30+pulse*15);
+  glow.addColorStop(0, `rgba(148,163,184,${0.5+pulse*0.4})`);
+  glow.addColorStop(1, "rgba(148,163,184,0)");
+
+  ctx.fillStyle = glow;
   ctx.beginPath();
-  ctx.arc(root.x,20,20,0,Math.PI*2);
+  ctx.arc(root.x,20,40,0,Math.PI*2);
   ctx.fill();
 
-  // LINKS
+  ctx.fillStyle = "#cbd5f5";
+  ctx.beginPath();
+  ctx.arc(root.x - 14, 22, 9, 0, Math.PI*2);
+  ctx.arc(root.x - 2, 18, 11, 0, Math.PI*2);
+  ctx.arc(root.x + 12, 22, 9, 0, Math.PI*2);
+  ctx.fill();
+
+  // ===== UPLINK =====
+  ctx.strokeStyle = "rgba(255,255,255,0.3)";
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(root.x,32);
+  ctx.lineTo(root.x,root.y);
+  ctx.stroke();
+
+  // particles
+  if (Math.random() < 0.3) uplinkParticles.push({ t: 0 });
+
+  uplinkParticles.forEach(p=>{
+    p.t += fireActive ? 0.04 : 0.02;
+
+    const y = 32 + (root.y-32)*p.t;
+
+    ctx.beginPath();
+    ctx.arc(root.x,y,2,0,Math.PI*2);
+    ctx.fillStyle = fireActive ? "rgba(255,80,80,0.9)" : "rgba(255,255,255,0.8)";
+    ctx.fill();
+  });
+
+  uplinkParticles = uplinkParticles.filter(p=>p.t<1);
+
+  // ===== LINKS =====
   function drawLink(a,b,active=false){
     if (CSF_SLOTS.includes(ASN % SLOTFRAME)) ctx.setLineDash([4,4]);
     else ctx.setLineDash([]);
@@ -987,9 +1021,9 @@ function draw(timestamp) {
   mobileNodes.forEach(n=> drawLink(n,n.parent));
 
   // ROOT
-  ctx.fillStyle = "#ef4444";
+  ctx.fillStyle="#ef4444";
   ctx.beginPath();
-  ctx.arc(root.x, root.y, 7, 0, Math.PI*2);
+  ctx.arc(root.x,root.y,7,0,Math.PI*2);
   ctx.fill();
 
   // TREE
@@ -998,26 +1032,24 @@ function draw(timestamp) {
     ctx.fillRect(n.x-4,n.y-4,8,8);
   });
 
-  // STATIC (🔥 LOAD GLOW)
+  // STATIC + LOAD
   staticNodes.forEach(n=>{
-
-    let color="#38bdf8";
-    if(n.type==="traffic") color="#f59e0b";
-    if(n.type==="fire") color="#dc2626";
-
-    // glow
     ctx.beginPath();
     ctx.arc(n.x,n.y,10,0,Math.PI*2);
-    ctx.fillStyle = `rgba(255,0,0,${n.load})`;
+    ctx.fillStyle=`rgba(255,0,0,${n.load})`;
     ctx.fill();
 
-    ctx.fillStyle=color;
+    let c="#38bdf8";
+    if(n.type==="traffic") c="#f59e0b";
+    if(n.type==="fire") c="#dc2626";
+
+    ctx.fillStyle=c;
     ctx.beginPath();
     ctx.arc(n.x,n.y,5,0,Math.PI*2);
     ctx.fill();
   });
 
-  // MOBILE + switching
+  // MOBILE
   mobileNodes.forEach(n=>{
     ctx.fillStyle="#fff";
     ctx.fillRect(n.x-6,n.y-4,12,8);
@@ -1026,11 +1058,11 @@ function draw(timestamp) {
     ctx.fillRect(n.x-4,n.y-1,8,2);
 
     n.x += n.dx;
-    if(n.x<50 || n.x>canvas.width-50) n.dx*=-1;
+    if(n.x<50||n.x>canvas.width-50) n.dx*=-1;
 
     if (!n.parent || Math.random()<0.1){
-      let candidates=[...nodes,root];
-      n.parent=candidates.reduce((a,b)=>
+      let c=[...nodes,root];
+      n.parent=c.reduce((a,b)=>
         Math.hypot(n.x-a.x,n.y-a.y)<Math.hypot(n.x-b.x,n.y-b.y)?a:b
       );
     }
@@ -1044,10 +1076,7 @@ function draw(timestamp) {
     p.y+=(target.y-p.y)*0.08;
 
     if (p.priority==="high") ctx.fillStyle="#ff0000";
-    else {
-      const ch=ASN%CHANNELS;
-      ctx.fillStyle=`hsl(${ch*70},90%,60%)`;
-    }
+    else ctx.fillStyle=`hsl(${ASN%CHANNELS*70},90%,60%)`;
 
     ctx.beginPath();
     ctx.arc(p.x,p.y,2.5,0,Math.PI*2);
@@ -1067,7 +1096,6 @@ function draw(timestamp) {
 // ---------- START ----------
 resizeCanvas();
 requestAnimationFrame(draw);
-
 
 
 
