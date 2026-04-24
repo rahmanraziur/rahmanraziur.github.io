@@ -1032,16 +1032,16 @@ function draw(timestamp) {
     ctx.fillRect(n.x-4,n.y-4,8,8);
   });
 
-  // STATIC + LOAD
-// ===== STATIC NODES (MULTI-TYPE + CLEAN GLOW) =====
+// ===== STATIC + LOAD =====
+// ===== STATIC NODES (VISIBLE + CLEAN GLOW) =====
 staticNodes.forEach(n=>{
 
-  // ===== LOAD GLOW (behind node, not overpowering) =====
+  // ===== LOAD GLOW (background load indicator) =====
   if (n.load > 0.01) {
-    ctx.globalAlpha = Math.min(0.6, n.load);  // controlled glow
+    ctx.globalAlpha = Math.min(0.5, n.load);
     ctx.beginPath();
-    ctx.arc(n.x, n.y, 10, 0, Math.PI*2);
-    ctx.fillStyle = "red";
+    ctx.arc(n.x, n.y, 12, 0, Math.PI*2);
+    ctx.fillStyle = "rgba(255,0,0,0.6)";
     ctx.fill();
     ctx.globalAlpha = 1;
   }
@@ -1049,18 +1049,29 @@ staticNodes.forEach(n=>{
   // ===== DEVICE TYPE COLORS =====
   let c;
 
-  if (n.type === "traffic") c = "#f59e0b";        // 🚦 amber
-  else if (n.type === "temperature") c = "#ef4444"; // 🌡️ red
-  else if (n.type === "humidity") c = "#06b6d4";    // 💧 cyan
-  else if (n.type === "light") c = "#fde047";       // 💡 yellow
-  else if (n.type === "fire") c = "#dc2626";        // 🔥 dark red
-  else c = "#38bdf8"; // fallback (generic sensor)
+  if (n.type === "traffic") c = "#f59e0b";       
+  else if (n.type === "temperature") c = "#ef4444";
+  else if (n.type === "humidity") c = "#06b6d4";
+  else if (n.type === "light") c = "#fde047";
+  else if (n.type === "fire") c = "#dc2626";
+  else c = "#38bdf8";
 
-  // ===== NODE CORE =====
+  // ===== GLOW (key fix) =====
+  ctx.shadowColor = c;
+  ctx.shadowBlur = 10;
+
+  // ===== NODE CORE (bigger + clearer) =====
   ctx.fillStyle = c;
   ctx.beginPath();
-  ctx.arc(n.x, n.y, 5, 0, Math.PI*2);
+  ctx.arc(n.x, n.y, 7, 0, Math.PI*2);  // 🔥 increased size
   ctx.fill();
+
+  ctx.shadowBlur = 0;
+
+  // ===== OPTIONAL BORDER (very clean look) =====
+  ctx.strokeStyle = "#ffffff22";
+  ctx.lineWidth = 1;
+  ctx.stroke();
 
 });
 
