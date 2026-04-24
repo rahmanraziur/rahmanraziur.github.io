@@ -575,7 +575,7 @@ footer {
 </h3>
 
 <div style="text-align:center;font-size:0.8rem;color:#94a3b8;">
-🚦 Traffic • 🌡️ Temp • 💧 Humidity • 💡 Light • 🔥 Fire • 🚑 Emergency • 📶 Channels
+🚦 Traffic • 🌡️ Temp • 💧 Humidity • 💡 Light • 🔥 Fire • 🚑 Emergency
 </div>
 
 
@@ -783,9 +783,7 @@ function animate(id, end) {
 
 <script>
 
-
-
-// ===== SMART CITY 6TiSCH (FINAL ULTRA VERSION) =====
+// ===== SMART CITY 6TiSCH (FINAL ULTRA VERSION - FIXED) =====
 
 const canvas = document.getElementById("net");
 const ctx = canvas.getContext("2d");
@@ -797,7 +795,7 @@ let mobileNodes = [];
 let packets = [];
 let uplinkParticles = [];
 
-const root = { x: 0, y: 60 };
+const root = { x: 0, y: 0 };
 
 // ===== TSCH =====
 const SLOTFRAME = 21;
@@ -815,57 +813,71 @@ let fireTimer = 0;
 // DEVICE TYPES
 const TYPES = ["traffic","temperature","humidity","light","fire"];
 
+
 // ---------- RESIZE ----------
 function resizeCanvas() {
   const dpr = window.devicePixelRatio || 1;
 
-  canvas.width = canvas.parentElement.clientWidth * dpr;
-  canvas.height = 320 * dpr;
+  const displayWidth = canvas.parentElement.clientWidth;
+  const displayHeight = Math.max(450, window.innerHeight * 0.55);
+
+  canvas.width = displayWidth * dpr;
+  canvas.height = displayHeight * dpr;
+
+  canvas.style.height = displayHeight + "px";
 
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-  initNetwork();
+  initNetwork(displayHeight, displayWidth); // ✅ pass logical width
 }
 window.addEventListener("resize", resizeCanvas);
 
+
 // ---------- INIT NETWORK ----------
-function initNetwork() {
+function initNetwork(H, W) {
 
   nodes = [];
   staticNodes = [];
   mobileNodes = [];
 
-  root.x = canvas.width / 2;
+  root.x = W / 2;
+  root.y = H * 0.12;
 
+  const level1Y = H * 0.32;
+  const level2Y = H * 0.58;
+  const leafY   = H * 0.88;
+
+  // ===== LEVEL 1 =====
   const level1 = [
-    { x: canvas.width * 0.25, y: 140, parent: root },
-    { x: canvas.width * 0.5,  y: 140, parent: root },
-    { x: canvas.width * 0.75, y: 140, parent: root }
+    { x: W * 0.25, y: level1Y, parent: root },
+    { x: W * 0.5,  y: level1Y, parent: root },
+    { x: W * 0.75, y: level1Y, parent: root }
   ];
   nodes.push(...level1);
 
-  const carNode = { x: canvas.width * 0.3, y: 240, parent: level1[0] };
+  // ===== LEVEL 2 =====
+  const carNode = { x: W * 0.3, y: level2Y, parent: level1[0] };
   nodes.push(carNode);
 
   mobileNodes.push({
-    x: canvas.width * 0.15,
-    y: 260,
+    x: W * 0.15,
+    y: level2Y + 20,
     dx: 1.2,
     type: "ambulance",
     priority: "high",
     parent: level1[0]
   });
 
-  nodes.push({ x: canvas.width * 0.5, y: 240, parent: level1[1] });
+  nodes.push({ x: W * 0.5, y: level2Y, parent: level1[1] });
 
-  const rightParent = { x: canvas.width * 0.75, y: 240, parent: level1[2] };
+  const rightParent = { x: W * 0.75, y: level2Y, parent: level1[2] };
   nodes.push(rightParent);
 
-  // ensure fire node exists
+  // ===== LEAF =====
   [0.65, 0.72, 0.78, 0.85].forEach((p, i) => {
     staticNodes.push({
-      x: canvas.width * p,
-      y: 310,
+      x: W * p,
+      y: leafY,
       type: i === 0 ? "fire" : TYPES[Math.floor(Math.random()*TYPES.length)],
       parent: rightParent,
       load: 0
@@ -873,13 +885,14 @@ function initNetwork() {
   });
 
   staticNodes.push({
-    x: canvas.width * 0.3,
-    y: 310,
+    x: W * 0.3,
+    y: leafY,
     type: "traffic",
     parent: carNode,
     load: 0
   });
 }
+
 
 // ---------- SLOT TRAFFIC ----------
 function generateSlotTraffic() {
@@ -918,11 +931,6 @@ function generateSlotTraffic() {
   }
 }
 
-// ---------- FIRE EVENT ----------
-function triggerFire() {
-  fireActive = true;
-  fireTimer = 50;
-}
 
 // ---------- DRAW ----------
 function draw(timestamp) {
@@ -941,12 +949,12 @@ function draw(timestamp) {
   ctx.fillStyle = "#94a3b8";
   ctx.font = "12px Inter";
 
-  const viewWidth = canvas.parentElement.clientWidth;
-  const margin = viewWidth < 500 ? 130 : 100;
+  const margin = canvas.width > 500 ? 100 : 130;
 
   ctx.fillText(`ASN: ${ASN}`, canvas.width - margin, 20);
   ctx.fillText(`Slot: ${currentSlot}`, canvas.width - margin, 35);
 
+  // ===== SLOT BAR =====
   const barWidth = SLOTFRAME * 5;
   const barStart = Math.max(10, canvas.width - barWidth - 20);
 
@@ -955,31 +963,31 @@ function draw(timestamp) {
     ctx.fillRect(barStart + i*5, 45, 4, 8);
   }
 
-  // ===== CLOUD (ANIMATED) =====
+  // ===== CLOUD (FIXED ALIGNMENT) =====
   const pulse = 0.5 + 0.5 * Math.sin(ASN * 0.2);
 
-  const glow = ctx.createRadialGradient(root.x,20,5,root.x,20,30+pulse*15);
+  const glow = ctx.createRadialGradient(root.x, root.y, 5, root.x, root.y, 30+pulse*15);
   glow.addColorStop(0, `rgba(148,163,184,${0.5+pulse*0.4})`);
   glow.addColorStop(1, "rgba(148,163,184,0)");
 
   ctx.fillStyle = glow;
   ctx.beginPath();
-  ctx.arc(root.x,20,40,0,Math.PI*2);
+  ctx.arc(root.x, root.y, 40, 0, Math.PI*2);
   ctx.fill();
 
   ctx.fillStyle = "#cbd5f5";
   ctx.beginPath();
-  ctx.arc(root.x - 14, 22, 9, 0, Math.PI*2);
-  ctx.arc(root.x - 2, 18, 11, 0, Math.PI*2);
-  ctx.arc(root.x + 12, 22, 9, 0, Math.PI*2);
+  ctx.arc(root.x - 14, root.y + 2, 9, 0, Math.PI*2);
+  ctx.arc(root.x - 2, root.y - 2, 11, 0, Math.PI*2);
+  ctx.arc(root.x + 12, root.y + 2, 9, 0, Math.PI*2);
   ctx.fill();
 
-  // ===== UPLINK =====
+  // ===== UPLINK (FIXED) =====
   ctx.strokeStyle = "rgba(255,255,255,0.3)";
   ctx.lineWidth = 1.5;
   ctx.beginPath();
-  ctx.moveTo(root.x,32);
-  ctx.lineTo(root.x,root.y);
+  ctx.moveTo(root.x, root.y - 30);
+  ctx.lineTo(root.x, root.y);
   ctx.stroke();
 
   // particles
@@ -988,7 +996,7 @@ function draw(timestamp) {
   uplinkParticles.forEach(p=>{
     p.t += fireActive ? 0.04 : 0.02;
 
-    const y = 32 + (root.y-32)*p.t;
+    const y = (root.y - 30) + 30*p.t;
 
     ctx.beginPath();
     ctx.arc(root.x,y,2,0,Math.PI*2);
@@ -1032,84 +1040,72 @@ function draw(timestamp) {
     ctx.fillRect(n.x-4,n.y-4,8,8);
   });
 
-// ===== STATIC + LOAD =====
-// ===== STATIC NODES (EMOJI ONLY - NO CIRCLE) =====
-staticNodes.forEach(n=>{
+  // ===== STATIC NODES =====
+  staticNodes.forEach(n=>{
 
-  // ===== LOAD GLOW (optional, subtle behind emoji) =====
-  if (n.load > 0.01) {
-    ctx.globalAlpha = Math.min(0.4, n.load);
-    ctx.beginPath();
-    ctx.arc(n.x, n.y, 12, 0, Math.PI*2);
-    ctx.fillStyle = "rgba(255,0,0,0.5)";
-    ctx.fill();
-    ctx.globalAlpha = 1;
-  }
+    if (n.load > 0.01) {
+      ctx.globalAlpha = Math.min(0.4, n.load);
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, 12, 0, Math.PI*2);
+      ctx.fillStyle = "rgba(255,0,0,0.5)";
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    }
 
-  // ===== ICON SELECTION =====
-  let icon = "";
+    let icon = "";
+    if (n.type === "traffic") icon = "🚦";
+    else if (n.type === "temperature") icon = "🌡️";
+    else if (n.type === "humidity") icon = "💧";
+    else if (n.type === "light") icon = "💡";
+    else if (n.type === "fire") icon = "🔥";
+    else icon = "📡";
 
-  if (n.type === "traffic") icon = "🚦";
-  else if (n.type === "temperature") icon = "🌡️";
-  else if (n.type === "humidity") icon = "💧";
-  else if (n.type === "light") icon = "💡";
-  else if (n.type === "fire") icon = "🔥";
-  else icon = "📡";
+    ctx.font = "16px Arial";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
 
-  // ===== DRAW EMOJI NODE =====
-  ctx.font = "14px Arial";   // 🔥 bigger for visibility
-  ctx.textAlign = "center";
-  ctx.textBaseline = "middle";
+    ctx.shadowColor = "#ffffff";
+    ctx.shadowBlur = 6;
 
-  // subtle glow (optional)
-  ctx.shadowColor = "#ffffff";
-  ctx.shadowBlur = 6;
+    ctx.fillText(icon, n.x, n.y);
 
-  ctx.fillText(icon, n.x, n.y);
+    ctx.shadowBlur = 0;
+  });
 
-  ctx.shadowBlur = 0;
+  // ===== MOBILE =====
+  mobileNodes.forEach(n=>{
 
-});
+    ctx.fillStyle="#ffffff";
+    ctx.fillRect(n.x-6,n.y-4,12,8);
 
+    ctx.fillStyle="#ef4444";
+    ctx.fillRect(n.x-1,n.y-4,2,8);
+    ctx.fillRect(n.x-4,n.y-1,8,2);
 
-// ===== MOBILE =====
-mobileNodes.forEach(n=>{
+    n.x += n.dx;
+    if(n.x<50||n.x>canvas.width-50) n.dx*=-1;
 
-  // ambulance body
-  ctx.fillStyle="#ffffff";
-  ctx.fillRect(n.x-6,n.y-4,12,8);
+    if (!n.parent || Math.random()<0.1){
+      let c=[...nodes,root];
+      n.parent=c.reduce((a,b)=>
+        Math.hypot(n.x-a.x,n.y-a.y)<Math.hypot(n.x-b.x,n.y-b.y)?a:b
+      );
+    }
+  });
 
-  // red cross
-  ctx.fillStyle="#ef4444";
-  ctx.fillRect(n.x-1,n.y-4,2,8);
-  ctx.fillRect(n.x-4,n.y-1,8,2);
-
-  // movement
-  n.x += n.dx;
-  if(n.x<50||n.x>canvas.width-50) n.dx*=-1;
-
-  // dynamic parent
-  if (!n.parent || Math.random()<0.1){
-    let c=[...nodes,root];
-    n.parent=c.reduce((a,b)=>
-      Math.hypot(n.x-a.x,n.y-a.y)<Math.hypot(n.x-b.x,n.y-b.y)?a:b
-    );
-  }
-
-});
-
-  // PACKETS
+  // ===== PACKETS =====
   packets.forEach(p=>{
     let target=p.current.parent||root;
 
     p.x+=(target.x-p.x)*0.08;
     p.y+=(target.y-p.y)*0.08;
 
-    if (p.priority==="high") ctx.fillStyle="#ff0000";
-    else ctx.fillStyle=`hsl(${ASN%CHANNELS*70},90%,60%)`;
+    ctx.fillStyle = p.priority==="high"
+      ? "#ff0000"
+      : `hsl(${ASN%CHANNELS*70},90%,60%)`;
 
     ctx.beginPath();
-    ctx.arc(p.x,p.y,2.5,0,Math.PI*2);
+    ctx.arc(p.x,p.y,3,0,Math.PI*2);
     ctx.fill();
 
     if(Math.hypot(p.x-target.x,p.y-target.y)<5){
@@ -1126,8 +1122,6 @@ mobileNodes.forEach(n=>{
 // ---------- START ----------
 resizeCanvas();
 requestAnimationFrame(draw);
-
-
 
 </script>
 
