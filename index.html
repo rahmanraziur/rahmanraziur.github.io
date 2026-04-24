@@ -574,8 +574,8 @@ footer {
   Live Multi-hop Visualization of a 6TiSCH-based Smart City IoT Network
 </h3>
 
-<div style="text-align:center;font-size:0.8rem;color:#94a3b8; margin-top:10px;">
-  🟥 Gateway • 🟩 Relay Nodes • 🔵 Leaf Nodes • 🚑 Mobile Nodes • 📶 Channels
+<div style="text-align:center;font-size:0.8rem;color:#94a3b8;">
+🚦 Traffic • 🌡️ Temp • 💧 Humidity • 💡 Light • 🔥 Fire • 🚑 Emergency • 📶 Channels
 </div>
 
 
@@ -1033,21 +1033,36 @@ function draw(timestamp) {
   });
 
   // STATIC + LOAD
-  staticNodes.forEach(n=>{
-    ctx.beginPath();
-    ctx.arc(n.x,n.y,10,0,Math.PI*2);
-    ctx.fillStyle=`rgba(255,0,0,${n.load})`;
-    ctx.fill();
+// ===== STATIC NODES (MULTI-TYPE + CLEAN GLOW) =====
+staticNodes.forEach(n=>{
 
-    let c="#38bdf8";
-    if(n.type==="traffic") c="#f59e0b";
-    if(n.type==="fire") c="#dc2626";
-
-    ctx.fillStyle=c;
+  // ===== LOAD GLOW (behind node, not overpowering) =====
+  if (n.load > 0.01) {
+    ctx.globalAlpha = Math.min(0.6, n.load);  // controlled glow
     ctx.beginPath();
-    ctx.arc(n.x,n.y,5,0,Math.PI*2);
+    ctx.arc(n.x, n.y, 10, 0, Math.PI*2);
+    ctx.fillStyle = "red";
     ctx.fill();
-  });
+    ctx.globalAlpha = 1;
+  }
+
+  // ===== DEVICE TYPE COLORS =====
+  let c;
+
+  if (n.type === "traffic") c = "#f59e0b";        // 🚦 amber
+  else if (n.type === "temperature") c = "#ef4444"; // 🌡️ red
+  else if (n.type === "humidity") c = "#06b6d4";    // 💧 cyan
+  else if (n.type === "light") c = "#fde047";       // 💡 yellow
+  else if (n.type === "fire") c = "#dc2626";        // 🔥 dark red
+  else c = "#38bdf8"; // fallback (generic sensor)
+
+  // ===== NODE CORE =====
+  ctx.fillStyle = c;
+  ctx.beginPath();
+  ctx.arc(n.x, n.y, 5, 0, Math.PI*2);
+  ctx.fill();
+
+});
 
   // MOBILE
   mobileNodes.forEach(n=>{
