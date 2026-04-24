@@ -575,12 +575,9 @@ footer {
 </h3>
 
 <div style="text-align:center;font-size:0.8rem;color:#94a3b8; margin-top:10px;">
-  🟥 Gateway • 🟩 Router • 🔵 Sensors • 🚑 Ambulance • 📶 Channels • 🔥 Event Traffic
+  🟥 Gateway • 🟩 Relay Nodes • 🔵 Leaf Nodes • 🚑 Mobile Nodes • 📶 Channels
 </div>
 
-<div style="text-align:center; margin-top:10px;">
-  <button class="btn" onclick="triggerFire()">🔥 Fire Event</button>
-</div>
 
 <canvas id="net"></canvas>
  
@@ -851,7 +848,7 @@ function initNetwork() {
     x: canvas.width * 0.15,
     y: 260,
     dx: 1.2,
-    type: "ambulance",
+    type: "mobile nodes",
     priority: "high",
     parent: level1[0]
   });
