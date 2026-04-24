@@ -1033,10 +1033,11 @@ function draw(timestamp) {
   });
 
 // ===== STATIC + LOAD =====
-// ===== STATIC NODES (VISIBLE + CLEAN GLOW) =====
+// ===== STATIC + LOAD =====
+// ===== STATIC NODES (VISIBLE + CLEAN GLOW + EMOJI) =====
 staticNodes.forEach(n=>{
 
-  // ===== LOAD GLOW (background load indicator) =====
+  // ===== LOAD GLOW =====
   if (n.load > 0.01) {
     ctx.globalAlpha = Math.min(0.5, n.load);
     ctx.beginPath();
@@ -1047,52 +1048,86 @@ staticNodes.forEach(n=>{
   }
 
   // ===== DEVICE TYPE COLORS =====
-  let c;
+  let c, icon = "";
 
-  if (n.type === "traffic") c = "#f59e0b";       
-  else if (n.type === "temperature") c = "#ef4444";
-  else if (n.type === "humidity") c = "#06b6d4";
-  else if (n.type === "light") c = "#fde047";
-  else if (n.type === "fire") c = "#dc2626";
-  else c = "#38bdf8";
+  if (n.type === "traffic") {
+    c = "#f59e0b";
+    icon = "🚦";
+  }
+  else if (n.type === "temperature") {
+    c = "#ef4444";
+    icon = "🌡️";
+  }
+  else if (n.type === "humidity") {
+    c = "#06b6d4";
+    icon = "💧";
+  }
+  else if (n.type === "light") {
+    c = "#fde047";
+    icon = "💡";
+  }
+  else if (n.type === "fire") {
+    c = "#dc2626";
+    icon = "🔥";
+  }
+  else {
+    c = "#38bdf8";
+    icon = "📡";
+  }
 
-  // ===== GLOW (key fix) =====
+  // ===== GLOW =====
   ctx.shadowColor = c;
   ctx.shadowBlur = 10;
 
-  // ===== NODE CORE (bigger + clearer) =====
+  // ===== NODE CORE =====
   ctx.fillStyle = c;
   ctx.beginPath();
-  ctx.arc(n.x, n.y, 7, 0, Math.PI*2);  // 🔥 increased size
+  ctx.arc(n.x, n.y, 7, 0, Math.PI*2);
   ctx.fill();
 
-  ctx.shadowBlur = 0;
+  // ===== EMOJI (placed inside node) =====
+  ctx.shadowBlur = 0; // prevent glow on text
+  ctx.font = "9px Arial";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillStyle = "#000"; // dark for contrast
+  ctx.fillText(icon, n.x, n.y + 1);
 
-  // ===== OPTIONAL BORDER (very clean look) =====
+  // ===== BORDER =====
   ctx.strokeStyle = "#ffffff22";
   ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.arc(n.x, n.y, 7, 0, Math.PI*2);
   ctx.stroke();
 
 });
 
-  // MOBILE
-  mobileNodes.forEach(n=>{
-    ctx.fillStyle="#fff";
-    ctx.fillRect(n.x-6,n.y-4,12,8);
-    ctx.fillStyle="red";
-    ctx.fillRect(n.x-1,n.y-4,2,8);
-    ctx.fillRect(n.x-4,n.y-1,8,2);
 
-    n.x += n.dx;
-    if(n.x<50||n.x>canvas.width-50) n.dx*=-1;
+// ===== MOBILE =====
+mobileNodes.forEach(n=>{
 
-    if (!n.parent || Math.random()<0.1){
-      let c=[...nodes,root];
-      n.parent=c.reduce((a,b)=>
-        Math.hypot(n.x-a.x,n.y-a.y)<Math.hypot(n.x-b.x,n.y-b.y)?a:b
-      );
-    }
-  });
+  // ambulance body
+  ctx.fillStyle="#ffffff";
+  ctx.fillRect(n.x-6,n.y-4,12,8);
+
+  // red cross
+  ctx.fillStyle="#ef4444";
+  ctx.fillRect(n.x-1,n.y-4,2,8);
+  ctx.fillRect(n.x-4,n.y-1,8,2);
+
+  // movement
+  n.x += n.dx;
+  if(n.x<50||n.x>canvas.width-50) n.dx*=-1;
+
+  // dynamic parent
+  if (!n.parent || Math.random()<0.1){
+    let c=[...nodes,root];
+    n.parent=c.reduce((a,b)=>
+      Math.hypot(n.x-a.x,n.y-a.y)<Math.hypot(n.x-b.x,n.y-b.y)?a:b
+    );
+  }
+
+});
 
   // PACKETS
   packets.forEach(p=>{
