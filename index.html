@@ -874,15 +874,17 @@ function initNetwork(H, W) {
   nodes.push(rightParent);
 
   // ===== LEAF =====
-  [0.65, 0.72, 0.78, 0.85].forEach((p, i) => {
-    staticNodes.push({
-      x: W * p,
-      y: leafY,
-      type: i === 0 ? "fire" : TYPES[Math.floor(Math.random()*TYPES.length)],
-      parent: rightParent,
-      load: 0
-    });
+const sensorTypes = ["fire","temperature","humidity","light"];
+
+[0.65, 0.72, 0.78, 0.85].forEach((p, i) => {
+  staticNodes.push({
+    x: W * p,
+    y: leafY,
+    type: sensorTypes[i],   // ✅ fixed mapping
+    parent: rightParent,
+    load: 0
   });
+});
 
   staticNodes.push({
     x: W * 0.3,
