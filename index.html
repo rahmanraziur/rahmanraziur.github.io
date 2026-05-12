@@ -282,7 +282,73 @@ body.dark .section-subtitle {
 
 }
 
+/* PUBLICATIONS */
+.publication-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
 
+.publication-item {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 28px;
+  transition: 0.25s ease;
+}
+
+.publication-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+}
+
+.publication-item h3 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  font-size: 1.15rem;
+  line-height: 1.5;
+  color: #111827;
+}
+
+.pub-authors {
+  color: #374151;
+  margin-bottom: 8px;
+  font-size: 0.96rem;
+}
+
+.pub-venue {
+  color: #6b7280;
+  margin-bottom: 18px;
+  font-size: 0.95rem;
+}
+
+.pub-link {
+  color: #38bdf8;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.pub-link:hover {
+  text-decoration: underline;
+}
+
+/* DARK MODE */
+body.dark .publication-item {
+  background: rgba(17,24,39,0.7);
+  border: 1px solid #1f2937;
+}
+
+body.dark .publication-item h3 {
+  color: #e5e7eb;
+}
+
+body.dark .pub-authors {
+  color: #cbd5e1;
+}
+
+body.dark .pub-venue {
+  color: #94a3b8;
+}
 
 /* CANVAS */
 canvas {
@@ -747,45 +813,65 @@ Prof. Wei Xiang
 
 
 
-
 <section id="publications">
   <h2>Publications</h2>
 
-  <div class="grid">
+  <div class="publication-list">
 
-    <div class="card">
-      <h3>FlexiFrame</h3>
-      <p>Adaptive Slotframe Scheduling for 6TiSCH</p>
-      <span style="color:#94a3b8;">
-        IEEE GLOBECOM • 2025 • Taipei, Taiwan
-      </span><br><br>
+    <div class="publication-item">
+      <h3>
+        FlexiFrame: Adaptive Slotframe Scheduling for 6TiSCH-Based Smart City IoT Networks
+      </h3>
 
-      <a href="#">Paper (Coming Soon)</a>
+      <p class="pub-authors">
+        Raziur Rahman, Nikumani Choudhury, Wei Xiang, Tanoj Ojha
+      </p>
+
+      <p class="pub-venue">
+        Accepted at IEEE GLOBECOM Workshops 2025 • Taipei, Taiwan
+      </p>
+
+      <a href="#" class="pub-link">Paper Coming Soon</a>
     </div>
 
-    <div class="card">
-      <h3>TARA</h3>
-      <p>Topology-Aware Scheduling</p>
-      <span style="color:#94a3b8;">
-        IEEE ANTS • 2025 • New Delhi, India
-      </span><br><br>
+    <div class="publication-item">
+      <h3>
+        TARA: Topology-Aware Rank Allocation for Load Balancing in Autonomous Scheduling of 6TiSCH-based IoT Networks
+      </h3>
 
-      <a href="https://ieeexplore.ieee.org/abstract/document/11429748" class="pub-link">Paper</a>
+      <p class="pub-authors">
+        Raziur Rahman, Nikumani Choudhury, Wei Xiang
+      </p>
+
+      <p class="pub-venue">
+        Accepted at IEEE ANTS 2025 • New Delhi, India
+      </p>
+
+      <a href="https://ieeexplore.ieee.org/abstract/document/11429748"
+         class="pub-link"
+         target="_blank">
+         View Paper
+      </a>
     </div>
 
-    <div class="card">
-      <h3>ASCP</h3>
-      <p>Analytical Slotframe Control Policy</p>
-      <span style="color:#94a3b8;">
-        IEEE ICC • 2026 • Glasgow, UK
-      </span><br><br>
+    <div class="publication-item">
+      <h3>
+        ASCP: Analytical Slotframe Control Policy for Adaptive Resource Allocation in 6TiSCH Networks
+      </h3>
 
-      <a href="#">Paper (Coming Soon)</a>
+      <p class="pub-authors">
+        Raziur Rahman, Nikumani Choudhury, Wei Xiang
+      </p>
+
+      <p class="pub-venue">
+        Accepted at IEEE ICC 2026 • Glasgow, UK
+      </p>
+
+      <a href="#" class="pub-link">Paper Coming Soon</a>
     </div>
 
   </div>
 </section>
-
 
 
 
