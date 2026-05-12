@@ -206,6 +206,84 @@ h2 {
   margin-bottom: 20px;
 }
 
+
+/* SECTION SUBTITLE */
+.section-subtitle {
+  color: #6b7280;
+  margin-bottom: 35px;
+  font-size: 1rem;
+}
+
+/* TEACHING */
+.teaching-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.teaching-item {
+  display: flex;
+  gap: 30px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 24px;
+  transition: 0.25s ease;
+}
+
+.teaching-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+}
+
+.teaching-date {
+  min-width: 180px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.teaching-content h3 {
+  margin: 0 0 4px 0;
+  font-size: 1.05rem;
+  color: #111827;
+}
+
+.teaching-content p {
+  margin: 0 0 14px 0;
+  color: #6b7280;
+  font-size: 0.95rem;
+}
+
+body.dark .teaching-item {
+  background: rgba(17,24,39,0.7);
+  border: 1px solid #1f2937;
+}
+
+body.dark .teaching-date,
+body.dark .teaching-content h3 {
+  color: #e5e7eb;
+}
+
+body.dark .teaching-content p,
+body.dark .section-subtitle {
+  color: #94a3b8;
+}
+
+@media (max-width: 768px) {
+
+  .teaching-item {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .teaching-date {
+    min-width: auto;
+  }
+
+}
+
+
+
 /* CANVAS */
 canvas {
   width: 100%;
@@ -714,37 +792,56 @@ Prof. Wei Xiang
 <section id="teaching">
   <h2>Teaching Assistantship</h2>
 
-  <p style="color:#94a3b8; margin-bottom:20px;">
+  <p class="section-subtitle">
     Teaching Assistant at BITS Pilani Hyderabad Campus
   </p>
 
-  <div class="grid">
+  <div class="teaching-list">
 
-    <div class="card">
-      <b>Aug 2024 - Dec 2024</b><br>
-      CS F342 - Computer Architecture
+    <div class="teaching-item">
+      <div class="teaching-date">Aug 2024 – Dec 2024</div>
+
+      <div class="teaching-content">
+        <h3>Computer Architecture</h3>
+        <p>CS F342</p>
+      </div>
     </div>
 
-    <div class="card">
-      <b>Jan 2025 - May 2025</b><br>
-      CS F303 - Computer Networks<br>
-      CS F372 - Operating Systems
+    <div class="teaching-item">
+      <div class="teaching-date">Jan 2025 – May 2025</div>
+
+      <div class="teaching-content">
+        <h3>Computer Networks</h3>
+        <p>CS F303</p>
+
+        <h3>Operating Systems</h3>
+        <p>CS F372</p>
+      </div>
     </div>
 
-    <div class="card">
-      <b>Aug 2025 - Dec 2025</b><br>
-      CS F213 - Object Oriented Programming<br>
-      CS F372 - Operating Systems
+    <div class="teaching-item">
+      <div class="teaching-date">Aug 2025 – Dec 2025</div>
+
+      <div class="teaching-content">
+        <h3>Object Oriented Programming</h3>
+        <p>CS F213</p>
+
+        <h3>Operating Systems</h3>
+        <p>CS F372</p>
+      </div>
     </div>
 
-    <div class="card">
-      <b>Jan 2026 - May 2026</b><br>
-      CS F303 - Computer Networks
+    <div class="teaching-item">
+      <div class="teaching-date">Jan 2026 – May 2026</div>
+
+      <div class="teaching-content">
+        <h3>Computer Networks</h3>
+        <p>CS F303</p>
+      </div>
     </div>
 
   </div>
 </section>
-
 
 
 
