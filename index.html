@@ -43,18 +43,6 @@ body {
   color: #111827;
 }
 
-/* subtle grid */
-body::before {
-  content: "";
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  background-image:
-    linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
-  background-size: 40px 40px;
-  z-index: -1;
-}
 
 
 
@@ -99,7 +87,8 @@ nav {
   gap: 25px;
   padding: 15px;
   background: rgba(255,255,255,0.8);
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px); 
+  border-bottom: 1px solid #e5e7eb;
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -240,14 +229,13 @@ footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 80px 50px;            /* slightly tighter */
+  padding: 60px 50px;            /* slightly tighter */
   max-width: 1100px;
   margin: 40px auto;
   gap: 30px;                     /* balanced spacing */
   position: relative;   /* 🔥 required */
   overflow: hidden;
-  background: rgba(2,6,23,0.6);
-  backdrop-filter: blur(12px);
+  background: white;
   border-radius: 18px;
   border: 1px solid rgba(56,189,248,0.15);
 }
@@ -260,9 +248,12 @@ footer {
 
 /* TEXT */
 .hero h1 {
-  font-size: 3.2rem;
+  font-size: 4rem;
+  font-weight: 700;
   margin-bottom: 10px;
-  letter-spacing: -0.5px;
+  letter-spacing: -1px;
+  color: #0f172a;
+  line-height: 1.05;
 }
 
 .subtitle {
@@ -271,14 +262,14 @@ footer {
 }
 
 .affiliation {
-  color: #94a3b8;
+  color: #6b7280;
   margin-top: 6px;
 }
 
 /* TAGLINE (NEW) */
 .hero-tagline {
   margin-top: 15px;
-  color: #cbd5e1;
+  color: #374151;
   line-height: 1.7;
   font-size: 1.02rem;
 }
@@ -326,14 +317,12 @@ footer {
   flex: 0 0 auto;
 }
 
-/* PROFILE WRAPPER (NEW glow effect) */
+/* PROFILE WRAPPER */
 .profile-wrapper {
-  padding: 8px;
+  padding: 4px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(56,189,248,0.5), transparent);
-  box-shadow: 0 0 50px rgba(56,189,248,0.25);
+  background: white;
 }
-
 
 
 /* IMAGE */
@@ -532,7 +521,8 @@ footer {
       <a href="mailto:p20230482@hyderabad.bits-pilani.ac.in">Email</a>
       <a href="https://github.com/rahmanraziur">GitHub</a>
       <a href="https://www.linkedin.com/in/raziur247">LinkedIn</a>
-      <a href="https://scholar.google.com/citations?user=ae-asNAAAAAJ&hl=en">Scholar</a>
+      <a href="https://scholar.google.com/citations?user=ae-asNAAAAAJ&hl=en">Google Scholar</a>
+      <a href="https://orcid.org/0009-0003-6365-7915">Orcid</a>
     </div>
 
   </div>
