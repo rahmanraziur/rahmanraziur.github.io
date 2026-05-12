@@ -34,36 +34,50 @@
 
 <style>
 
-/* GLOBAL */
+/* GLOBAL — LIGHT DEFAULT */
 body {
   font-family: 'Inter', sans-serif;
   margin: 0;
   line-height: 1.6;
-  background: radial-gradient(circle at top, #0f172a, #020617);
-  color: #e5e7eb;
+  background: #f9fafb;
+  color: #111827;
 }
 
+/* subtle grid */
 body::before {
   content: "";
   position: fixed;
   width: 100%;
   height: 100%;
-  background-image: 
-    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-image:
+    linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
   background-size: 40px 40px;
   z-index: -1;
 }
 
-/* LIGHT MODE */
-body.light {
-  background: #f9fafb;
-  color: #111827;
-}
-
-body.light .card {
+/* LIGHT DEFAULT CARD */
+.card {
   background: white;
   color: #111;
+}
+
+/* DARK MODE */
+body.dark {
+  background: radial-gradient(circle at top, #0f172a, #020617);
+  color: #e5e7eb;
+}
+
+body.dark::before {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+}
+
+body.dark .card {
+  background: rgba(17,24,39,0.7);
+  color: #e5e7eb;
+  border: 1px solid #1f2937;
 }
 
 /* HEADER RESET */
@@ -88,7 +102,7 @@ nav {
   justify-content: center;
   gap: 25px;
   padding: 15px;
-  background: rgba(2,6,23,0.7);
+  background: rgba(255,255,255,0.8);
   backdrop-filter: blur(10px);
   position: sticky;
   top: 0;
@@ -109,6 +123,19 @@ nav a {
 
 nav a:hover {
   color: #38bdf8;
+}
+
+/* DARK MODE NAV */
+body.dark nav {
+  background: rgba(2,6,23,0.7);
+}
+
+body.dark nav a {
+  color: #e5e7eb;
+}
+
+body:not(.dark) nav a {
+  color: #111827;
 }
 
 #themeToggle {
@@ -784,7 +811,15 @@ AOS.init();
 
 // DARK MODE
 document.getElementById("themeToggle").onclick = () => {
-  document.body.classList.toggle("light");
+  document.body.classList.toggle("dark");
+
+  const btn = document.getElementById("themeToggle");
+
+  if(document.body.classList.contains("dark")){
+    btn.innerHTML = "☀️";
+  } else {
+    btn.innerHTML = "🌙";
+  }
 };
 
 // STATS ANIMATION
