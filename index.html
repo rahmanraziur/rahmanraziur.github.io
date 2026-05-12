@@ -8,9 +8,43 @@
 
 <meta name="description" content="Raziur Rahman is a Joint PhD Researcher at BITS Pilani Hyderabad and La Trobe University working on 6TiSCH, TSCH scheduling, IoT resource allocation, smart city networks, and computer networking systems.">
 
+
+<meta name="robots" content="index, follow">
+
+
+
 <meta name="keywords" content="Raziur Rahman, Joint PhD, La Trobe University, BITS Pilani Hyderabad, BITS Hyderabad, 6TiSCH, TSCH, IoT, Smart Cities, Computer Networks, Wireless Sensor Networks, Resource Allocation, Adaptive Scheduling">
 
-<!-- Open Graph -->
+
+<link rel="canonical" href="https://rahmanraziur.github.io/">
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"Person",
+  "name":"Raziur Rahman",
+  "url":"https://rahmanraziur.github.io/",
+  "jobTitle":"Joint Doctoral Researcher",
+  "affiliation":[
+    {
+      "@type":"CollegeOrUniversity",
+      "name":"BITS Pilani Hyderabad Campus"
+    },
+    {
+      "@type":"CollegeOrUniversity",
+      "name":"La Trobe University"
+    }
+  ],
+  "sameAs":[
+    "https://scholar.google.com/citations?user=ae-asNAAAAAJ&hl=en",
+    "https://github.com/rahmanraziur",
+    "https://www.linkedin.com/in/raziur247",
+    "https://orcid.org/0009-0003-6365-7915"
+  ]
+}
+</script>
+
+
 <!-- Open Graph -->
 <meta property="og:title" content="Raziur Rahman | Joint Doctoral Researcher">
 
@@ -27,666 +61,18 @@
 <meta property="og:locale" content="en_US">
 
 
-<link rel="icon" href="favicon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="assets/css/style.css">
+
+
+
 <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
 
-<style>
-html {
-  scroll-behavior: smooth;
-}
 
 
-/* GLOBAL — LIGHT DEFAULT */
-body {
-  font-family: 'Inter', sans-serif;
-  margin: 0;
-  line-height: 1.6;
-  background: #f9fafb;
-  color: #111827;
-
-  transition:
-    background 0.3s ease,
-    color 0.3s ease;
-}
-
-
-
-/* DARK MODE */
-body.dark {
-  background: radial-gradient(circle at top, #0f172a, #020617);
-  color: #e5e7eb;
-}
-
-
-body.dark .card {
-  background: rgba(17,24,39,0.7);
-  color: #e5e7eb;
-  border: 1px solid #1f2937;
-}
-
-/* HEADER RESET */
-header {
-  padding: 0;
-}
-
-
-
-/* NAV */
-nav {
-  display: flex;
-  justify-content: center;
-  gap: 25px;
-  padding: 15px;
-
-  background: rgba(255,255,255,0.96);
-
-  border-bottom: 1px solid #e5e7eb;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  overflow-x: auto;
-  white-space: nowrap;
-}
-
-
-nav::-webkit-scrollbar {
-  display: none;
-}
-
-nav a {
-  text-decoration: none;
-}
-
-nav a:hover {
-  color: #38bdf8;
-}
-
-/* DARK MODE NAV */
-body.dark nav {
-  background: rgba(2,6,23,0.7);
-}
-
-body.dark nav a {
-  color: #e5e7eb;
-}
-
-body:not(.dark) nav a {
-  color: #111827;
-}
-
-#themeToggle {
-  position: absolute;
-  right: 20px;
-  background: none;
-  border: none;
-  color: #38bdf8;
-  font-size: 18px;
-  cursor: pointer;
-}
-
-/* SECTION */
-section {
-  max-width: 900px;
-  margin: auto;
-  padding: 80px 20px;
-}
-
-h2 {
-  color: #38bdf8;
-  margin-bottom: 25px;
-}
-
-/* CARD */
-.card {
-  background: white;
-  color: #111827;
-  padding: 25px;
-  border-radius: 16px;
-  margin-bottom: 20px;
-  border: 1px solid #e5e7eb;
-  transition: 0.3s;
-
-  max-width: 900px;          /* ADD */
-  margin-left: auto;         /* ADD */
-  margin-right: auto;        /* ADD */
-}
-
-.card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 20px 40px rgba(56,189,248,0.15);
-}
-.card,
-.publication-item,
-.teaching-item,
-.hero,
-nav {
-  transition:
-    background 0.3s ease,
-    border-color 0.3s ease,
-    color 0.3s ease;
-}
-
-
-/* RESEARCH INTEREST */
-.interest-list {
-  list-style: none;
-  padding-left: 0;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px 30px;
-}
-
-.interest-list li {
-  padding: 10px 0;
-  border-bottom: 1px solid #e5e7eb;
-  position: relative;
-  padding-left: 20px;
-}
-
-body.dark .interest-list li {
-  border-bottom: 1px solid #1f2937;
-}
-
-.interest-list li::before {
-  content: "▸";
-  position: absolute;
-  left: 0;
-  color: #38bdf8;
-}
-
-/* TIMELINE */
-.timeline {
-  border-left: 2px solid #38bdf8;
-  padding-left: 20px;
-}
-
-.timeline div {
-  margin-bottom: 20px;
-}
-
-
-/* SECTION SUBTITLE */
-.section-subtitle {
-  color: #6b7280;
-  margin-bottom: 35px;
-  font-size: 1rem;
-}
-
-/* TEACHING */
-.teaching-list {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.teaching-item {
-  display: flex;
-  gap: 30px;
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 14px;
-  padding: 24px;
-  transition: 0.25s ease;
-}
-
-.teaching-item:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-}
-
-.teaching-date {
-  min-width: 180px;
-  font-weight: 600;
-  color: #0f172a;
-}
-
-.teaching-content h3 {
-  margin: 0 0 4px 0;
-  font-size: 1.05rem;
-  color: #111827;
-}
-
-.teaching-content p {
-  margin: 0 0 14px 0;
-  color: #6b7280;
-  font-size: 0.95rem;
-}
-
-body.dark .teaching-item {
-  background: rgba(17,24,39,0.7);
-  border: 1px solid #1f2937;
-}
-
-body.dark .teaching-date,
-body.dark .teaching-content h3 {
-  color: #e5e7eb;
-}
-
-body.dark .teaching-content p,
-body.dark .section-subtitle {
-  color: #94a3b8;
-}
-
-@media (max-width: 768px) {
-
-  .teaching-item {
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .teaching-date {
-    min-width: auto;
-  }
-
-}
-
-/* PUBLICATIONS */
-.publication-list {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
-.publication-item {
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 14px;
-  padding: 28px;
-  transition: 0.25s ease;
-}
-
-.publication-item:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-}
-
-.publication-item h3 {
-  margin-top: 0;
-  margin-bottom: 12px;
-  font-size: 1.08rem;
-  line-height: 1.5;
-  color: #111827;
-}
-
-.pub-authors {
-  color: #374151;
-  margin-bottom: 8px;
-  font-size: 0.96rem;
-}
-
-.pub-venue {
-  color: #6b7280;
-  margin-bottom: 18px;
-  font-size: 0.95rem;
-}
-.pub-summary {
-  color: #374151;
-  line-height: 1.7;
-  margin-bottom: 18px;
-}
-
-body.dark .pub-summary {
-  color: #cbd5e1;
-}
-
-.pub-link {
-  color: #38bdf8;
-  text-decoration: none;
-  font-weight: 500;
-}
-
-.pub-link:hover {
-  text-decoration: underline;
-}
-
-/* DARK MODE */
-body.dark .publication-item {
-  background: rgba(17,24,39,0.7);
-  border: 1px solid #1f2937;
-}
-
-body.dark .publication-item h3 {
-  color: #e5e7eb;
-}
-
-body.dark .pub-authors {
-  color: #cbd5e1;
-}
-
-body.dark .pub-venue {
-  color: #94a3b8;
-}
-
-body.dark .hero {
-  background: rgba(17,24,39,0.75);
-  border: 1px solid #1f2937;
-}
-
-body.dark .hero h1 {
-  color: #f8fafc;
-}
-
-body.dark .affiliation,
-body.dark .hero-tagline {
-  color: #cbd5e1;
-}
-
-body.dark .hero-badges span {
-  background: rgba(56,189,248,0.12);
-  border: 1px solid rgba(56,189,248,0.25);
-  color: #e5e7eb;
-}
-
-
-body.dark footer {
-  color: #94a3b8;
-}
-
-
-/* RESEARCH DEMO */
-.research-demo {
-  margin-top: 60px;
-  text-align: center;
-}
-
-.research-demo h3 {
-  font-size: 1.35rem;
-  color: #111827;
-  margin-bottom: 12px;
-}
-
-.demo-subtitle {
-  color: #6b7280;
-  max-width: 720px;
-  margin: 0 auto 24px auto;
-  line-height: 1.7;
-}
-
-.demo-tags {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 28px;
-}
-
-.demo-tags span {
-  background: rgba(56,189,248,0.08);
-  border: 1px solid rgba(56,189,248,0.18);
-  padding: 6px 12px;
-  border-radius: 999px;
-  font-size: 0.82rem;
-}
-
-body.dark .research-demo h3 {
-  color: #e5e7eb;
-}
-
-body.dark .demo-subtitle {
-  color: #94a3b8;
-}
-
-
-
-
-/* CANVAS */
-canvas {
-  width: 100%;
-  max-width: 800px;
-  display: block;
-  margin: 20px auto;
-  border-radius: 12px;
-}
-
-/* FOOTER */
-footer {
-  text-align: center;
-  padding: 30px;
-  color: #6b7280;
-}
-
-
-
-/* HERO */
-.hero {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 60px 50px;            /* slightly tighter */
-  max-width: 950px;
-  margin: 40px auto;
-  gap: 30px;                     /* balanced spacing */
-  position: relative;   /* 🔥 required */
-  overflow: hidden;
-  background: white;
-  border-radius: 18px;
-  border: 1px solid #e5e7eb;
-}
-
-/* LEFT */
-.hero-left {
-  flex: 1;
-  max-width: 800px;
-}
-
-/* TEXT */
-.hero h1 {
-  font-size: 3.5rem;
-  font-weight: 700;
-  margin-bottom: 10px;
-  letter-spacing: -1px;
-  color: #0f172a;
-  line-height: 1.05;
-}
-
-.subtitle {
-  color: #38bdf8;
-  font-weight: 500;
-}
-
-.affiliation {
-  color: #6b7280;
-  margin-top: 6px;
-}
-
-/* TAGLINE (NEW) */
-.hero-tagline {
-  margin-top: 15px;
-  color: #374151;
-  line-height: 1.7;
-  font-size: 1.02rem;
-}
-
-/* BADGES (NEW) */
-.hero-badges {
-  margin-top: 15px;
-}
-
-.hero-badges span {
-  display: inline-block;
-  margin: 6px 8px 0 0;
-  padding: 6px 12px;
-  background: rgba(56,189,248,0.12);
-  border: 1px solid rgba(56,189,248,0.3);
-  border-radius: 6px;
-  font-size: 0.8rem;
-  transition: all 0.25s ease;
-}
-
-
-.hero-badges span:hover {
-  background: rgba(56,189,248,0.25);
-  transform: translateY(-2px);
-}
-
-
-/* LINKS */
-.hero-links {
-  margin-top: 18px;
-}
-
-.hero-links a {
-  margin-right: 18px;
-  text-decoration: none;
-  color: #38bdf8;
-}
-
-.hero-links a:hover {
-  text-decoration: underline;
-}
-
-/* RIGHT */
-.hero-right {
-  flex: 0 0 auto;
-}
-
-/* PROFILE WRAPPER */
-.profile-wrapper {
-  padding: 4px;
-  border-radius: 50%;
-  background: white;
-}
-
-
-/* IMAGE */
-.profile-wrapper img {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  border: 3px solid #38bdf8;
-  object-fit: cover;
-}
-.hero::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    circle at 20% 30%,
-    rgba(56,189,248,0.08),
-    transparent 60%
-  );
-  pointer-events: none;
-  border-radius: 18px;
-}
-
-
-/* MOBILE */
-@media (max-width: 768px) {
-  .hero {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .hero-left,
-  .hero-right {
-    flex: 100%;
-    max-width: 100%;
-  }
-
-  .hero-right {
-    margin-top: 20px;
-  }
-
-  .hero-left p {
-    max-width: 100%;   /* ✅ THIS FIX */
-  }
-
-  .interest-list {
-    grid-template-columns: 1fr;
-  }
-}
-
-
-
-/* ===== ADD THIS BELOW YOUR EXISTING MOBILE BLOCK ===== */
-@media (max-width: 768px) {
-
-  /* TEXT SCALING */
-  .hero h1 {
-    font-size: 2rem;
-  }
-
-  .subtitle {
-    font-size: 0.95rem;
-  }
-
-  .hero-tagline {
-    font-size: 0.9rem;
-  }
-
-  /* HERO SPACING */
-  .hero {
-    padding: 40px 20px;
-    margin: 20px 10px;
-  }
-
-  /* PROFILE IMAGE */
-  .profile-wrapper img {
-    width: 110px;
-    height: 110px;
-  }
-
-  /* NAVBAR FIX (THIS IS A BIG ONE) */
-  nav {
-    flex-wrap: wrap;
-    gap: 10px;
-    padding: 10px;
-  }
-
-  nav a {
-    font-size: 0.85rem;
-  }
-
-  #themeToggle {
-    position: static;
-  }
-
-  /* SECTION PADDING */
-  section {
-    padding: 50px 15px;
-  }
-
-  /* CARDS */
-  .card {
-    padding: 18px;
-  }
-
-  /* GRID STACK */
-  .grid {
-    grid-template-columns: 1fr;
-  }
-
-  /* CANVAS (CRITICAL FIX) */
-  canvas {
-    width: 100%;
-    height: auto;
-  }
-
-  /* BADGES */
-  .hero-badges span {
-    font-size: 0.7rem;
-    padding: 5px 10px;
-  }
-}
-
-
-
-
-
-.card a {
-  color: #38bdf8;
-  text-decoration: none;
-}
-
-.card a:hover {
-  text-decoration: underline;
-}
-
-
-
-</style>
 </head>
 
 
@@ -713,19 +99,51 @@ footer {
       energy-efficient 6TiSCH-based smart city IoT networks.
     </p>
 
-    <div class="hero-badges">
-      <span>IEEE GLOBECOM 2025</span>
-      <span>IEEE ANTS 2025</span>
-      <span>IEEE ICC 2026</span>
-    </div>
+        <div class="hero-badges">
+  <span>IEEE GLOBECOM 2025</span>
+  <span>IEEE ANTS 2025</span>
+  <span>IEEE ICC 2026</span>
+</div>
+
+<div class="hero-buttons">
+  <a href="#publications" class="hero-btn">
+    View Research
+  </a>
+
+  <a href="Curriculum_Vitae.pdf" class="hero-btn">
+    Download CV
+  </a>
+</div>
 
     <div class="hero-links">
       <a href="mailto:p20230482@hyderabad.bits-pilani.ac.in">Email</a>
-      <a href="https://github.com/rahmanraziur">GitHub</a>
-      <a href="https://www.linkedin.com/in/raziur247">LinkedIn</a>
-      <a href="https://scholar.google.com/citations?user=ae-asNAAAAAJ&hl=en">Google Scholar</a>
-      <a href="https://orcid.org/0009-0003-6365-7915">Orcid</a>
-    </div>
+      <a href="https://github.com/rahmanraziur"
+   target="_blank"
+   rel="noopener noreferrer">
+   GitHub
+</a>
+
+
+<a href="https://www.linkedin.com/in/raziur247"
+   target="_blank"
+   rel="noopener noreferrer">
+   LinkedIn
+</a>
+
+<a href="https://scholar.google.com/citations?user=ae-asNAAAAAJ&hl=en"
+   target="_blank"
+   rel="noopener noreferrer">
+   Google Scholar
+</a>
+
+
+<a href="https://orcid.org/0009-0003-6365-7915"
+   target="_blank"
+   rel="noopener noreferrer">
+   ORCID
+</a>
+
+</div>
 
   </div>
 
@@ -742,6 +160,7 @@ footer {
   <a href="#interests">Research Interests</a>
   <a href="#timeline">Timeline</a>
   <a href="#publications">Publications</a>
+  <a href="#teaching">Teaching</a>
   <a href="#education">Education</a> 
   <a href="#contact">Contact</a>
   <button id="themeToggle">🌙</button>
@@ -760,13 +179,17 @@ footer {
 
       <p>
         My research is conducted under the supervision of 
-<a href="https://www.bits-pilani.ac.in/hyderabad/nikumani-choudhury/" target="_blank">
+<a href="https://www.bits-pilani.ac.in/hyderabad/nikumani-choudhury/"
+   target="_blank"
+   rel="noopener noreferrer">
 Prof. Nikumani Choudhury
 </a> 
 (BITS Pilani Hyderabad Campus) and 
-<a href="https://scholars.latrobe.edu.au/wxiang" target="_blank">
+<a href="https://scholars.latrobe.edu.au/wxiang"
+   target="_blank"
+   rel="noopener noreferrer">
 Prof. Wei Xiang
-</a> 
+</a>
 (La Trobe University, Melbourne).
       </p>
   </div>
@@ -853,9 +276,9 @@ Prof. Wei Xiang
         efficiency, latency, and scheduling responsiveness in 6TiSCH IoT networks.
       </p>
 
-      <a href="#" class="pub-link">
-        Paper Coming Soon
-      </a>
+      <a href="projects/flexiframe.html" class="pub-link">
+Project Overview
+</a>
 
     </div>
 
@@ -879,12 +302,18 @@ Prof. Wei Xiang
         based on node position and traffic conditions to improve reliability,
         load balancing, and congestion management in multi-hop IoT networks.
       </p>
+        
+         <a href="projects/tara.html" class="pub-link">
+          Project Overview
+          </a>
 
-      <a href="https://ieeexplore.ieee.org/abstract/document/11429748"
-         class="pub-link"
-         target="_blank">
-         View Paper
-      </a>
+        <br><br>
+
+        <a href="https://ieeexplore.ieee.org/abstract/document/11429748"
+   target="_blank"
+   rel="noopener noreferrer">
+          IEEE Xplore
+        </a>
 
     </div>
 
@@ -909,8 +338,8 @@ Prof. Wei Xiang
         under dynamic traffic conditions in 6TiSCH networks.
       </p>
 
-      <a href="#" class="pub-link">
-        Paper Coming Soon
+      <a href="projects/ascp.html" class="pub-link">
+        Project Overview
       </a>
 
     </div>
@@ -1035,7 +464,19 @@ Prof. Wei Xiang
 
   <div class="card" data-aos="fade-up">
 
-    <p><b>Email:</b> p20230482@hyderabad.bits-pilani.ac.in</p>
+    <p>
+      <b>BITS Pilani Email:</b><br>
+      <a href="mailto:p20230482@hyderabad.bits-pilani.ac.in">
+        p20230482@hyderabad.bits-pilani.ac.in
+      </a>
+    </p>
+
+    <p>
+      <b>La Trobe University Email:</b><br>
+      <a href="mailto:23734784@students.latrobe.edu.au">
+        23734784@students.latrobe.edu.au
+      </a>
+    </p>
 
     <p>
       <b>Address:</b><br>
@@ -1045,8 +486,11 @@ Prof. Wei Xiang
     </p>
 
     <p>
-      <a href="https://github.com/rahmanraziur">GitHub</a> |
-      <a href="https://www.linkedin.com/in/raziur247">LinkedIn</a>
+      <a href="https://www.linkedin.com/in/raziur247"
+         target="_blank"
+         rel="noopener noreferrer">
+         LinkedIn
+      </a>
     </p>
 
   </div>
