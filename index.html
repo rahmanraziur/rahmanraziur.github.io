@@ -33,6 +33,10 @@
 <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
 
 <style>
+html {
+  scroll-behavior: smooth;
+}
+
 
 /* GLOBAL — LIGHT DEFAULT */
 body {
@@ -41,8 +45,11 @@ body {
   line-height: 1.6;
   background: #f9fafb;
   color: #111827;
-}
 
+  transition:
+    background 0.3s ease,
+    color 0.3s ease;
+}
 
 
 
@@ -52,11 +59,6 @@ body.dark {
   color: #e5e7eb;
 }
 
-body.dark::before {
-  background-image:
-    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-}
 
 body.dark .card {
   background: rgba(17,24,39,0.7);
@@ -69,16 +71,7 @@ header {
   padding: 0;
 }
 
-/* BUTTON */
-.btn {
-  padding: 10px 18px;
-  background: linear-gradient(135deg, #38bdf8, #0ea5e9);
-  color: #000;
-  border-radius: 8px;
-  margin: 5px;
-  display: inline-block;
-  text-decoration: none;
-}
+
 
 /* NAV */
 nav {
@@ -86,8 +79,9 @@ nav {
   justify-content: center;
   gap: 25px;
   padding: 15px;
-  background: rgba(255,255,255,0.8);
-  backdrop-filter: blur(10px); 
+
+  background: rgba(255,255,255,0.96);
+
   border-bottom: 1px solid #e5e7eb;
   position: sticky;
   top: 0;
@@ -103,7 +97,6 @@ nav::-webkit-scrollbar {
 
 nav a {
   text-decoration: none;
-  color: #e5e7eb;
 }
 
 nav a:hover {
@@ -153,7 +146,6 @@ h2 {
   border-radius: 16px;
   margin-bottom: 20px;
   border: 1px solid #e5e7eb;
-  backdrop-filter: blur(12px);
   transition: 0.3s;
 
   max-width: 900px;          /* ADD */
@@ -162,16 +154,20 @@ h2 {
 }
 
 .card:hover {
-  transform: translateY(-8px) scale(1.01);
+  transform: translateY(-4px);
   box-shadow: 0 20px 40px rgba(56,189,248,0.15);
 }
-
-/* GRID */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
+.card,
+.publication-item,
+.teaching-item,
+.hero,
+nav {
+  transition:
+    background 0.3s ease,
+    border-color 0.3s ease,
+    color 0.3s ease;
 }
+
 
 /* RESEARCH INTEREST */
 .interest-list {
@@ -184,9 +180,13 @@ h2 {
 
 .interest-list li {
   padding: 10px 0;
-  border-bottom: 1px solid #1f2937;
+  border-bottom: 1px solid #e5e7eb;
   position: relative;
   padding-left: 20px;
+}
+
+body.dark .interest-list li {
+  border-bottom: 1px solid #1f2937;
 }
 
 .interest-list li::before {
@@ -305,7 +305,7 @@ body.dark .section-subtitle {
 .publication-item h3 {
   margin-top: 0;
   margin-bottom: 12px;
-  font-size: 1.15rem;
+  font-size: 1.08rem;
   line-height: 1.5;
   color: #111827;
 }
@@ -320,6 +320,15 @@ body.dark .section-subtitle {
   color: #6b7280;
   margin-bottom: 18px;
   font-size: 0.95rem;
+}
+.pub-summary {
+  color: #374151;
+  line-height: 1.7;
+  margin-bottom: 18px;
+}
+
+body.dark .pub-summary {
+  color: #cbd5e1;
 }
 
 .pub-link {
@@ -350,6 +359,78 @@ body.dark .pub-venue {
   color: #94a3b8;
 }
 
+body.dark .hero {
+  background: rgba(17,24,39,0.75);
+  border: 1px solid #1f2937;
+}
+
+body.dark .hero h1 {
+  color: #f8fafc;
+}
+
+body.dark .affiliation,
+body.dark .hero-tagline {
+  color: #cbd5e1;
+}
+
+body.dark .hero-badges span {
+  background: rgba(56,189,248,0.12);
+  border: 1px solid rgba(56,189,248,0.25);
+  color: #e5e7eb;
+}
+
+
+body.dark footer {
+  color: #94a3b8;
+}
+
+
+/* RESEARCH DEMO */
+.research-demo {
+  margin-top: 60px;
+  text-align: center;
+}
+
+.research-demo h3 {
+  font-size: 1.35rem;
+  color: #111827;
+  margin-bottom: 12px;
+}
+
+.demo-subtitle {
+  color: #6b7280;
+  max-width: 720px;
+  margin: 0 auto 24px auto;
+  line-height: 1.7;
+}
+
+.demo-tags {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+
+.demo-tags span {
+  background: rgba(56,189,248,0.08);
+  border: 1px solid rgba(56,189,248,0.18);
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 0.82rem;
+}
+
+body.dark .research-demo h3 {
+  color: #e5e7eb;
+}
+
+body.dark .demo-subtitle {
+  color: #94a3b8;
+}
+
+
+
+
 /* CANVAS */
 canvas {
   width: 100%;
@@ -374,14 +455,14 @@ footer {
   align-items: center;
   justify-content: space-between;
   padding: 60px 50px;            /* slightly tighter */
-  max-width: 1100px;
+  max-width: 950px;
   margin: 40px auto;
   gap: 30px;                     /* balanced spacing */
   position: relative;   /* 🔥 required */
   overflow: hidden;
   background: white;
   border-radius: 18px;
-  border: 1px solid rgba(56,189,248,0.15);
+  border: 1px solid #e5e7eb;
 }
 
 /* LEFT */
@@ -392,7 +473,7 @@ footer {
 
 /* TEXT */
 .hero h1 {
-  font-size: 4rem;
+  font-size: 3.5rem;
   font-weight: 700;
   margin-bottom: 10px;
   letter-spacing: -1px;
@@ -592,17 +673,7 @@ footer {
 
 
 
-.btn {
-  padding: 10px 18px;
-  background: linear-gradient(135deg, #38bdf8, #0ea5e9);
-  color: #000;
-  border-radius: 8px;
-  margin: 5px;
-  display: inline-block;
-  text-decoration: none;
-  border: none;
-  cursor: pointer;
-}
+
 
 .card a {
   color: #38bdf8;
@@ -614,26 +685,6 @@ footer {
 }
 
 
-/* PUBLICATIONS */
-.pub-link {
-  margin-right: 12px;
-  text-decoration: none;
-  color: #38bdf8;
-  font-size: 0.95rem;
-}
-
-.pub-link:hover {
-  text-decoration: underline;
-}
-
-.pub-title {
-  color: #e5e7eb;
-  text-decoration: none;
-}
-
-.pub-title:hover {
-  color: #38bdf8;
-}
 
 </style>
 </head>
@@ -689,7 +740,6 @@ footer {
 <nav>
   <a href="#about">About</a>
   <a href="#interests">Research Interests</a>
-  <a href="#research">Research Contributions</a>
   <a href="#timeline">Timeline</a>
   <a href="#publications">Publications</a>
   <a href="#education">Education</a> 
@@ -741,42 +791,7 @@ Prof. Wei Xiang
 
 
 
-<section id="research">
-  <h2>Research Contributions</h2>
 
-  <div class="grid">
-
-    <div class="card" data-aos="fade-up">
-      <h3>ASCP (IEEE ICC 2026) </h3>
-      <p>
-        An analytical model and control policy for slotframe adaptation, enabling predictable latency and efficient resource utilization in 6TiSCH networks.
-      </p>
-    </div>
-
-    <div class="card" data-aos="fade-up">
-      <h3>FlexiFrame (IEEE GLOBECOM 2025)</h3>
-      <p>An adaptive slotframe scheduling mechanism that dynamically adjusts slotframe size based on traffic load to improve energy efficiency and latency in 6TiSCH networks.</p>
-    </div>
-
-    <div class="card" data-aos="fade-up">
-      <h3>TARA (IEEE ANTS 2025) </h3>
-      <p>A topology-aware scheduling approach that allocates resources based on node position and traffic load to enhance reliability and load balancing in multi-hop IoT networks.</p>
-    </div>
-
-  </div>
-
-<h3 style="text-align:center;margin-top:40px;">
-  Live Multi-hop Visualization of a 6TiSCH-based Smart City IoT Network
-</h3>
-
-<div style="text-align:center;font-size:0.8rem;color:#94a3b8;">
-🚦 Traffic • 🌡️ Temp • 💧 Humidity • 💡 Light • 🔥 Fire • 🚑 Emergency
-</div>
-
-
-<canvas id="net"></canvas>
- 
-</section>
 
 <section id="timeline">
   <h2>Research Timeline</h2>
@@ -804,7 +819,7 @@ Prof. Wei Xiang
     </div>
 
     <div data-aos="fade-up">
-      <b>Jan 2027 - Dec 2027 (Planned)</b><br>
+      <b>Expected Research Visit: Jan 2027 - Dec 2027</b><br>
       Research at La Trobe University, Melbourne
     </div>
 
@@ -812,13 +827,14 @@ Prof. Wei Xiang
 </section>
 
 
-
 <section id="publications">
-  <h2>Publications</h2>
+  <h2>Publications & Research Contributions</h2>
 
   <div class="publication-list">
 
+    <!-- FLEXIFRAME -->
     <div class="publication-item">
+
       <h3>
         FlexiFrame: Adaptive Slotframe Scheduling for 6TiSCH-Based Smart City IoT Networks
       </h3>
@@ -831,10 +847,21 @@ Prof. Wei Xiang
         Accepted at IEEE GLOBECOM Workshops 2025 • Taipei, Taiwan
       </p>
 
-      <a href="#" class="pub-link">Paper Coming Soon</a>
+      <p class="pub-summary">
+        Proposed an adaptive slotframe scheduling mechanism that dynamically
+        adjusts slotframe size according to traffic load, improving energy
+        efficiency, latency, and scheduling responsiveness in 6TiSCH IoT networks.
+      </p>
+
+      <a href="#" class="pub-link">
+        Paper Coming Soon
+      </a>
+
     </div>
 
+    <!-- TARA -->
     <div class="publication-item">
+
       <h3>
         TARA: Topology-Aware Rank Allocation for Load Balancing in Autonomous Scheduling of 6TiSCH-based IoT Networks
       </h3>
@@ -847,14 +874,23 @@ Prof. Wei Xiang
         Accepted at IEEE ANTS 2025 • New Delhi, India
       </p>
 
+      <p class="pub-summary">
+        Developed a topology-aware scheduling approach that allocates resources
+        based on node position and traffic conditions to improve reliability,
+        load balancing, and congestion management in multi-hop IoT networks.
+      </p>
+
       <a href="https://ieeexplore.ieee.org/abstract/document/11429748"
          class="pub-link"
          target="_blank">
          View Paper
       </a>
+
     </div>
 
+    <!-- ASCP -->
     <div class="publication-item">
+
       <h3>
         ASCP: Analytical Slotframe Control Policy for Adaptive Resource Allocation in 6TiSCH Networks
       </h3>
@@ -867,12 +903,46 @@ Prof. Wei Xiang
         Accepted at IEEE ICC 2026 • Glasgow, UK
       </p>
 
-      <a href="#" class="pub-link">Paper Coming Soon</a>
+      <p class="pub-summary">
+        Proposed an analytical model and adaptive control policy for slotframe
+        adaptation, enabling predictable latency and efficient resource utilization
+        under dynamic traffic conditions in 6TiSCH networks.
+      </p>
+
+      <a href="#" class="pub-link">
+        Paper Coming Soon
+      </a>
+
     </div>
 
   </div>
-</section>
 
+  <!-- VISUALIZATION -->
+  <div class="research-demo">
+
+    <h3>
+      Live Multi-hop Visualization of a 6TiSCH-based Smart City IoT Network
+    </h3>
+
+    <p class="demo-subtitle">
+      Real-time visualization of adaptive scheduling, heterogeneous IoT traffic,
+      and multi-hop forwarding in a smart city 6TiSCH environment.
+    </p>
+
+    <div class="demo-tags">
+      <span>🚦 Traffic</span>
+      <span>🌡️ Temperature</span>
+      <span>💧 Humidity</span>
+      <span>💡 Light</span>
+      <span>🔥 Fire</span>
+      <span>🚑 Emergency</span>
+    </div>
+
+    <canvas id="net"></canvas>
+
+  </div>
+
+</section>
 
 
 <section id="teaching">
