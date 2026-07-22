@@ -377,6 +377,20 @@ body.dark .expertise-label {
     flex-direction: column;
   }
 }
+
+.lab-mark img {
+  display: block;
+  width: 100%;
+  max-width: 360px;
+  height: auto;
+  object-fit: contain;
+  margin: 0 auto;
+}
+
+body.dark .lab-mark {
+  background: rgba(255, 255, 255, 0.96);
+}
+
 </style>
 
 </head>
@@ -523,17 +537,7 @@ Prof. Wei Xiang
         IEEE ICC 2026 in Glasgow, United Kingdom.
       </p>
     </article>
-
-    <article class="highlight-card" data-aos="fade-up" data-aos-delay="80">
-      <span class="highlight-date">2026</span>
-      <h3>Joint doctoral programme</h3>
-      <p>
-        Continuing doctoral research jointly with BITS Pilani Hyderabad Campus
-        and La Trobe University through ASCRIN.
-      </p>
-    </article>
-
-    <article class="highlight-card" data-aos="fade-up" data-aos-delay="160">
+<article class="highlight-card" data-aos="fade-up" data-aos-delay="160">
       <span class="highlight-date">2025</span>
       <h3>TARA accepted at IEEE ANTS</h3>
       <p>
@@ -910,10 +914,11 @@ Prof. Wei Xiang
 
   <div class="lab-feature" data-aos="fade-up">
     <div class="lab-mark" aria-label="LUMEN-X Lab">
-      <div>
-        <strong>LUMEN-X</strong>
-        <span>Low-Power Wireless Networking</span>
-      </div>
+      <img src="/assets/images/lumenx-logo.png"
+           alt="LUMEN-X Lab logo"
+           loading="lazy"
+           decoding="async">
+    </div>
     </div>
 
     <div class="lab-content">
