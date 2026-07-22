@@ -106,6 +106,8 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 <link rel="stylesheet" href="assets/css/style.css">
 
 
@@ -391,6 +393,59 @@ body.dark .lab-mark {
   background: rgba(255, 255, 255, 0.96);
 }
 
+
+/* Clickable IEEE venue badges */
+.hero-badges a {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.hero-badges a:hover,
+.hero-badges a:focus-visible {
+  transform: translateY(-2px);
+  border-color: #0ea5e9;
+  box-shadow: 0 6px 16px rgba(14, 165, 233, 0.16);
+}
+
+/* Academic and social-profile links */
+.hero-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.hero-links a i {
+  width: 1.15rem;
+  flex: 0 0 1.15rem;
+  text-align: center;
+  font-size: 1.08rem;
+}
+
+.hero-links a:hover i,
+.hero-links a:focus-visible i {
+  transform: translateY(-1px);
+}
+
+.hero-links a i {
+  transition: transform 0.2s ease;
+}
+
+@media (max-width: 640px) {
+  .hero-links {
+    align-items: flex-start;
+  }
+
+  .hero-links a {
+    width: fit-content;
+  }
+}
+
 </style>
 
 </head>
@@ -420,9 +475,26 @@ body.dark .lab-mark {
     </p>
 
         <div class="hero-badges">
-  <span>IEEE GLOBECOM 2025</span>
-  <span>IEEE ANTS 2025</span>
-  <span>IEEE ICC 2026</span>
+  <a href="https://ieeexplore.ieee.org/abstract/document/11591191"
+     target="_blank"
+     rel="noopener noreferrer"
+     aria-label="Open the FlexiFrame paper on IEEE Xplore">
+    IEEE GLOBECOM 2025
+  </a>
+
+  <a href="https://ieeexplore.ieee.org/abstract/document/11429748"
+     target="_blank"
+     rel="noopener noreferrer"
+     aria-label="Open the TARA paper on IEEE Xplore">
+    IEEE ANTS 2025
+  </a>
+
+  <a href="https://ieeexplore.ieee.org/abstract/document/11586844"
+     target="_blank"
+     rel="noopener noreferrer"
+     aria-label="Open the ASCP paper on IEEE Xplore">
+    IEEE ICC 2026
+  </a>
 </div>
 
 <div class="hero-buttons">
@@ -431,38 +503,46 @@ body.dark .lab-mark {
 </div>
 
     <div class="hero-links">
-  
-      <a href="https://scholars.latrobe.edu.au/r3rahman/about"
-   target="_blank"
-   rel="noopener noreferrer">
-   La Trobe Research Profile
-</a>
 
-<a href="https://github.com/rahmanraziur"
-   target="_blank"
-   rel="noopener noreferrer">
-   GitHub
-</a>
+  <a href="https://scholars.latrobe.edu.au/r3rahman/about"
+     target="_blank"
+     rel="noopener noreferrer"
+     aria-label="La Trobe University research profile">
+    <i class="fa-solid fa-building-columns" aria-hidden="true"></i>
+    <span>La Trobe Research Profile</span>
+  </a>
 
+  <a href="https://github.com/rahmanraziur"
+     target="_blank"
+     rel="noopener noreferrer"
+     aria-label="Raziur Rahman on GitHub">
+    <i class="fa-brands fa-github" aria-hidden="true"></i>
+    <span>GitHub</span>
+  </a>
 
-<a href="https://www.linkedin.com/in/raziur247"
-   target="_blank"
-   rel="noopener noreferrer">
-   LinkedIn
-</a>
+  <a href="https://www.linkedin.com/in/raziur247"
+     target="_blank"
+     rel="noopener noreferrer"
+     aria-label="Raziur Rahman on LinkedIn">
+    <i class="fa-brands fa-linkedin" aria-hidden="true"></i>
+    <span>LinkedIn</span>
+  </a>
 
-<a href="https://scholar.google.com/citations?user=FUXiS7UAAAAJ&hl=en&authuser=1"
-   target="_blank"
-   rel="noopener noreferrer">
-   Google Scholar
-</a>
+  <a href="https://scholar.google.com/citations?user=FUXiS7UAAAAJ&amp;hl=en"
+     target="_blank"
+     rel="noopener noreferrer"
+     aria-label="Raziur Rahman on Google Scholar">
+    <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i>
+    <span>Google Scholar</span>
+  </a>
 
-
-<a href="https://orcid.org/0009-0003-6365-7915"
-   target="_blank"
-   rel="noopener noreferrer">
-   ORCID
-</a>
+  <a href="https://orcid.org/0009-0003-6365-7915"
+     target="_blank"
+     rel="noopener noreferrer"
+     aria-label="Raziur Rahman on ORCID">
+    <i class="fa-brands fa-orcid" aria-hidden="true"></i>
+    <span>ORCID</span>
+  </a>
 
 </div>
 
