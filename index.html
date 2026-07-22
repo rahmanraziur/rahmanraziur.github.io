@@ -113,6 +113,271 @@
 <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
 
 
+<style>
+/* Modern homepage additions */
+.hero-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.hero-btn-secondary {
+  background: transparent;
+  color: inherit;
+  border: 1px solid rgba(37, 99, 235, 0.45);
+}
+
+.section-intro {
+  max-width: 760px;
+  margin: -0.35rem 0 1.5rem;
+  color: #64748b;
+  line-height: 1.7;
+}
+
+.highlights-grid,
+.featured-projects,
+.expertise-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.1rem;
+}
+
+.highlight-card,
+.featured-project-card,
+.expertise-item,
+.lab-feature {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+}
+
+.highlight-card,
+.featured-project-card,
+.expertise-item {
+  padding: 1.25rem;
+}
+
+.highlight-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.highlight-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 4px;
+  background: #2563eb;
+}
+
+.highlight-date,
+.project-badge,
+.expertise-label {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.highlight-date {
+  padding: 0.25rem 0.6rem;
+  background: rgba(37, 99, 235, 0.1);
+  color: #1d4ed8;
+  margin-bottom: 0.75rem;
+}
+
+.highlight-card h3,
+.featured-project-card h3 {
+  margin: 0 0 0.55rem;
+}
+
+.highlight-card p,
+.featured-project-card p,
+.lab-feature p {
+  line-height: 1.65;
+}
+
+.project-topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.8rem;
+}
+
+.project-acronym {
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+
+.project-badge {
+  padding: 0.3rem 0.65rem;
+  color: #166534;
+  background: rgba(34, 197, 94, 0.12);
+}
+
+.project-meta {
+  color: #64748b;
+  font-size: 0.92rem;
+  margin-bottom: 0.8rem;
+}
+
+.project-actions,
+.lab-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-top: 1rem;
+}
+
+.project-actions a,
+.lab-actions a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.62rem 0.9rem;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 600;
+  border: 1px solid rgba(37, 99, 235, 0.28);
+}
+
+.project-actions a:first-child,
+.lab-actions a:first-child {
+  background: #2563eb;
+  color: #ffffff;
+  border-color: #2563eb;
+}
+
+.expertise-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.expertise-item {
+  min-height: 120px;
+}
+
+.expertise-label {
+  padding: 0.25rem 0.55rem;
+  margin-bottom: 0.7rem;
+  color: #4338ca;
+  background: rgba(99, 102, 241, 0.1);
+}
+
+.expertise-item h3 {
+  margin: 0 0 0.35rem;
+  font-size: 1rem;
+}
+
+.expertise-item p {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.lab-feature {
+  display: grid;
+  grid-template-columns: minmax(180px, 0.65fr) minmax(0, 1.6fr);
+  gap: 1.5rem;
+  align-items: center;
+  padding: 1.5rem;
+}
+
+.lab-mark {
+  display: grid;
+  place-items: center;
+  min-height: 180px;
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(34, 197, 94, 0.2), transparent 38%),
+    linear-gradient(135deg, #0f3b75, #2563eb 58%, #f59e0b);
+  color: #ffffff;
+  text-align: center;
+  padding: 1rem;
+}
+
+.lab-mark strong {
+  display: block;
+  font-size: clamp(1.7rem, 4vw, 2.5rem);
+  letter-spacing: 0.04em;
+}
+
+.lab-mark span {
+  display: block;
+  margin-top: 0.45rem;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  opacity: 0.9;
+}
+
+.lab-content h3 {
+  margin-top: 0;
+}
+
+body.dark .section-intro,
+body.dark .project-meta,
+body.dark .expertise-item p {
+  color: #94a3b8;
+}
+
+body.dark .highlight-card,
+body.dark .featured-project-card,
+body.dark .expertise-item,
+body.dark .lab-feature {
+  background: rgba(15, 23, 42, 0.86);
+  border-color: rgba(148, 163, 184, 0.18);
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.2);
+}
+
+body.dark .highlight-date {
+  color: #93c5fd;
+  background: rgba(59, 130, 246, 0.16);
+}
+
+body.dark .project-badge {
+  color: #86efac;
+  background: rgba(34, 197, 94, 0.14);
+}
+
+body.dark .expertise-label {
+  color: #c4b5fd;
+  background: rgba(139, 92, 246, 0.16);
+}
+
+@media (max-width: 960px) {
+  .highlights-grid,
+  .featured-projects {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .expertise-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 680px) {
+  .highlights-grid,
+  .featured-projects,
+  .expertise-grid,
+  .lab-feature {
+    grid-template-columns: 1fr;
+  }
+
+  .lab-mark {
+    min-height: 150px;
+  }
+
+  .project-topline {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+</style>
 
 </head>
 
@@ -147,11 +412,8 @@
 </div>
 
 <div class="hero-buttons">
-  <a href="#publications" class="hero-btn">
-    View Research
-  </a>
-
-
+  <a href="#research" class="hero-btn">Featured Research</a>
+  <a href="#highlights" class="hero-btn hero-btn-secondary">Recent Highlights</a>
 </div>
 
     <div class="hero-links">
@@ -204,15 +466,17 @@
 
 </header>
 
-<nav>
+<nav aria-label="Primary navigation">
   <a href="#about">About</a>
-  <a href="#interests">Research Interests</a>
-  <a href="#timeline">Timeline</a>
+  <a href="#highlights">Highlights</a>
+  <a href="#research">Research</a>
   <a href="#publications">Publications</a>
+  <a href="#professional">Professional</a>
+  <a href="#lumenx">LUMEN-X</a>
   <a href="#teaching">Teaching</a>
-  <a href="#education">Education</a> 
+  <a href="#education">Education</a>
   <a href="#contact">Contact</a>
-  <button id="themeToggle">🌙</button>
+  <button id="themeToggle" type="button" aria-label="Switch colour theme" title="Switch colour theme">🌙</button>
 </nav>
 
 
@@ -243,6 +507,51 @@ Prof. Wei Xiang
 </section>
 
 
+<section id="highlights">
+  <h2>Recent Highlights</h2>
+  <p class="section-intro">
+    Selected research milestones from my work on adaptive scheduling and resource
+    allocation for low-power multi-hop IoT networks.
+  </p>
+
+  <div class="highlights-grid">
+    <article class="highlight-card" data-aos="fade-up">
+      <span class="highlight-date">2026</span>
+      <h3>ASCP accepted at IEEE ICC</h3>
+      <p>
+        Analytical Slotframe Control Policy accepted for presentation at
+        IEEE ICC 2026 in Glasgow, United Kingdom.
+      </p>
+    </article>
+
+    <article class="highlight-card" data-aos="fade-up" data-aos-delay="80">
+      <span class="highlight-date">2026</span>
+      <h3>Joint doctoral programme</h3>
+      <p>
+        Continuing doctoral research jointly with BITS Pilani Hyderabad Campus
+        and La Trobe University through ASCRIN.
+      </p>
+    </article>
+
+    <article class="highlight-card" data-aos="fade-up" data-aos-delay="160">
+      <span class="highlight-date">2025</span>
+      <h3>TARA accepted at IEEE ANTS</h3>
+      <p>
+        Topology-Aware Rank Allocation accepted at IEEE ANTS 2025 in New Delhi,
+        India.
+      </p>
+    </article>
+
+    <article class="highlight-card" data-aos="fade-up">
+      <span class="highlight-date">2025</span>
+      <h3>FlexiFrame accepted at GLOBECOM Workshops</h3>
+      <p>
+        Adaptive slotframe scheduling work accepted at IEEE GLOBECOM Workshops
+        2025 in Taipei, Taiwan.
+      </p>
+    </article>
+  </div>
+</section>
 
 <section id="interests">
   <h2>Research Interests</h2>
@@ -262,6 +571,69 @@ Prof. Wei Xiang
 
 
 
+<section id="research">
+  <h2>Featured Research</h2>
+  <p class="section-intro">
+    Three published research contributions addressing adaptive scheduling,
+    topology-aware resource allocation, and analytical slotframe control in 6TiSCH networks.
+  </p>
+
+  <div class="featured-projects">
+    <article class="featured-project-card" data-aos="fade-up">
+      <div class="project-topline">
+        <span class="project-acronym">FlexiFrame</span>
+        <span class="project-badge">Accepted</span>
+      </div>
+      <p class="project-meta">IEEE GLOBECOM Workshops 2025</p>
+      <h3>Adaptive slotframe scheduling</h3>
+      <p>
+        Dynamically adjusts the slotframe according to traffic demand to improve
+        latency, energy efficiency, and scheduling responsiveness.
+      </p>
+      <div class="project-actions">
+        <a href="projects/flexiframe.html">Project Overview</a>
+        <a href="https://ieeexplore.ieee.org/abstract/document/11591191"
+           target="_blank" rel="noopener noreferrer">IEEE Xplore</a>
+      </div>
+    </article>
+
+    <article class="featured-project-card" data-aos="fade-up" data-aos-delay="80">
+      <div class="project-topline">
+        <span class="project-acronym">TARA</span>
+        <span class="project-badge">Accepted</span>
+      </div>
+      <p class="project-meta">IEEE ANTS 2025</p>
+      <h3>Topology-aware rank allocation</h3>
+      <p>
+        Uses topology and forwarding position to improve autonomous scheduling,
+        load balancing, and congestion management in multi-hop networks.
+      </p>
+      <div class="project-actions">
+        <a href="projects/tara.html">Project Overview</a>
+        <a href="https://ieeexplore.ieee.org/abstract/document/11429748"
+           target="_blank" rel="noopener noreferrer">IEEE Xplore</a>
+      </div>
+    </article>
+
+    <article class="featured-project-card" data-aos="fade-up" data-aos-delay="160">
+      <div class="project-topline">
+        <span class="project-acronym">ASCP</span>
+        <span class="project-badge">Accepted</span>
+      </div>
+      <p class="project-meta">IEEE ICC 2026</p>
+      <h3>Analytical slotframe control</h3>
+      <p>
+        Derives a control policy for adaptive resource allocation with predictable
+        latency and efficient utilization under changing traffic conditions.
+      </p>
+      <div class="project-actions">
+        <a href="projects/ascp.html">Project Overview</a>
+        <a href="https://ieeexplore.ieee.org/abstract/document/11586844"
+           target="_blank" rel="noopener noreferrer">IEEE Xplore</a>
+      </div>
+    </article>
+  </div>
+</section>
 
 <section id="timeline">
   <h2>Research Timeline</h2>
@@ -324,9 +696,7 @@ Prof. Wei Xiang
       </p>
 
         <a href="projects/flexiframe.html"
-   class="pub-link"
-   target="_blank"
-   rel="noopener noreferrer">
+   class="pub-link">
    Project Overview
 </a>
 
@@ -363,9 +733,7 @@ Prof. Wei Xiang
       </p>
         
         <a href="projects/tara.html"
-   class="pub-link"
-   target="_blank"
-   rel="noopener noreferrer">
+   class="pub-link">
    Project Overview
 </a>
 
@@ -401,9 +769,7 @@ Prof. Wei Xiang
       </p>
 
   <a href="projects/ascp.html"
-   class="pub-link"
-   target="_blank"
-   rel="noopener noreferrer">
+   class="pub-link">
    Project Overview
 
 </a>
@@ -441,7 +807,7 @@ Prof. Wei Xiang
       <span>🚑 Emergency</span>
     </div>
 
-    <canvas id="net"></canvas>
+    <canvas id="net" aria-label="Animated 6TiSCH smart-city network visualization">Your browser does not support the network visualization.</canvas>
 
   </div>
 
@@ -503,6 +869,69 @@ Prof. Wei Xiang
 </section>
 
 
+
+
+<section id="professional">
+  <h2>Professional Service & Research Platforms</h2>
+  <p class="section-intro">
+    Academic service and experimental platforms supporting my work on low-power
+    wireless networking and 6TiSCH systems.
+  </p>
+
+  <div class="expertise-grid">
+    <article class="expertise-item" data-aos="fade-up">
+      <span class="expertise-label">Service</span>
+      <h3>IEEE VTC 2026-Fall</h3>
+      <p>Reviewer for the vehicular networking track.</p>
+    </article>
+
+    <article class="expertise-item" data-aos="fade-up" data-aos-delay="50">
+      <span class="expertise-label">Testbed</span>
+      <h3>FIT IoT-LAB</h3>
+      <p>Large-scale experimentation with multi-hop low-power wireless networks.</p>
+    </article>
+
+    <article class="expertise-item" data-aos="fade-up" data-aos-delay="100">
+      <span class="expertise-label">Platform</span>
+      <h3>Contiki-NG & Cooja</h3>
+      <p>Implementation and simulation of TSCH, RPL, and 6TiSCH mechanisms.</p>
+    </article>
+
+    <article class="expertise-item" data-aos="fade-up" data-aos-delay="150">
+      <span class="expertise-label">Analysis</span>
+      <h3>MATLAB</h3>
+      <p>Performance modelling, data analysis, and publication-quality visualization.</p>
+    </article>
+  </div>
+</section>
+
+<section id="lumenx">
+  <h2>LUMEN-X Lab</h2>
+
+  <div class="lab-feature" data-aos="fade-up">
+    <div class="lab-mark" aria-label="LUMEN-X Lab">
+      <div>
+        <strong>LUMEN-X</strong>
+        <span>Low-Power Wireless Networking</span>
+      </div>
+    </div>
+
+    <div class="lab-content">
+      <h3>Low-power, Ultra-reliable, Multidomain and Emerging Networks eXploration Lab</h3>
+      <p>
+        LUMEN-X Lab explores low-power wireless networking, dependable IoT systems,
+        adaptive scheduling, emerging network architectures, and experimental research
+        for dynamic connected environments.
+      </p>
+      <div class="lab-actions">
+        <a href="https://lumenxlab.github.io/"
+           target="_blank" rel="noopener noreferrer">Visit Lab Website</a>
+        <a href="https://www.linkedin.com/company/lumenxlab/"
+           target="_blank" rel="noopener noreferrer">LinkedIn Page</a>
+      </div>
+    </div>
+  </div>
+</section>
 
 <section id="education">
   <h2>Education</h2>
@@ -588,35 +1017,37 @@ Prof. Wei Xiang
 <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
 
 <script>
-AOS.init();
+AOS.init({
+  duration: 700,
+  once: true,
+  offset: 70
+});
 
-// DARK MODE
-document.getElementById("themeToggle").onclick = () => {
-  document.body.classList.toggle("dark");
+const themeToggle = document.getElementById("themeToggle");
+const savedTheme = localStorage.getItem("theme");
+const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
 
-  const btn = document.getElementById("themeToggle");
-
-  if(document.body.classList.contains("dark")){
-    btn.innerHTML = "☀️";
-  } else {
-    btn.innerHTML = "🌙";
-  }
-};
-
-// STATS ANIMATION
-function animate(id, end) {
-  let i = 0;
-  let el = document.getElementById(id);
-  let interval = setInterval(() => {
-    i++;
-    el.innerText = i;
-    if (i >= end) clearInterval(interval);
-  }, 40);
+if (savedTheme === "dark" || (!savedTheme && prefersDark)) {
+  document.body.classList.add("dark");
 }
 
+function updateThemeButton() {
+  const darkMode = document.body.classList.contains("dark");
+  themeToggle.textContent = darkMode ? "☀️" : "🌙";
+  themeToggle.setAttribute(
+    "aria-label",
+    darkMode ? "Switch to light theme" : "Switch to dark theme"
+  );
+}
 
+updateThemeButton();
 
-
+themeToggle.addEventListener("click", () => {
+  document.body.classList.toggle("dark");
+  const darkMode = document.body.classList.contains("dark");
+  localStorage.setItem("theme", darkMode ? "dark" : "light");
+  updateThemeButton();
+});
 </script>
 
 <script>
@@ -625,6 +1056,8 @@ function animate(id, end) {
 
 const canvas = document.getElementById("net");
 const ctx = canvas.getContext("2d");
+let canvasWidth = 0;
+let canvasHeight = 0;
 
 // ---------- GLOBAL STATE ----------
 let nodes = [];
@@ -656,17 +1089,18 @@ const TYPES = ["traffic","temperature","humidity","light","fire"];
 function resizeCanvas() {
   const dpr = window.devicePixelRatio || 1;
 
-  const displayWidth = canvas.parentElement.clientWidth;
-  const displayHeight = Math.max(450, window.innerHeight * 0.55);
+  canvasWidth = canvas.parentElement.clientWidth;
+  canvasHeight = Math.max(450, window.innerHeight * 0.55);
 
-  canvas.width = displayWidth * dpr;
-  canvas.height = displayHeight * dpr;
+  canvas.width = canvasWidth * dpr;
+  canvas.height = canvasHeight * dpr;
 
-  canvas.style.height = displayHeight + "px";
+  canvas.style.width = canvasWidth + "px";
+  canvas.style.height = canvasHeight + "px";
 
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-  initNetwork(displayHeight, displayWidth); // ✅ pass logical width
+  initNetwork(canvasHeight, canvasWidth);
 }
 window.addEventListener("resize", resizeCanvas);
 
@@ -782,21 +1216,21 @@ function draw(timestamp) {
   }
 
   ctx.fillStyle = "rgba(2,6,23,0.15)";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
   const currentSlot = ASN % SLOTFRAME;
 
   ctx.fillStyle = "#94a3b8";
   ctx.font = "12px Inter";
 
-  const margin = canvas.width > 500 ? 100 : 130;
+  const margin = canvasWidth > 500 ? 100 : 130;
 
-  ctx.fillText(`ASN: ${ASN}`, canvas.width - margin, 20);
-  ctx.fillText(`Slot: ${currentSlot}`, canvas.width - margin, 35);
+  ctx.fillText(`ASN: ${ASN}`, canvasWidth - margin, 20);
+  ctx.fillText(`Slot: ${currentSlot}`, canvasWidth - margin, 35);
 
   // ===== SLOT BAR =====
   const barWidth = SLOTFRAME * 5;
-  const barStart = Math.max(10, canvas.width - barWidth - 20);
+  const barStart = Math.max(10, canvasWidth - barWidth - 20);
 
   for (let i = 0; i < SLOTFRAME; i++) {
     ctx.fillStyle = i === currentSlot ? "#22c55e" : "rgba(255,255,255,0.1)";
@@ -923,7 +1357,7 @@ function draw(timestamp) {
     ctx.fillRect(n.x-4,n.y-1,8,2);
 
     n.x += n.dx;
-    if(n.x<50||n.x>canvas.width-50) n.dx*=-1;
+    if(n.x < 50 || n.x > canvasWidth - 50) n.dx *= -1;
 
     if (!n.parent || Math.random()<0.1){
       let c=[...nodes,root];
