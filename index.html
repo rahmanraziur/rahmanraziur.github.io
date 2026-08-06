@@ -743,6 +743,20 @@ body.dark .hero-badges .venue-chip > i:first-child {
   }
 }
 
+
+/* PMAS: balanced four-item research layout */
+.highlights-grid,
+.featured-projects {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (max-width: 680px) {
+  .highlights-grid,
+  .featured-projects {
+    grid-template-columns: 1fr;
+  }
+}
+
 </style>
 
 </head>
@@ -802,6 +816,16 @@ body.dark .hero-badges .venue-chip > i:first-child {
      aria-label="Open the ASCP paper on IEEE Xplore">
     <i class="fa-solid fa-wave-square" aria-hidden="true"></i>
     <span>IEEE ICC 2026</span>
+    <i class="fa-solid fa-arrow-up-right-from-square chip-arrow"
+       aria-hidden="true"></i>
+  </a>
+
+
+  <a class="venue-chip"
+     href="projects/pmas.html"
+     aria-label="Open the PMAS project overview">
+    <i class="fa-solid fa-satellite-dish" aria-hidden="true"></i>
+    <span>IEEE GLOBECOM 2026</span>
     <i class="fa-solid fa-arrow-up-right-from-square chip-arrow"
        aria-hidden="true"></i>
   </a>
@@ -922,6 +946,15 @@ Prof. Wei Xiang
   <div class="highlights-grid">
     <article class="highlight-card" data-aos="fade-up">
       <span class="highlight-date">2026</span>
+      <h3>PMAS accepted at IEEE GLOBECOM</h3>
+      <p>
+        Predictive Mobility-Aware Scheduling accepted for presentation at
+        IEEE GLOBECOM 2026 in Macau S.A.R., China.
+      </p>
+    </article>
+
+    <article class="highlight-card" data-aos="fade-up">
+      <span class="highlight-date">2026</span>
       <h3>ASCP accepted at IEEE ICC</h3>
       <p>
         Analytical Slotframe Control Policy accepted for presentation at
@@ -969,8 +1002,7 @@ Prof. Wei Xiang
 <section id="research">
   <h2>Featured Research</h2>
   <p class="section-intro">
-    Three published research contributions addressing adaptive scheduling,
-    topology-aware resource allocation, and analytical slotframe control in 6TiSCH networks.
+    Four peer-reviewed research contributions spanning adaptive slotframe control, topology-aware resource allocation, and predictive mobility-aware scheduling in 6TiSCH networks.
   </p>
 
   <div class="featured-projects">
@@ -1027,6 +1059,35 @@ Prof. Wei Xiang
            target="_blank" rel="noopener noreferrer">IEEE Xplore</a>
       </div>
     </article>
+
+    <article class="featured-project-card"
+             data-aos="fade-up"
+             data-aos-delay="240">
+      <div class="project-topline">
+        <span class="project-acronym">PMAS</span>
+        <span class="project-badge">Accepted</span>
+      </div>
+
+      <p class="project-meta">IEEE GLOBECOM 2026</p>
+
+      <h3>Predictive mobility-aware scheduling</h3>
+
+      <p>
+        Predicts the remaining lifetime of mobile wireless links and aligns
+        parent selection and TSCH cell allocation with expected link stability.
+      </p>
+
+      <div class="project-actions">
+        <a href="projects/pmas.html">Project Overview</a>
+
+        <a href="https://globecom2026.ieee-globecom.org/"
+           target="_blank"
+           rel="noopener noreferrer">
+          Conference
+        </a>
+      </div>
+    </article>
+
   </div>
 </section>
 
@@ -1176,6 +1237,43 @@ Prof. Wei Xiang
    rel="noopener noreferrer">
           IEEE Xplore
         </a>
+
+    </div>
+
+
+    <!-- PMAS -->
+    <div class="publication-item">
+
+      <h3>
+        PMAS: Predictive Mobility-Aware Scheduling for 6TiSCH IoT Networks
+      </h3>
+
+      <p class="pub-authors">
+        Raziur Rahman, Shambhavi Rani, Nikumani Choudhury, Wei Xiang
+      </p>
+
+      <p class="pub-venue">
+        Accepted at IEEE GLOBECOM 2026 • Macau S.A.R., China
+      </p>
+
+      <p class="pub-summary">
+        Proposed a lightweight predictive scheduling framework that estimates
+        the residual lifetime of mobile links and incorporates this information
+        into parent selection and lifetime-aware TSCH cell allocation.
+      </p>
+
+      <a href="projects/pmas.html"
+         class="pub-link">
+        Project Overview
+      </a>
+
+      <br><br>
+
+      <a href="https://globecom2026.ieee-globecom.org/"
+         target="_blank"
+         rel="noopener noreferrer">
+        IEEE GLOBECOM 2026
+      </a>
 
     </div>
 
