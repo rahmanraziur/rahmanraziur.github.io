@@ -1103,41 +1103,86 @@
       }
 
       function sessionFinished() {
-        if (mode === "focus") {
+
+        const finishedMode = mode;
+
+        /* Record completed focus session */
+        if (finishedMode === "focus") {
+
           recordCompletedFocus(focusMinutesSetting);
 
           notify(
-            "Focus session complete. Take a proper break."
+            "Focus session complete. Break is starting."
           );
 
           showToast(
-            "Focus session complete. Good work."
+            "Focus complete — break started."
           );
 
-          playChime();
-
-          mode = "break";
-          durationSeconds = breakMinutesSetting * 60;
-          remainingSeconds = durationSeconds;
         } else {
+
           notify(
-            "Break complete. Your next focus session is ready."
+            "Break complete. Focus session is starting."
           );
 
           showToast(
-            "Break complete. Ready for another session."
+            "Break complete — focus started."
           );
-
-          playChime();
-
-          mode = "focus";
-          durationSeconds = focusMinutesSetting * 60;
-          remainingSeconds = durationSeconds;
         }
 
+        /* Completion sound */
+        playChime();
+
+
+        /* ---------------------------------
+           AUTOMATICALLY SWITCH NEXT PHASE
+        ---------------------------------- */
+
+        if (finishedMode === "focus") {
+
+          mode = "break";
+
+          durationSeconds =
+            breakMinutesSetting * 60;
+
+        } else {
+
+          mode = "focus";
+
+          durationSeconds =
+            focusMinutesSetting * 60;
+        }
+
+        remainingSeconds = durationSeconds;
+
+
+        /* ---------------------------------
+           AUTOMATICALLY START NEXT PHASE
+        ---------------------------------- */
+
+        running = true;
+
+        endTimestamp =
+          Date.now() +
+          remainingSeconds * 1000;
+
+
+        /* Play appropriate start alarm shortly
+           after the completion sound */
+        const nextMode = mode;
+
+        setTimeout(() => {
+          playPhaseStartTone(nextMode);
+        }, 500);
+
+
+        startTicker();
+
         updateUI();
+
         saveTimerState();
       }
+
 
       function startTimer() {
         if (remainingSeconds <= 0) {
