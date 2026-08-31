@@ -177,48 +177,52 @@
     }
 
     .focus-top {
-      display: grid;
-      grid-template-columns: minmax(0, 1.15fr) minmax(260px, .85fr);
-      gap: 16px;
-      align-items: stretch;
-      margin-bottom: 30px;
+      display: block;
+      margin-bottom: 32px;
     }
 
     .intention-wrap {
-      margin-bottom: 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
+      margin-bottom: 18px;
     }
 
     .inline-quote {
-      min-height: 150px;
+      width: 100%;
+      min-height: 125px;
       border-radius: 18px;
       overflow: hidden;
-      background:
-        radial-gradient(circle at 10% 10%, rgba(110,168,254,.22), transparent 18rem),
-        #111827;
-      border: 1px solid rgba(255,255,255,.08);
       position: relative;
+
+      background:
+        radial-gradient(
+          circle at 10% 10%,
+          rgba(110, 168, 254, 0.20),
+          transparent 28rem
+        ),
+        #111827;
+
+      border: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     .inline-quote-label {
       position: absolute;
       top: 12px;
-      left: 14px;
+      left: 18px;
       z-index: 2;
-      color: rgba(255,255,255,.62);
-      font-size: .68rem;
+
+      color: rgba(255, 255, 255, 0.58);
+
+      font-size: 0.68rem;
       font-weight: 800;
-      letter-spacing: .10em;
+      letter-spacing: 0.10em;
       text-transform: uppercase;
+
       pointer-events: none;
     }
 
     .inline-quote iframe {
       display: block;
       width: 100%;
-      height: 150px;
+      height: 125px;
       border: 0;
       background: transparent;
     }
@@ -474,14 +478,10 @@
     }
 
     @media (max-width: 760px) {
-      .focus-top {
-        grid-template-columns: 1fr;
-      }
-
       .inline-quote,
       .inline-quote iframe {
-        min-height: 138px;
-        height: 138px;
+        min-height: 140px;
+        height: 140px;
       }
     }
 
