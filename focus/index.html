@@ -852,6 +852,35 @@
     }
 
 
+
+/* =====================================================
+   Mobile Quote Typography Fix
+   ===================================================== */
+
+@media (max-width: 600px) {
+
+  .quote-card,
+  .quote-box {
+    padding: 1.15rem 1rem !important;
+    overflow: hidden !important;
+  }
+
+  .quote-text,
+  #quoteText,
+  #quote {
+    max-width: 100% !important;
+
+    /* Responsive size: long quotes can wrap safely */
+    font-size: clamp(1.25rem, 5.5vw, 1.75rem) !important;
+    line-height: 1.20 !important;
+
+    text-align: center !important;
+    overflow-wrap: anywhere !important;
+    word-break: normal !important;
+    hyphens: auto !important;
+  }
+}
+
 </style>
 </head>
 
