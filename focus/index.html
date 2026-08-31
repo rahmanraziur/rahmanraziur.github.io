@@ -176,7 +176,52 @@
       margin-bottom: 10px;
     }
 
-    .intention-wrap { margin-bottom: 28px; }
+    .focus-top {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(260px, .85fr);
+      gap: 16px;
+      align-items: stretch;
+      margin-bottom: 30px;
+    }
+
+    .intention-wrap {
+      margin-bottom: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .inline-quote {
+      min-height: 150px;
+      border-radius: 18px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 10% 10%, rgba(110,168,254,.22), transparent 18rem),
+        #111827;
+      border: 1px solid rgba(255,255,255,.08);
+      position: relative;
+    }
+
+    .inline-quote-label {
+      position: absolute;
+      top: 12px;
+      left: 14px;
+      z-index: 2;
+      color: rgba(255,255,255,.62);
+      font-size: .68rem;
+      font-weight: 800;
+      letter-spacing: .10em;
+      text-transform: uppercase;
+      pointer-events: none;
+    }
+
+    .inline-quote iframe {
+      display: block;
+      width: 100%;
+      height: 150px;
+      border: 0;
+      background: transparent;
+    }
 
     .intention-input {
       width: 100%;
@@ -262,7 +307,7 @@
 
     .preset-row {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 9px;
     }
 
@@ -392,32 +437,6 @@
       background: #111;
     }
 
-    .quote-card {
-      margin-top: 22px;
-      min-height: 220px;
-      padding: 20px;
-      overflow: hidden;
-    }
-
-    .quote-card iframe {
-      display: block;
-      width: 100%;
-      min-height: 175px;
-      border: 0;
-      background: #172033;
-      border-radius: 18px;
-    }
-
-    html[data-theme="dark"] .quote-card iframe {
-      background: #0c1220;
-    }
-
-    .quote-caption {
-      text-align: center;
-      color: var(--muted);
-      font-size: .72rem;
-      margin-top: 10px;
-    }
 
     .footer {
       text-align: center;
@@ -454,6 +473,18 @@
       .side { grid-template-columns: 1fr 1fr; }
     }
 
+    @media (max-width: 760px) {
+      .focus-top {
+        grid-template-columns: 1fr;
+      }
+
+      .inline-quote,
+      .inline-quote iframe {
+        min-height: 138px;
+        height: 138px;
+      }
+    }
+
     @media (max-width: 680px) {
       .topbar-inner,
       main {
@@ -464,7 +495,7 @@
 
       .link-btn span { display: none; }
       .side { grid-template-columns: 1fr; }
-      .preset-row { grid-template-columns: 1fr 1fr; }
+      .preset-row { grid-template-columns: repeat(3, 1fr); }
 
       .custom-panel {
         grid-template-columns: 1fr 1fr;
@@ -480,6 +511,7 @@
     }
 
     @media (max-width: 420px) {
+      .preset-row { grid-template-columns: 1fr; }
       .stats-grid { grid-template-columns: 1fr; }
 
       .stat {
@@ -517,20 +549,30 @@
 
     <section class="workspace">
       <article class="card timer-card">
-        <div class="intention-wrap">
-          <div class="section-label">What are you working on?</div>
-          <input
-            id="intention"
-            class="intention-input"
-            type="text"
-            maxlength="120"
-            autocomplete="off"
-            placeholder="e.g. Revise network model, read two papers, run simulation..."
-          />
+        <div class="focus-top">
+          <div class="intention-wrap">
+            <div class="section-label">What are you working on?</div>
+            <input
+              id="intention"
+              class="intention-input"
+              type="text"
+              maxlength="120"
+              autocomplete="off"
+              placeholder="e.g. Revise network model, read two papers, run simulation..."
+            />
+          </div>
+
+          <div class="inline-quote">
+            <div class="inline-quote-label">Research thought</div>
+            <iframe
+              src="../quotes.html"
+              title="Rotating PhD and research motivation quotes"
+            ></iframe>
+          </div>
         </div>
 
         <div id="modeLabel" class="mode">Focus Session</div>
-        <div id="timer" class="timer" aria-live="polite">50:00</div>
+        <div id="timer" class="timer" aria-live="polite">25:00</div>
 
         <div class="progress-track">
           <div id="progressBar" class="progress-bar"></div>
@@ -545,12 +587,12 @@
         <div class="section-label">Session length</div>
 
         <div class="preset-row">
-          <button class="preset" type="button" data-focus="25" data-break="5">
+          <button class="preset active" type="button" data-focus="25" data-break="5">
             25 / 5
             <small>Pomodoro</small>
           </button>
 
-          <button class="preset active" type="button" data-focus="50" data-break="10">
+          <button class="preset" type="button" data-focus="50" data-break="10">
             50 / 10
             <small>Deep Work</small>
           </button>
@@ -614,41 +656,25 @@
 
         <section class="card music-card">
           <div class="section-label">Focus Music</div>
-          <h2>NCS on Spotify</h2>
+          <h2>NCS Focus Music</h2>
           <p class="music-intro">
-            Press play inside the Spotify player. Spotify provides the playback; this website does not host the music.
+            Official NCS Releases playlist via Spotify. Press play here and keep the focus page open while you work.
           </p>
 
-          <!--
-            To use YOUR own public Spotify playlist:
-            Replace ONLY the playlist ID below.
-
-              Example public playlist URL:
-            https://open.spotify.com/playlist/YOUR_PLAYLIST_ID
-          -->
-            <iframe
-  class="spotify-frame"
-  src="https://open.spotify.com/embed/playlist/37i9dQZF1F5p3rmiWPIYgZ?utm_source=generator&theme=0"
-  allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-  loading="lazy"
-  title="Spotify focus music"
-></iframe>
+          <iframe
+            class="spotify-frame"
+            src="https://open.spotify.com/embed/playlist/7sZbq8QGyMnhKPcLJvCUFD?utm_source=generator&theme=0"
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy"
+            title="Spotify focus music"
+          ></iframe>
         </section>
       </aside>
     </section>
 
-    <section class="card quote-card">
-      <iframe
-        src="../quotes.html"
-        title="Rotating PhD and research motivation quotes"
-      ></iframe>
-      <div class="quote-caption">
-        Research thoughts rotate automatically.
-      </div>
-    </section>
 
     <footer class="footer">
-      PhD Focus Space · No account required · Timer and statistics stay on your device
+      PhD Focus Space · No account required · Start/break alarms · Timer and statistics stay on your device
     </footer>
   </main>
 
@@ -661,7 +687,7 @@
       const STORAGE = {
         theme: "theme",
         intention: "phdFocus.intention",
-        timerState: "phdFocus.timerState",
+        timerState: "phdFocus.timerState.v2",
         stats: "phdFocus.stats"
       };
 
@@ -688,15 +714,15 @@
         toast: document.getElementById("toast")
       };
 
-      let focusMinutesSetting = 50;
-      let breakMinutesSetting = 10;
+      let focusMinutesSetting = 25;
+      let breakMinutesSetting = 5;
       let mode = "focus";
       let durationSeconds = focusMinutesSetting * 60;
       let remainingSeconds = durationSeconds;
       let running = false;
       let endTimestamp = null;
       let tickHandle = null;
-      let selectedPreset = "50-10";
+      let selectedPreset = "25-5";
 
       function todayKey(date = new Date()) {
         const y = date.getFullYear();
@@ -916,6 +942,46 @@
         }
       }
 
+
+      function playPhaseStartTone(kind) {
+        try {
+          const AudioCtx =
+            window.AudioContext ||
+            window.webkitAudioContext;
+
+          const ctx = new AudioCtx();
+
+          // Focus = two rising notes.
+          // Break = two softer descending notes.
+          const notes =
+            kind === "focus"
+              ? [659.25, 880.00]
+              : [659.25, 523.25];
+
+          notes.forEach((freq, i) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+
+            osc.type = "sine";
+            osc.frequency.value = freq;
+
+            const start = ctx.currentTime + i * 0.16;
+
+            gain.gain.setValueAtTime(0.0001, start);
+            gain.gain.exponentialRampToValueAtTime(0.14, start + 0.02);
+            gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.26);
+
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+
+            osc.start(start);
+            osc.stop(start + 0.28);
+          });
+
+          setTimeout(() => ctx.close(), 1200);
+        } catch {}
+      }
+
       function playChime() {
         try {
           const AudioCtx =
@@ -1002,6 +1068,21 @@
               : breakMinutesSetting) * 60;
 
           remainingSeconds = durationSeconds;
+        }
+
+        // A fresh phase starts when the timer is still at its full duration.
+        // Resuming from pause does not replay the start alarm.
+        const isFreshPhase =
+          Math.abs(remainingSeconds - durationSeconds) < 0.75;
+
+        if (isFreshPhase) {
+          playPhaseStartTone(mode);
+
+          showToast(
+            mode === "focus"
+              ? "Focus session started."
+              : "Break started."
+          );
         }
 
         running = true;
@@ -1140,10 +1221,10 @@
           if (!state) return;
 
           focusMinutesSetting =
-            Number(state.focusMinutesSetting) || 50;
+            Number(state.focusMinutesSetting) || 25;
 
           breakMinutesSetting =
-            Number(state.breakMinutesSetting) || 10;
+            Number(state.breakMinutesSetting) || 5;
 
           mode =
             state.mode === "break"
@@ -1164,7 +1245,7 @@
             Number(state.endTimestamp) || null;
 
           selectedPreset =
-            state.selectedPreset || "50-10";
+            state.selectedPreset || "25-5";
 
           if (running && endTimestamp) {
             remainingSeconds = Math.max(
