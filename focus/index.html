@@ -983,10 +983,11 @@
 
       <aside class="side">
         <section class="card stats-card">
-          <div class="section-label">Your Focus Today</div>
-          <h2>Private, browser-only statistics</h2>
 
-          <div class="stats-grid">
+          <div class="section-label">Today</div>
+
+          <div class="stats-grid today-stats">
+
             <div class="stat">
               <strong id="sessionCount">0</strong>
               <span>sessions</span>
@@ -997,19 +998,19 @@
               <span>focused</span>
             </div>
 
-            <div class="stat">
-              <strong id="streakCount">0</strong>
-              <span>day streak</span>
-            </div>
           </div>
 
           <p class="privacy-note">
-            Stored only in this browser using local storage. Nothing is uploaded or shared with other visitors.
+            Stored only on this device.
           </p>
 
-          <button id="resetStatsBtn" class="reset-link" type="button">
-            Reset my local statistics
+          <button
+            id="resetStatsBtn"
+            class="reset-link"
+            type="button">
+            Reset today's stats
           </button>
+
         </section>
 
         <section class="card music-card compact-lofi-card">
@@ -1159,9 +1160,6 @@
 
     focusMinutes:
       document.getElementById("focusMinutes"),
-
-    streakCount:
-      document.getElementById("streakCount"),
 
     resetStatsBtn:
       document.getElementById("resetStatsBtn"),
@@ -1646,12 +1644,6 @@
         formatFocusMinutes(
           today.minutes || 0
         );
-    }
-
-    if (els.streakCount) {
-
-      els.streakCount.textContent =
-        stats.streak || 0;
     }
 
     saveStats(stats);
@@ -2639,3 +2631,10 @@
 
 </body>
 </html>
+
+
+<style>
+  .today-stats {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+</style>
