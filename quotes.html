@@ -26,15 +26,22 @@
     }
 
     #quote-box {
-      max-width: 88%;
+      width: 92%;
+      max-width: 1100px;
+      max-height: calc(100% - 20px);
+      padding: 10px 12px;
       opacity: 1;
       transition: opacity 1s ease-in-out;
+      overflow: hidden;
     }
 
     #quote {
-      font-size: 30px;
-      line-height: 1.4;
+      font-size: clamp(18px, 3vw, 30px);
+      line-height: 1.35;
       font-weight: 400;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      hyphens: auto;
     }
   </style>
 </head>
@@ -564,6 +571,49 @@ const quoteText = document.getElementById("quote");
 
 let previousIndex = -1;
 
+
+function fitQuoteToBox() {
+
+  const mobile =
+    window.innerWidth <= 600;
+
+  let fontSize =
+    mobile ? 24 : 30;
+
+  const minimumSize =
+    mobile ? 13 : 17;
+
+  quoteText.style.fontSize =
+    fontSize + "px";
+
+  quoteText.style.lineHeight =
+    "1.35";
+
+  /*
+    Reduce font size only when the selected
+    quote does not fit inside the iframe.
+  */
+
+  while (
+    (
+      quoteBox.scrollHeight >
+        document.documentElement.clientHeight - 12
+      ||
+      quoteBox.scrollWidth >
+        document.documentElement.clientWidth - 12
+    )
+    &&
+    fontSize > minimumSize
+  ) {
+
+    fontSize -= 1;
+
+    quoteText.style.fontSize =
+      fontSize + "px";
+  }
+}
+
+
 function showNewQuote() {
 
   quoteBox.style.opacity = 0;
@@ -580,6 +630,8 @@ function showNewQuote() {
 
     quoteText.textContent = `"${quotes[index]}"`;
 
+    fitQuoteToBox();
+
     quoteBox.style.opacity = 1;
 
   }, 1000);
@@ -590,6 +642,11 @@ showNewQuote();
 /* Change quote every 15 seconds */
 setInterval(showNewQuote, 15000);
 
+
+window.addEventListener(
+  "resize",
+  fitQuoteToBox
+);
 </script>
 
 </body>
