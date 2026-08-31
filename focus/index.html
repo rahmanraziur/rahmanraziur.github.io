@@ -1050,6 +1050,1474 @@
 
 
 
+
+<script>
+(() => {
+  "use strict";
+
+  /* =====================================================
+     PhD Focus Space — Timer Engine
+     ===================================================== */
+
+  const STORAGE = {
+    theme: "theme",
+    timer: "phdFocus.timerState.v4",
+    stats: "phdFocus.stats"
+  };
+
+  const els = {
+    html: document.documentElement,
+
+    themeToggle:
+      document.getElementById("themeToggle"),
+
+    timer:
+      document.getElementById("timer"),
+
+    modeLabel:
+      document.getElementById("modeLabel"),
+
+    progressBar:
+      document.getElementById("progressBar"),
+
+    startPauseBtn:
+      document.getElementById("startPauseBtn"),
+
+    resetBtn:
+      document.getElementById("resetBtn"),
+
+    switchBtn:
+      document.getElementById("switchBtn"),
+
+    presets:
+      [...document.querySelectorAll(".preset[data-focus]")],
+
+    customToggle:
+      document.getElementById("customToggle"),
+
+    customPanel:
+      document.getElementById("customPanel"),
+
+    customFocus:
+      document.getElementById("customFocus"),
+
+    customBreak:
+      document.getElementById("customBreak"),
+
+    applyCustom:
+      document.getElementById("applyCustom"),
+
+    sessionCount:
+      document.getElementById("sessionCount"),
+
+    focusMinutes:
+      document.getElementById("focusMinutes"),
+
+    streakCount:
+      document.getElementById("streakCount"),
+
+    resetStatsBtn:
+      document.getElementById("resetStatsBtn"),
+
+    toast:
+      document.getElementById("toast")
+  };
+
+
+  /* =====================================================
+     DEFAULT TIMER
+     ===================================================== */
+
+  let focusMinutesSetting = 25;
+  let breakMinutesSetting = 5;
+
+  let mode = "focus";
+
+  let durationSeconds =
+    focusMinutesSetting * 60;
+
+  let remainingSeconds =
+    durationSeconds;
+
+  let running = false;
+
+  let endTimestamp = null;
+
+  let tickHandle = null;
+
+  let selectedPreset = "25-5";
+
+
+  /* =====================================================
+     AUDIO
+     ===================================================== */
+
+  let audioContext = null;
+
+  function getAudioContext() {
+
+    try {
+
+      const AudioCtx =
+        window.AudioContext ||
+        window.webkitAudioContext;
+
+      if (!AudioCtx) return null;
+
+      if (!audioContext) {
+        audioContext = new AudioCtx();
+      }
+
+      if (audioContext.state === "suspended") {
+        audioContext.resume().catch(() => {});
+      }
+
+      return audioContext;
+
+    } catch {
+      return null;
+    }
+  }
+
+
+  function playToneSequence(
+    frequencies,
+    volume = 0.13,
+    spacing = 0.16,
+    length = 0.28
+  ) {
+
+    const ctx = getAudioContext();
+
+    if (!ctx) return;
+
+    frequencies.forEach((frequency, index) => {
+
+      const oscillator =
+        ctx.createOscillator();
+
+      const gain =
+        ctx.createGain();
+
+      const start =
+        ctx.currentTime +
+        index * spacing;
+
+      oscillator.type = "sine";
+
+      oscillator.frequency.value =
+        frequency;
+
+      gain.gain.setValueAtTime(
+        0.0001,
+        start
+      );
+
+      gain.gain.exponentialRampToValueAtTime(
+        volume,
+        start + 0.025
+      );
+
+      gain.gain.exponentialRampToValueAtTime(
+        0.0001,
+        start + length
+      );
+
+      oscillator.connect(gain);
+
+      gain.connect(ctx.destination);
+
+      oscillator.start(start);
+
+      oscillator.stop(
+        start + length + 0.03
+      );
+    });
+  }
+
+
+  function playFocusStartSound() {
+
+    // Rising tone = focus begins
+
+    playToneSequence(
+      [523.25, 659.25, 783.99],
+      0.14,
+      0.14,
+      0.27
+    );
+  }
+
+
+  function playBreakStartSound() {
+
+    // Descending tone = break begins
+
+    playToneSequence(
+      [659.25, 523.25],
+      0.11,
+      0.18,
+      0.30
+    );
+  }
+
+
+  function playSessionEndSound() {
+
+    // Distinct completion alarm
+
+    playToneSequence(
+      [783.99, 783.99, 1046.50],
+      0.17,
+      0.18,
+      0.34
+    );
+  }
+
+
+  /* =====================================================
+     BASIC HELPERS
+     ===================================================== */
+
+  function formatTime(seconds) {
+
+    const safe =
+      Math.max(0, Math.ceil(seconds));
+
+    const minutes =
+      Math.floor(safe / 60);
+
+    const secondsLeft =
+      safe % 60;
+
+    return (
+      String(minutes).padStart(2, "0")
+      + ":"
+      + String(secondsLeft).padStart(2, "0")
+    );
+  }
+
+
+  function showToast(message) {
+
+    if (!els.toast) return;
+
+    els.toast.textContent = message;
+
+    els.toast.classList.add("show");
+
+    clearTimeout(showToast.timeout);
+
+    showToast.timeout =
+      setTimeout(() => {
+
+        els.toast.classList.remove("show");
+
+      }, 2600);
+  }
+
+
+  function progressPercent() {
+
+    if (durationSeconds <= 0) {
+      return 0;
+    }
+
+    return Math.min(
+      100,
+      Math.max(
+        0,
+        (
+          (durationSeconds - remainingSeconds)
+          / durationSeconds
+        ) * 100
+      )
+    );
+  }
+
+
+  /* =====================================================
+     UI
+     ===================================================== */
+
+  function updateUI() {
+
+    if (els.timer) {
+
+      els.timer.textContent =
+        formatTime(remainingSeconds);
+    }
+
+    if (els.modeLabel) {
+
+      els.modeLabel.textContent =
+        mode === "focus"
+          ? "Focus Session"
+          : "Break";
+    }
+
+    if (els.startPauseBtn) {
+
+      if (running) {
+
+        els.startPauseBtn.textContent =
+          "Pause";
+
+      } else {
+
+        els.startPauseBtn.textContent =
+          mode === "focus"
+            ? "Start Focus"
+            : "Start Break";
+      }
+    }
+
+    if (els.switchBtn) {
+
+      els.switchBtn.textContent =
+        mode === "focus"
+          ? "Start Break"
+          : "Back to Focus";
+    }
+
+    if (els.progressBar) {
+
+      els.progressBar.style.width =
+        progressPercent() + "%";
+    }
+
+    document.title =
+      running
+        ? (
+          formatTime(remainingSeconds)
+          + " · "
+          + (
+            mode === "focus"
+              ? "Focus"
+              : "Break"
+          )
+        )
+        : "PhD Focus Space | Raziur Rahman";
+  }
+
+
+  /* =====================================================
+     BROWSER NOTIFICATIONS
+     ===================================================== */
+
+  async function requestNotifications() {
+
+    if (!("Notification" in window)) {
+      return;
+    }
+
+    if (
+      Notification.permission === "default"
+    ) {
+
+      try {
+
+        await Notification.requestPermission();
+
+      } catch {}
+    }
+  }
+
+
+  function notify(message) {
+
+    if (
+      "Notification" in window &&
+      Notification.permission === "granted"
+    ) {
+
+      try {
+
+        new Notification(
+          "PhD Focus Space",
+          {
+            body: message
+          }
+        );
+
+      } catch {}
+    }
+  }
+
+
+  /* =====================================================
+     LOCAL STATISTICS
+     ===================================================== */
+
+  function todayKey(date = new Date()) {
+
+    const year =
+      date.getFullYear();
+
+    const month =
+      String(
+        date.getMonth() + 1
+      ).padStart(2, "0");
+
+    const day =
+      String(
+        date.getDate()
+      ).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+  }
+
+
+  function dateFromKey(key) {
+
+    const [year, month, day] =
+      key.split("-").map(Number);
+
+    return new Date(
+      year,
+      month - 1,
+      day
+    );
+  }
+
+
+  function differenceInDays(
+    laterKey,
+    earlierKey
+  ) {
+
+    return Math.round(
+      (
+        dateFromKey(laterKey)
+        - dateFromKey(earlierKey)
+      ) / 86400000
+    );
+  }
+
+
+  function getStats() {
+
+    try {
+
+      return (
+        JSON.parse(
+          localStorage.getItem(
+            STORAGE.stats
+          )
+        )
+        || {
+          days: {},
+          lastCompletedDay: null,
+          streak: 0
+        }
+      );
+
+    } catch {
+
+      return {
+        days: {},
+        lastCompletedDay: null,
+        streak: 0
+      };
+    }
+  }
+
+
+  function saveStats(stats) {
+
+    localStorage.setItem(
+      STORAGE.stats,
+      JSON.stringify(stats)
+    );
+  }
+
+
+  function formatFocusMinutes(minutes) {
+
+    if (minutes < 60) {
+      return `${minutes}m`;
+    }
+
+    const hours =
+      Math.floor(minutes / 60);
+
+    const mins =
+      minutes % 60;
+
+    return mins
+      ? `${hours}h ${mins}m`
+      : `${hours}h`;
+  }
+
+
+  function normalizeStreak(stats) {
+
+    if (!stats.lastCompletedDay) {
+
+      stats.streak = 0;
+
+      return stats;
+    }
+
+    const difference =
+      differenceInDays(
+        todayKey(),
+        stats.lastCompletedDay
+      );
+
+    if (difference > 1) {
+      stats.streak = 0;
+    }
+
+    return stats;
+  }
+
+
+  function renderStats() {
+
+    const stats =
+      normalizeStreak(
+        getStats()
+      );
+
+    const today =
+      stats.days[todayKey()]
+      || {
+        sessions: 0,
+        minutes: 0
+      };
+
+    if (els.sessionCount) {
+
+      els.sessionCount.textContent =
+        today.sessions || 0;
+    }
+
+    if (els.focusMinutes) {
+
+      els.focusMinutes.textContent =
+        formatFocusMinutes(
+          today.minutes || 0
+        );
+    }
+
+    if (els.streakCount) {
+
+      els.streakCount.textContent =
+        stats.streak || 0;
+    }
+
+    saveStats(stats);
+  }
+
+
+  function recordCompletedFocus(minutes) {
+
+    const key =
+      todayKey();
+
+    const stats =
+      normalizeStreak(
+        getStats()
+      );
+
+    if (!stats.days[key]) {
+
+      stats.days[key] = {
+        sessions: 0,
+        minutes: 0
+      };
+    }
+
+    stats.days[key].sessions += 1;
+
+    stats.days[key].minutes +=
+      minutes;
+
+
+    if (
+      stats.lastCompletedDay !== key
+    ) {
+
+      if (!stats.lastCompletedDay) {
+
+        stats.streak = 1;
+
+      } else {
+
+        const difference =
+          differenceInDays(
+            key,
+            stats.lastCompletedDay
+          );
+
+        stats.streak =
+          difference === 1
+            ? Math.max(
+                1,
+                stats.streak + 1
+              )
+            : 1;
+      }
+
+      stats.lastCompletedDay =
+        key;
+    }
+
+    saveStats(stats);
+
+    renderStats();
+  }
+
+
+  /* =====================================================
+     TIMER STATE
+     ===================================================== */
+
+  function saveTimerState() {
+
+    localStorage.setItem(
+      STORAGE.timer,
+      JSON.stringify({
+        focusMinutesSetting,
+        breakMinutesSetting,
+        mode,
+        durationSeconds,
+        remainingSeconds,
+        running,
+        endTimestamp,
+        selectedPreset
+      })
+    );
+  }
+
+
+  function stopTicker() {
+
+    if (tickHandle) {
+
+      clearInterval(tickHandle);
+
+      tickHandle = null;
+    }
+  }
+
+
+  function startTicker() {
+
+    stopTicker();
+
+    tickHandle =
+      setInterval(
+        tick,
+        250
+      );
+  }
+
+
+  /* =====================================================
+     AUTOMATIC CYCLE
+     ===================================================== */
+
+  function sessionFinished() {
+
+    const completedMode =
+      mode;
+
+
+    /* End alarm */
+
+    playSessionEndSound();
+
+
+    if (completedMode === "focus") {
+
+      recordCompletedFocus(
+        focusMinutesSetting
+      );
+
+      notify(
+        "Focus complete. Break has started."
+      );
+
+      showToast(
+        "Focus complete — break started."
+      );
+
+      mode = "break";
+
+      durationSeconds =
+        breakMinutesSetting * 60;
+
+    } else {
+
+      notify(
+        "Break complete. Focus has started."
+      );
+
+      showToast(
+        "Break complete — focus started."
+      );
+
+      mode = "focus";
+
+      durationSeconds =
+        focusMinutesSetting * 60;
+    }
+
+
+    remainingSeconds =
+      durationSeconds;
+
+
+    /*
+      IMPORTANT:
+      Keep running automatically.
+    */
+
+    running = true;
+
+    endTimestamp =
+      Date.now()
+      + remainingSeconds * 1000;
+
+
+    /*
+      End alarm first,
+      then announce next phase.
+    */
+
+    const nextMode = mode;
+
+    setTimeout(() => {
+
+      if (nextMode === "focus") {
+
+        playFocusStartSound();
+
+      } else {
+
+        playBreakStartSound();
+      }
+
+    }, 900);
+
+
+    startTicker();
+
+    updateUI();
+
+    saveTimerState();
+  }
+
+
+  function tick() {
+
+    if (
+      !running ||
+      !endTimestamp
+    ) {
+      return;
+    }
+
+    remainingSeconds =
+      Math.max(
+        0,
+        (
+          endTimestamp
+          - Date.now()
+        ) / 1000
+      );
+
+
+    if (remainingSeconds <= 0) {
+
+      remainingSeconds = 0;
+
+      running = false;
+
+      endTimestamp = null;
+
+      stopTicker();
+
+      updateUI();
+
+      sessionFinished();
+
+      return;
+    }
+
+
+    updateUI();
+
+    saveTimerState();
+  }
+
+
+  /* =====================================================
+     START / PAUSE
+     ===================================================== */
+
+  function startTimer() {
+
+    /*
+      User click unlocks Web Audio.
+    */
+
+    getAudioContext();
+
+
+    if (remainingSeconds <= 0) {
+
+      durationSeconds =
+        (
+          mode === "focus"
+            ? focusMinutesSetting
+            : breakMinutesSetting
+        ) * 60;
+
+      remainingSeconds =
+        durationSeconds;
+    }
+
+
+    /*
+      Start alarm only if this is a fresh phase.
+      Resume from Pause remains silent.
+    */
+
+    const freshPhase =
+      Math.abs(
+        remainingSeconds
+        - durationSeconds
+      ) < 0.75;
+
+
+    if (freshPhase) {
+
+      if (mode === "focus") {
+
+        playFocusStartSound();
+
+        showToast(
+          "Focus session started."
+        );
+
+      } else {
+
+        playBreakStartSound();
+
+        showToast(
+          "Break started."
+        );
+      }
+    }
+
+
+    running = true;
+
+    endTimestamp =
+      Date.now()
+      + remainingSeconds * 1000;
+
+
+    requestNotifications();
+
+    startTicker();
+
+    updateUI();
+
+    saveTimerState();
+  }
+
+
+  function pauseTimer() {
+
+    if (
+      running &&
+      endTimestamp
+    ) {
+
+      remainingSeconds =
+        Math.max(
+          0,
+          (
+            endTimestamp
+            - Date.now()
+          ) / 1000
+        );
+    }
+
+    running = false;
+
+    endTimestamp = null;
+
+    stopTicker();
+
+    updateUI();
+
+    saveTimerState();
+  }
+
+
+  function toggleTimer() {
+
+    if (running) {
+
+      pauseTimer();
+
+    } else {
+
+      startTimer();
+    }
+  }
+
+
+  /* =====================================================
+     RESET / MANUAL SWITCH
+     ===================================================== */
+
+  function resetCurrentSession() {
+
+    pauseTimer();
+
+    durationSeconds =
+      (
+        mode === "focus"
+          ? focusMinutesSetting
+          : breakMinutesSetting
+      ) * 60;
+
+    remainingSeconds =
+      durationSeconds;
+
+    updateUI();
+
+    saveTimerState();
+  }
+
+
+  function switchMode() {
+
+    pauseTimer();
+
+    mode =
+      mode === "focus"
+        ? "break"
+        : "focus";
+
+    durationSeconds =
+      (
+        mode === "focus"
+          ? focusMinutesSetting
+          : breakMinutesSetting
+      ) * 60;
+
+    remainingSeconds =
+      durationSeconds;
+
+    updateUI();
+
+    saveTimerState();
+  }
+
+
+  /* =====================================================
+     PRESETS
+     ===================================================== */
+
+  function selectPreset(
+    focusMinutes,
+    breakMinutes,
+    button
+  ) {
+
+    pauseTimer();
+
+    focusMinutesSetting =
+      focusMinutes;
+
+    breakMinutesSetting =
+      breakMinutes;
+
+    mode = "focus";
+
+    durationSeconds =
+      focusMinutes * 60;
+
+    remainingSeconds =
+      durationSeconds;
+
+    selectedPreset =
+      `${focusMinutes}-${breakMinutes}`;
+
+
+    els.presets.forEach(item => {
+
+      item.classList.remove("active");
+    });
+
+
+    if (els.customToggle) {
+
+      els.customToggle.classList.remove(
+        "active"
+      );
+    }
+
+
+    button.classList.add("active");
+
+
+    if (els.customPanel) {
+
+      els.customPanel.classList.remove(
+        "visible"
+      );
+    }
+
+    updateUI();
+
+    saveTimerState();
+  }
+
+
+  function applyCustomTimer() {
+
+    const focus =
+      Math.min(
+        240,
+        Math.max(
+          1,
+          Number(
+            els.customFocus?.value
+          ) || 25
+        )
+      );
+
+    const breakTime =
+      Math.min(
+        60,
+        Math.max(
+          1,
+          Number(
+            els.customBreak?.value
+          ) || 5
+        )
+      );
+
+
+    pauseTimer();
+
+
+    focusMinutesSetting =
+      focus;
+
+    breakMinutesSetting =
+      breakTime;
+
+    mode =
+      "focus";
+
+    durationSeconds =
+      focus * 60;
+
+    remainingSeconds =
+      durationSeconds;
+
+    selectedPreset =
+      "custom";
+
+
+    els.presets.forEach(item => {
+
+      item.classList.remove("active");
+    });
+
+
+    if (els.customToggle) {
+
+      els.customToggle.classList.add(
+        "active"
+      );
+    }
+
+
+    updateUI();
+
+    saveTimerState();
+
+    showToast(
+      `Custom cycle: ${focus}/${breakTime}`
+    );
+  }
+
+
+  /* =====================================================
+     RESTORE TIMER
+     ===================================================== */
+
+  function restoreTimer() {
+
+    try {
+
+      const state =
+        JSON.parse(
+          localStorage.getItem(
+            STORAGE.timer
+          )
+        );
+
+      if (!state) {
+        return;
+      }
+
+
+      focusMinutesSetting =
+        Number(
+          state.focusMinutesSetting
+        ) || 25;
+
+
+      breakMinutesSetting =
+        Number(
+          state.breakMinutesSetting
+        ) || 5;
+
+
+      mode =
+        state.mode === "break"
+          ? "break"
+          : "focus";
+
+
+      durationSeconds =
+        Number(
+          state.durationSeconds
+        )
+        || (
+          mode === "focus"
+            ? focusMinutesSetting
+            : breakMinutesSetting
+        ) * 60;
+
+
+      remainingSeconds =
+        Number(
+          state.remainingSeconds
+        )
+        || durationSeconds;
+
+
+      running =
+        Boolean(
+          state.running
+        );
+
+
+      endTimestamp =
+        Number(
+          state.endTimestamp
+        )
+        || null;
+
+
+      selectedPreset =
+        state.selectedPreset
+        || "25-5";
+
+
+      if (
+        running &&
+        endTimestamp
+      ) {
+
+        remainingSeconds =
+          Math.max(
+            0,
+            (
+              endTimestamp
+              - Date.now()
+            ) / 1000
+          );
+
+
+        if (
+          remainingSeconds <= 0
+        ) {
+
+          running = false;
+
+          endTimestamp = null;
+
+          remainingSeconds = 0;
+
+          sessionFinished();
+
+        } else {
+
+          startTicker();
+        }
+      }
+
+
+      els.presets.forEach(button => {
+
+        button.classList.toggle(
+          "active",
+          (
+            `${button.dataset.focus}-${button.dataset.break}`
+            === selectedPreset
+          )
+        );
+      });
+
+
+      if (
+        selectedPreset === "custom"
+      ) {
+
+        els.customToggle?.classList.add(
+          "active"
+        );
+
+        els.customPanel?.classList.add(
+          "visible"
+        );
+
+        if (els.customFocus) {
+
+          els.customFocus.value =
+            focusMinutesSetting;
+        }
+
+        if (els.customBreak) {
+
+          els.customBreak.value =
+            breakMinutesSetting;
+        }
+      }
+
+    } catch (error) {
+
+      console.warn(
+        "Could not restore timer:",
+        error
+      );
+    }
+  }
+
+
+  /* =====================================================
+     THEME
+     ===================================================== */
+
+  function currentTheme() {
+
+    return (
+      els.html.dataset.theme === "dark"
+        ? "dark"
+        : "light"
+    );
+  }
+
+
+  function setTheme(theme) {
+
+    els.html.dataset.theme =
+      theme;
+
+    localStorage.setItem(
+      STORAGE.theme,
+      theme
+    );
+  }
+
+
+  function initializeTheme() {
+
+    const saved =
+      localStorage.getItem(
+        STORAGE.theme
+      );
+
+    const preferred =
+      saved
+      || (
+        window.matchMedia(
+          "(prefers-color-scheme: dark)"
+        ).matches
+          ? "dark"
+          : "light"
+      );
+
+    setTheme(preferred);
+  }
+
+
+  /* =====================================================
+     EVENT LISTENERS
+     ===================================================== */
+
+  els.themeToggle?.addEventListener(
+    "click",
+    () => {
+
+      setTheme(
+        currentTheme() === "dark"
+          ? "light"
+          : "dark"
+      );
+    }
+  );
+
+
+  els.startPauseBtn?.addEventListener(
+    "click",
+    toggleTimer
+  );
+
+
+  els.resetBtn?.addEventListener(
+    "click",
+    resetCurrentSession
+  );
+
+
+  els.switchBtn?.addEventListener(
+    "click",
+    switchMode
+  );
+
+
+  els.presets.forEach(button => {
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        selectPreset(
+          Number(
+            button.dataset.focus
+          ),
+          Number(
+            button.dataset.break
+          ),
+          button
+        );
+      }
+    );
+  });
+
+
+  els.customToggle?.addEventListener(
+    "click",
+    () => {
+
+      els.customPanel?.classList.toggle(
+        "visible"
+      );
+    }
+  );
+
+
+  els.applyCustom?.addEventListener(
+    "click",
+    applyCustomTimer
+  );
+
+
+  els.resetStatsBtn?.addEventListener(
+    "click",
+    () => {
+
+      const confirmed =
+        window.confirm(
+          "Reset the focus statistics stored in this browser?"
+        );
+
+      if (!confirmed) {
+        return;
+      }
+
+      localStorage.removeItem(
+        STORAGE.stats
+      );
+
+      renderStats();
+
+      showToast(
+        "Local statistics reset."
+      );
+    }
+  );
+
+
+  document.addEventListener(
+    "keydown",
+    event => {
+
+      const target =
+        event.target;
+
+      const typing =
+        target
+        && (
+          target.tagName === "INPUT"
+          || target.tagName === "TEXTAREA"
+          || target.isContentEditable
+        );
+
+      if (
+        event.code === "Space"
+        && !typing
+      ) {
+
+        event.preventDefault();
+
+        toggleTimer();
+      }
+    }
+  );
+
+
+  document.addEventListener(
+    "visibilitychange",
+    () => {
+
+      if (
+        !document.hidden
+        && running
+      ) {
+
+        tick();
+      }
+    }
+  );
+
+
+  window.addEventListener(
+    "beforeunload",
+    saveTimerState
+  );
+
+
+  /* =====================================================
+     INITIALIZE
+     ===================================================== */
+
+  initializeTheme();
+
+  restoreTimer();
+
+  renderStats();
+
+  updateUI();
+
+})();
+</script>
+
+
 <script>
 (() => {
 
