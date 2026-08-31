@@ -433,6 +433,56 @@
       font-size: .78rem;
     }
 
+
+    .station-switcher {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin: 16px 0 14px;
+    }
+
+    .station-btn {
+      min-height: 42px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface-strong);
+      color: var(--text);
+      font-weight: 700;
+      font-size: 0.82rem;
+      transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.15s ease;
+    }
+
+    .station-btn:hover {
+      transform: translateY(-1px);
+      border-color: var(--accent);
+    }
+
+    .station-btn.active {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .lofi-frame {
+      display: block;
+      width: 100%;
+      height: 170px;
+      border: 0;
+      border-radius: 16px;
+      background: var(--surface-strong);
+    }
+
+    .music-source {
+      margin: 10px 0 0;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.70rem;
+    }
+
     .spotify-frame {
       width: 100%;
       height: 352px;
@@ -662,18 +712,48 @@
 
         <section class="card music-card">
           <div class="section-label">Focus Music</div>
-          <h2>NCS Focus Music</h2>
+
+          <h2>Lofi Cafe</h2>
+
           <p class="music-intro">
-            Official NCS Releases playlist via Spotify. Press play here and keep the focus page open while you work.
+            Ad-free 24/7 lofi radio. Choose a station and keep working.
           </p>
 
+          <div class="station-switcher">
+            <button
+              class="station-btn active"
+              type="button"
+              data-station="studying">
+              Studying
+            </button>
+
+            <button
+              class="station-btn"
+              type="button"
+              data-station="working">
+              Working
+            </button>
+
+            <button
+              class="station-btn"
+              type="button"
+              data-station="chilling">
+              Chilling
+            </button>
+          </div>
+
           <iframe
-            class="spotify-frame"
-            src="https://open.spotify.com/embed/playlist/7sZbq8QGyMnhKPcLJvCUFD?utm_source=generator&theme=0"
-            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            id="lofiFrame"
+            class="lofi-frame"
+            src="https://loficafe.net/embed/studying"
+            title="Lofi Cafe focus music"
             loading="lazy"
-            title="Spotify focus music"
-          ></iframe>
+            allow="autoplay">
+          </iframe>
+
+          <p class="music-source">
+            Music provided by Lofi Cafe.
+          </p>
         </section>
       </aside>
     </section>
@@ -1418,5 +1498,62 @@
       updateUI();
     })();
   </script>
+
+  <script>
+    (() => {
+      const frame = document.getElementById("lofiFrame");
+      const buttons = document.querySelectorAll(".station-btn");
+
+      if (!frame || !buttons.length) return;
+
+      const validStations = [
+        "studying",
+        "working",
+        "chilling"
+      ];
+
+      const STORAGE_KEY = "phdFocus.lofiStation";
+
+      function selectStation(station) {
+        if (!validStations.includes(station)) {
+          station = "studying";
+        }
+
+        frame.src =
+          "https://loficafe.net/embed/" + station;
+
+        buttons.forEach(button => {
+          button.classList.toggle(
+            "active",
+            button.dataset.station === station
+          );
+        });
+
+        localStorage.setItem(
+          STORAGE_KEY,
+          station
+        );
+      }
+
+      buttons.forEach(button => {
+        button.addEventListener("click", () => {
+          selectStation(
+            button.dataset.station
+          );
+        });
+      });
+
+      const saved =
+        localStorage.getItem(STORAGE_KEY);
+
+      if (
+        saved &&
+        validStations.includes(saved)
+      ) {
+        selectStation(saved);
+      }
+    })();
+  </script>
+
 </body>
 </html>
