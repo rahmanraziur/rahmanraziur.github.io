@@ -118,7 +118,7 @@
 
     .hero {
       text-align: center;
-      max-width: 800px;
+      max-width: 1180px;
       margin: 0 auto 32px;
     }
 
@@ -137,9 +137,10 @@
 
     h1 {
       margin: 18px 0 10px;
-      font-size: clamp(2.25rem, 6vw, 4.6rem);
-      line-height: .98;
+      font-size: clamp(2.4rem, 5vw, 4rem);
+      line-height: 1;
       letter-spacing: -.055em;
+      white-space: nowrap;
     }
 
     .subtitle {
@@ -478,6 +479,11 @@
     }
 
     @media (max-width: 760px) {
+      h1 {
+        white-space: normal;
+        font-size: clamp(2.3rem, 10vw, 3.5rem);
+      }
+
       .inline-quote,
       .inline-quote iframe {
         min-height: 140px;
