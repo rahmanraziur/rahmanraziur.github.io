@@ -579,6 +579,162 @@
 
       .stat strong { margin: 0; }
     }
+  
+    /* ===== Refined Lofi Cafe card ===== */
+
+    .music-card {
+      padding: 26px;
+    }
+
+    .music-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .music-title-group {
+      min-width: 0;
+    }
+
+    .music-card .music-head h2 {
+      margin: 0 0 6px;
+      font-size: 1.20rem;
+      font-weight: 800;
+      letter-spacing: -0.025em;
+    }
+
+    .music-card .music-intro {
+      margin: 0;
+      max-width: 29ch;
+      color: var(--muted);
+      font-size: 0.80rem;
+      line-height: 1.55;
+    }
+
+    .music-badge {
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+
+      min-height: 32px;
+      padding: 0 11px;
+
+      border: 1px solid var(--border);
+      border-radius: 999px;
+
+      background: var(--accent-soft);
+      color: var(--accent);
+
+      font-size: 0.68rem;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .music-card .station-switcher {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin: 0 0 16px;
+    }
+
+    .music-card .station-btn {
+      min-height: 44px;
+      padding: 0 8px;
+
+      border: 1px solid var(--border);
+      border-radius: 13px;
+
+      background: var(--surface-strong);
+      color: var(--text);
+
+      font-size: 0.79rem;
+      font-weight: 700;
+
+      transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        color 0.2s ease,
+        transform 0.15s ease;
+    }
+
+    .music-card .station-btn:hover {
+      border-color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    .music-card .station-btn.active {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    .lofi-player-shell {
+      padding: 6px;
+
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+
+      background:
+        linear-gradient(
+          145deg,
+          #111827 0%,
+          #05070c 100%
+        );
+
+      box-shadow:
+        0 12px 28px rgba(0,0,0,0.16),
+        inset 0 1px 0 rgba(255,255,255,0.05);
+
+      overflow: hidden;
+    }
+
+    .music-card .lofi-frame {
+      display: block;
+      width: 100%;
+      height: 165px;
+
+      border: 0;
+      border-radius: 14px;
+
+      background: #050505;
+    }
+
+    .music-footer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+
+      margin-top: 13px;
+
+      color: var(--muted);
+      font-size: 0.70rem;
+      font-weight: 500;
+    }
+
+    .live-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 0 3px rgba(34,197,94,0.12);
+    }
+
+    @media (max-width: 420px) {
+      .music-head {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .music-card .station-switcher {
+        grid-template-columns: 1fr;
+      }
+    }
+
+
   </style>
 </head>
 
@@ -706,11 +862,18 @@
         <section class="card music-card">
           <div class="section-label">Focus Music</div>
 
-          <h2>Lofi Cafe</h2>
+          <div class="music-head">
+            <div class="music-title-group">
+              <h2>Lofi Cafe</h2>
+              <p class="music-intro">
+                Ad-free ambient lofi for uninterrupted focus.
+              </p>
+            </div>
 
-          <p class="music-intro">
-            Ad-free 24/7 lofi radio. Choose a station and keep working.
-          </p>
+            <span class="music-badge">
+              24/7 · No login
+            </span>
+          </div>
 
           <div class="station-switcher">
             <button
@@ -735,18 +898,21 @@
             </button>
           </div>
 
-          <iframe
-            id="lofiFrame"
-            class="lofi-frame"
-            src="https://loficafe.net/embed/studying"
-            title="Lofi Cafe focus music"
-            loading="lazy"
-            allow="autoplay">
-          </iframe>
+          <div class="lofi-player-shell">
+            <iframe
+              id="lofiFrame"
+              class="lofi-frame"
+              src="https://loficafe.net/embed/studying"
+              title="Lofi Cafe focus music"
+              loading="lazy"
+              allow="autoplay">
+            </iframe>
+          </div>
 
-          <p class="music-source">
-            Music provided by Lofi Cafe.
-          </p>
+          <div class="music-footer">
+            <span class="live-dot"></span>
+            <span>Streaming from Lofi Cafe</span>
+          </div>
         </section>
       </aside>
     </section>
