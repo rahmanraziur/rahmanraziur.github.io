@@ -762,18 +762,7 @@
     <section class="workspace">
       <article class="card timer-card">
         <div class="focus-top">
-          <div class="intention-wrap">
-            <input
-              id="intention"
-              class="intention-input"
-              type="text"
-              maxlength="120"
-              autocomplete="off"
-              placeholder="e.g. Revise network model, read two papers, run simulation..."
-            />
-          </div>
-
-          <div class="inline-quote">
+<div class="inline-quote">
             <iframe
               src="../quotes.html"
               title="Rotating PhD and research motivation quotes"
@@ -931,7 +920,6 @@
 
       const STORAGE = {
         theme: "theme",
-        intention: "phdFocus.intention",
         timerState: "phdFocus.timerState.v2",
         stats: "phdFocus.stats"
       };
@@ -939,7 +927,6 @@
       const els = {
         html: document.documentElement,
         themeToggle: document.getElementById("themeToggle"),
-        intention: document.getElementById("intention"),
         timer: document.getElementById("timer"),
         modeLabel: document.getElementById("modeLabel"),
         progressBar: document.getElementById("progressBar"),
@@ -1606,15 +1593,6 @@
         );
       });
 
-      els.intention.value =
-        localStorage.getItem(STORAGE.intention) || "";
-
-      els.intention.addEventListener("input", () => {
-        localStorage.setItem(
-          STORAGE.intention,
-          els.intention.value
-        );
-      });
 
       els.startPauseBtn.addEventListener(
         "click",
