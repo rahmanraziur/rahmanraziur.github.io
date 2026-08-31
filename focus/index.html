@@ -1,0 +1,1335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>PhD Focus Space | Raziur Rahman</title>
+  <meta
+    name="description"
+    content="A minimal public PhD focus workspace with Pomodoro timer, deep-work modes, research quotes, Spotify focus music, and private browser-only focus statistics."
+  />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Roboto+Mono:wght@500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #f5f8fc;
+      --surface: rgba(255,255,255,.90);
+      --surface-strong: #ffffff;
+      --text: #172033;
+      --muted: #65718a;
+      --border: rgba(28, 55, 95, .12);
+      --accent: #2563eb;
+      --accent-soft: rgba(37,99,235,.11);
+      --shadow: 0 18px 50px rgba(31, 48, 78, .10);
+    }
+
+    html[data-theme="dark"] {
+      --bg: #0c1220;
+      --surface: rgba(18, 27, 46, .90);
+      --surface-strong: #121b2e;
+      --text: #eef4ff;
+      --muted: #a4b1c8;
+      --border: rgba(176, 197, 230, .13);
+      --accent: #6ea8fe;
+      --accent-soft: rgba(110,168,254,.12);
+      --shadow: 0 18px 50px rgba(0,0,0,.26);
+    }
+
+    * { box-sizing: border-box; }
+
+    html { color-scheme: light; }
+    html[data-theme="dark"] { color-scheme: dark; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 10% 0%, rgba(37,99,235,.12), transparent 30rem),
+        radial-gradient(circle at 95% 15%, rgba(99,102,241,.08), transparent 28rem),
+        var(--bg);
+      color: var(--text);
+      font-family: "Inter", system-ui, sans-serif;
+      transition: background .25s ease, color .25s ease;
+    }
+
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    a { color: inherit; text-decoration: none; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(18px);
+      background: color-mix(in srgb, var(--bg) 82%, transparent);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .topbar-inner {
+      width: min(1180px, calc(100% - 32px));
+      margin: auto;
+      min-height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .brand {
+      font-weight: 800;
+      letter-spacing: -.025em;
+    }
+
+    .brand span { color: var(--accent); }
+
+    .top-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .link-btn,
+    .icon-btn {
+      min-height: 40px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 0 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .icon-btn {
+      width: 42px;
+      padding: 0;
+    }
+
+    main {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 58px 0 64px;
+    }
+
+    .hero {
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto 32px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--accent);
+      border-radius: 999px;
+      font-size: .82rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 18px 0 10px;
+      font-size: clamp(2.25rem, 6vw, 4.6rem);
+      line-height: .98;
+      letter-spacing: -.055em;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: var(--muted);
+      font-size: clamp(1rem, 2vw, 1.18rem);
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(320px, .75fr);
+      gap: 22px;
+      align-items: start;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .timer-card {
+      padding: clamp(22px, 4vw, 38px);
+    }
+
+    .section-label {
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .10em;
+      font-size: .74rem;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .intention-wrap { margin-bottom: 28px; }
+
+    .intention-input {
+      width: 100%;
+      border: 1px solid var(--border);
+      background: var(--surface-strong);
+      color: var(--text);
+      border-radius: 14px;
+      padding: 14px 16px;
+      outline: none;
+      transition: border .2s, box-shadow .2s;
+    }
+
+    .intention-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px var(--accent-soft);
+    }
+
+    .mode {
+      text-align: center;
+      color: var(--accent);
+      font-size: .84rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+    }
+
+    .timer {
+      font-family: "Roboto Mono", monospace;
+      font-variant-numeric: tabular-nums;
+      text-align: center;
+      font-size: clamp(4.8rem, 13vw, 8.7rem);
+      line-height: 1;
+      font-weight: 600;
+      letter-spacing: -.07em;
+      margin: 18px 0 26px;
+    }
+
+    .progress-track {
+      height: 7px;
+      background: var(--accent-soft);
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 0 auto 28px;
+      max-width: 640px;
+    }
+
+    .progress-bar {
+      width: 0%;
+      height: 100%;
+      background: var(--accent);
+      border-radius: inherit;
+      transition: width .4s linear;
+    }
+
+    .timer-actions {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+
+    .primary-btn,
+    .secondary-btn {
+      min-height: 48px;
+      border-radius: 14px;
+      padding: 0 20px;
+      font-weight: 800;
+      border: 1px solid transparent;
+    }
+
+    .primary-btn {
+      background: var(--accent);
+      color: #fff;
+      min-width: 150px;
+    }
+
+    .secondary-btn {
+      background: var(--surface-strong);
+      color: var(--text);
+      border-color: var(--border);
+    }
+
+    .preset-row {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 9px;
+    }
+
+    .preset {
+      border: 1px solid var(--border);
+      background: var(--surface-strong);
+      color: var(--text);
+      min-height: 54px;
+      border-radius: 14px;
+      font-weight: 700;
+      line-height: 1.15;
+    }
+
+    .preset small {
+      display: block;
+      color: var(--muted);
+      margin-top: 3px;
+      font-weight: 500;
+    }
+
+    .preset.active {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    .custom-panel {
+      display: none;
+      grid-template-columns: 1fr 1fr auto;
+      gap: 10px;
+      align-items: end;
+      margin-top: 12px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+    }
+
+    .custom-panel.visible { display: grid; }
+
+    .field label {
+      display: block;
+      font-size: .75rem;
+      color: var(--muted);
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .field input {
+      width: 100%;
+      min-height: 44px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface-strong);
+      color: var(--text);
+      padding: 0 12px;
+    }
+
+    .side {
+      display: grid;
+      gap: 22px;
+    }
+
+    .stats-card,
+    .music-card {
+      padding: 24px;
+    }
+
+    .stats-card h2,
+    .music-card h2 {
+      margin: 0 0 6px;
+      font-size: 1.05rem;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .stat {
+      padding: 15px 10px;
+      background: var(--surface-strong);
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      text-align: center;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 1.45rem;
+      letter-spacing: -.04em;
+      margin-bottom: 5px;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: .73rem;
+    }
+
+    .privacy-note,
+    .music-intro {
+      margin: 14px 0 0;
+      color: var(--muted);
+      font-size: .78rem;
+      line-height: 1.55;
+    }
+
+    .music-intro { margin: 0 0 16px; }
+
+    .reset-link {
+      margin-top: 12px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      font-size: .78rem;
+    }
+
+    .spotify-frame {
+      width: 100%;
+      height: 352px;
+      border: 0;
+      border-radius: 16px;
+      display: block;
+      background: #111;
+    }
+
+    .quote-card {
+      margin-top: 22px;
+      min-height: 220px;
+      padding: 20px;
+      overflow: hidden;
+    }
+
+    .quote-card iframe {
+      display: block;
+      width: 100%;
+      min-height: 175px;
+      border: 0;
+      background: #172033;
+      border-radius: 18px;
+    }
+
+    html[data-theme="dark"] .quote-card iframe {
+      background: #0c1220;
+    }
+
+    .quote-caption {
+      text-align: center;
+      color: var(--muted);
+      font-size: .72rem;
+      margin-top: 10px;
+    }
+
+    .footer {
+      text-align: center;
+      color: var(--muted);
+      padding: 28px 0 4px;
+      font-size: .82rem;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 24px;
+      transform: translate(-50%, 20px);
+      opacity: 0;
+      pointer-events: none;
+      background: var(--surface-strong);
+      color: var(--text);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      border-radius: 14px;
+      padding: 12px 16px;
+      font-weight: 600;
+      transition: opacity .2s, transform .2s;
+      z-index: 30;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    @media (max-width: 880px) {
+      .workspace { grid-template-columns: 1fr; }
+      .side { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 680px) {
+      .topbar-inner,
+      main {
+        width: min(100% - 20px, 1180px);
+      }
+
+      main { padding-top: 38px; }
+
+      .link-btn span { display: none; }
+      .side { grid-template-columns: 1fr; }
+      .preset-row { grid-template-columns: 1fr 1fr; }
+
+      .custom-panel {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .custom-panel .apply-custom {
+        grid-column: 1 / -1;
+      }
+
+      .timer {
+        font-size: clamp(4rem, 23vw, 6.5rem);
+      }
+    }
+
+    @media (max-width: 420px) {
+      .stats-grid { grid-template-columns: 1fr; }
+
+      .stat {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        text-align: left;
+      }
+
+      .stat strong { margin: 0; }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="../">Raziur <span>Rahman</span></a>
+
+      <div class="top-actions">
+        <a class="link-btn" href="../">← <span>Back to website</span></a>
+        <button class="icon-btn" id="themeToggle" type="button" aria-label="Toggle theme">◐</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="eyebrow">PhD Focus Space</div>
+      <h1>Research. Write. Simulate. Repeat.</h1>
+      <p class="subtitle">
+        A quiet public focus space for researchers, students, writers, and anyone who needs one serious session.
+      </p>
+    </section>
+
+    <section class="workspace">
+      <article class="card timer-card">
+        <div class="intention-wrap">
+          <div class="section-label">What are you working on?</div>
+          <input
+            id="intention"
+            class="intention-input"
+            type="text"
+            maxlength="120"
+            autocomplete="off"
+            placeholder="e.g. Revise network model, read two papers, run simulation..."
+          />
+        </div>
+
+        <div id="modeLabel" class="mode">Focus Session</div>
+        <div id="timer" class="timer" aria-live="polite">50:00</div>
+
+        <div class="progress-track">
+          <div id="progressBar" class="progress-bar"></div>
+        </div>
+
+        <div class="timer-actions">
+          <button id="startPauseBtn" class="primary-btn" type="button">Start Focus</button>
+          <button id="resetBtn" class="secondary-btn" type="button">Reset</button>
+          <button id="switchBtn" class="secondary-btn" type="button">Start Break</button>
+        </div>
+
+        <div class="section-label">Session length</div>
+
+        <div class="preset-row">
+          <button class="preset" type="button" data-focus="25" data-break="5">
+            25 / 5
+            <small>Pomodoro</small>
+          </button>
+
+          <button class="preset active" type="button" data-focus="50" data-break="10">
+            50 / 10
+            <small>Deep Work</small>
+          </button>
+
+          <button class="preset" type="button" data-focus="90" data-break="15">
+            90 / 15
+            <small>Research</small>
+          </button>
+
+          <button id="customToggle" class="preset" type="button">
+            Custom
+            <small>Your pace</small>
+          </button>
+        </div>
+
+        <div id="customPanel" class="custom-panel">
+          <div class="field">
+            <label for="customFocus">Focus minutes</label>
+            <input id="customFocus" type="number" min="1" max="240" value="60">
+          </div>
+
+          <div class="field">
+            <label for="customBreak">Break minutes</label>
+            <input id="customBreak" type="number" min="1" max="60" value="10">
+          </div>
+
+          <button id="applyCustom" class="secondary-btn apply-custom" type="button">Apply</button>
+        </div>
+      </article>
+
+      <aside class="side">
+        <section class="card stats-card">
+          <div class="section-label">Your Focus Today</div>
+          <h2>Private, browser-only statistics</h2>
+
+          <div class="stats-grid">
+            <div class="stat">
+              <strong id="sessionCount">0</strong>
+              <span>sessions</span>
+            </div>
+
+            <div class="stat">
+              <strong id="focusMinutes">0m</strong>
+              <span>focused</span>
+            </div>
+
+            <div class="stat">
+              <strong id="streakCount">0</strong>
+              <span>day streak</span>
+            </div>
+          </div>
+
+          <p class="privacy-note">
+            Stored only in this browser using local storage. Nothing is uploaded or shared with other visitors.
+          </p>
+
+          <button id="resetStatsBtn" class="reset-link" type="button">
+            Reset my local statistics
+          </button>
+        </section>
+
+        <section class="card music-card">
+          <div class="section-label">Focus Music</div>
+          <h2>NCS on Spotify</h2>
+          <p class="music-intro">
+            Press play inside the Spotify player. Spotify provides the playback; this website does not host the music.
+          </p>
+
+          <!--
+            To use YOUR own public Spotify playlist:
+            Replace ONLY the playlist ID below.
+
+              Example public playlist URL:
+            https://open.spotify.com/playlist/YOUR_PLAYLIST_ID
+          -->
+            <iframe
+  class="spotify-frame"
+  src="https://open.spotify.com/embed/playlist/37i9dQZF1F5p3rmiWPIYgZ?utm_source=generator&theme=0"
+  allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+  loading="lazy"
+  title="Spotify focus music"
+></iframe>
+        </section>
+      </aside>
+    </section>
+
+    <section class="card quote-card">
+      <iframe
+        src="../quotes.html"
+        title="Rotating PhD and research motivation quotes"
+      ></iframe>
+      <div class="quote-caption">
+        Research thoughts rotate automatically.
+      </div>
+    </section>
+
+    <footer class="footer">
+      PhD Focus Space · No account required · Timer and statistics stay on your device
+    </footer>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const STORAGE = {
+        theme: "theme",
+        intention: "phdFocus.intention",
+        timerState: "phdFocus.timerState",
+        stats: "phdFocus.stats"
+      };
+
+      const els = {
+        html: document.documentElement,
+        themeToggle: document.getElementById("themeToggle"),
+        intention: document.getElementById("intention"),
+        timer: document.getElementById("timer"),
+        modeLabel: document.getElementById("modeLabel"),
+        progressBar: document.getElementById("progressBar"),
+        startPauseBtn: document.getElementById("startPauseBtn"),
+        resetBtn: document.getElementById("resetBtn"),
+        switchBtn: document.getElementById("switchBtn"),
+        presets: [...document.querySelectorAll(".preset[data-focus]")],
+        customToggle: document.getElementById("customToggle"),
+        customPanel: document.getElementById("customPanel"),
+        customFocus: document.getElementById("customFocus"),
+        customBreak: document.getElementById("customBreak"),
+        applyCustom: document.getElementById("applyCustom"),
+        sessionCount: document.getElementById("sessionCount"),
+        focusMinutes: document.getElementById("focusMinutes"),
+        streakCount: document.getElementById("streakCount"),
+        resetStatsBtn: document.getElementById("resetStatsBtn"),
+        toast: document.getElementById("toast")
+      };
+
+      let focusMinutesSetting = 50;
+      let breakMinutesSetting = 10;
+      let mode = "focus";
+      let durationSeconds = focusMinutesSetting * 60;
+      let remainingSeconds = durationSeconds;
+      let running = false;
+      let endTimestamp = null;
+      let tickHandle = null;
+      let selectedPreset = "50-10";
+
+      function todayKey(date = new Date()) {
+        const y = date.getFullYear();
+        const m = String(date.getMonth() + 1).padStart(2, "0");
+        const d = String(date.getDate()).padStart(2, "0");
+        return `${y}-${m}-${d}`;
+      }
+
+      function dateFromKey(key) {
+        const [y, m, d] = key.split("-").map(Number);
+        return new Date(y, m - 1, d);
+      }
+
+      function differenceInDays(aKey, bKey) {
+        return Math.round((dateFromKey(aKey) - dateFromKey(bKey)) / 86400000);
+      }
+
+      function formatTime(seconds) {
+        const safe = Math.max(0, Math.ceil(seconds));
+        const mins = Math.floor(safe / 60);
+        const secs = safe % 60;
+        return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+      }
+
+      function formatFocusMinutes(minutes) {
+        if (minutes < 60) return `${minutes}m`;
+        const h = Math.floor(minutes / 60);
+        const m = minutes % 60;
+        return m ? `${h}h ${m}m` : `${h}h`;
+      }
+
+      function showToast(message) {
+        els.toast.textContent = message;
+        els.toast.classList.add("show");
+        clearTimeout(showToast.timeout);
+        showToast.timeout = setTimeout(() => {
+          els.toast.classList.remove("show");
+        }, 2600);
+      }
+
+      function getStats() {
+        try {
+          return JSON.parse(localStorage.getItem(STORAGE.stats)) || {
+            days: {},
+            lastCompletedDay: null,
+            streak: 0
+          };
+        } catch {
+          return {
+            days: {},
+            lastCompletedDay: null,
+            streak: 0
+          };
+        }
+      }
+
+      function saveStats(stats) {
+        localStorage.setItem(STORAGE.stats, JSON.stringify(stats));
+      }
+
+      function normalizeStreak(stats) {
+        if (!stats.lastCompletedDay) {
+          stats.streak = 0;
+          return stats;
+        }
+
+        const diff = differenceInDays(todayKey(), stats.lastCompletedDay);
+
+        if (diff > 1) stats.streak = 0;
+        return stats;
+      }
+
+      function renderStats() {
+        const stats = normalizeStreak(getStats());
+        const today = stats.days[todayKey()] || {
+          sessions: 0,
+          minutes: 0
+        };
+
+        els.sessionCount.textContent = today.sessions || 0;
+        els.focusMinutes.textContent = formatFocusMinutes(today.minutes || 0);
+        els.streakCount.textContent = stats.streak || 0;
+
+        saveStats(stats);
+      }
+
+      function recordCompletedFocus(minutes) {
+        const key = todayKey();
+        const stats = normalizeStreak(getStats());
+
+        stats.days[key] ||= {
+          sessions: 0,
+          minutes: 0
+        };
+
+        stats.days[key].sessions += 1;
+        stats.days[key].minutes += minutes;
+
+        if (stats.lastCompletedDay !== key) {
+          if (!stats.lastCompletedDay) {
+            stats.streak = 1;
+          } else {
+            const diff = differenceInDays(key, stats.lastCompletedDay);
+            stats.streak = diff === 1
+              ? Math.max(1, stats.streak + 1)
+              : 1;
+          }
+
+          stats.lastCompletedDay = key;
+        }
+
+        saveStats(stats);
+        renderStats();
+      }
+
+      function progressPercent() {
+        if (durationSeconds <= 0) return 0;
+
+        return Math.min(
+          100,
+          Math.max(
+            0,
+            ((durationSeconds - remainingSeconds) / durationSeconds) * 100
+          )
+        );
+      }
+
+      function updateUI() {
+        els.timer.textContent = formatTime(remainingSeconds);
+        els.modeLabel.textContent = mode === "focus"
+          ? "Focus Session"
+          : "Break";
+
+        els.startPauseBtn.textContent = running
+          ? "Pause"
+          : (mode === "focus" ? "Start Focus" : "Start Break");
+
+        els.switchBtn.textContent = mode === "focus"
+          ? "Start Break"
+          : "Back to Focus";
+
+        els.progressBar.style.width = `${progressPercent()}%`;
+
+        document.title = running
+          ? `${formatTime(remainingSeconds)} · ${mode === "focus" ? "Focus" : "Break"}`
+          : "PhD Focus Space | Raziur Rahman";
+      }
+
+      function saveTimerState() {
+        localStorage.setItem(
+          STORAGE.timerState,
+          JSON.stringify({
+            focusMinutesSetting,
+            breakMinutesSetting,
+            mode,
+            durationSeconds,
+            remainingSeconds,
+            running,
+            endTimestamp,
+            selectedPreset
+          })
+        );
+      }
+
+      function stopTicker() {
+        if (tickHandle) {
+          clearInterval(tickHandle);
+          tickHandle = null;
+        }
+      }
+
+      function startTicker() {
+        stopTicker();
+        tickHandle = setInterval(tick, 250);
+      }
+
+      function tick() {
+        if (!running || !endTimestamp) return;
+
+        remainingSeconds = Math.max(
+          0,
+          (endTimestamp - Date.now()) / 1000
+        );
+
+        if (remainingSeconds <= 0) {
+          remainingSeconds = 0;
+          running = false;
+          endTimestamp = null;
+          stopTicker();
+          sessionFinished();
+        }
+
+        updateUI();
+        saveTimerState();
+      }
+
+      async function requestNotificationPermission() {
+        if (!("Notification" in window)) return;
+
+        if (Notification.permission === "default") {
+          try {
+            await Notification.requestPermission();
+          } catch {}
+        }
+      }
+
+      function notify(message) {
+        if (
+          "Notification" in window &&
+          Notification.permission === "granted"
+        ) {
+          try {
+            new Notification("PhD Focus Space", {
+              body: message
+            });
+          } catch {}
+        }
+      }
+
+      function playChime() {
+        try {
+          const AudioCtx =
+            window.AudioContext ||
+            window.webkitAudioContext;
+
+          const ctx = new AudioCtx();
+          const notes = [523.25, 659.25, 783.99];
+
+          notes.forEach((freq, i) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+
+            osc.frequency.value = freq;
+
+            gain.gain.setValueAtTime(
+              0.0001,
+              ctx.currentTime + i * .12
+            );
+
+            gain.gain.exponentialRampToValueAtTime(
+              .11,
+              ctx.currentTime + i * .12 + .02
+            );
+
+            gain.gain.exponentialRampToValueAtTime(
+              .0001,
+              ctx.currentTime + i * .12 + .22
+            );
+
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+
+            osc.start(ctx.currentTime + i * .12);
+            osc.stop(ctx.currentTime + i * .12 + .25);
+          });
+
+          setTimeout(() => ctx.close(), 1000);
+        } catch {}
+      }
+
+      function sessionFinished() {
+        if (mode === "focus") {
+          recordCompletedFocus(focusMinutesSetting);
+
+          notify(
+            "Focus session complete. Take a proper break."
+          );
+
+          showToast(
+            "Focus session complete. Good work."
+          );
+
+          playChime();
+
+          mode = "break";
+          durationSeconds = breakMinutesSetting * 60;
+          remainingSeconds = durationSeconds;
+        } else {
+          notify(
+            "Break complete. Your next focus session is ready."
+          );
+
+          showToast(
+            "Break complete. Ready for another session."
+          );
+
+          playChime();
+
+          mode = "focus";
+          durationSeconds = focusMinutesSetting * 60;
+          remainingSeconds = durationSeconds;
+        }
+
+        updateUI();
+        saveTimerState();
+      }
+
+      function startTimer() {
+        if (remainingSeconds <= 0) {
+          durationSeconds =
+            (mode === "focus"
+              ? focusMinutesSetting
+              : breakMinutesSetting) * 60;
+
+          remainingSeconds = durationSeconds;
+        }
+
+        running = true;
+        endTimestamp =
+          Date.now() + remainingSeconds * 1000;
+
+        requestNotificationPermission();
+        startTicker();
+        updateUI();
+        saveTimerState();
+      }
+
+      function pauseTimer() {
+        if (running && endTimestamp) {
+          remainingSeconds = Math.max(
+            0,
+            (endTimestamp - Date.now()) / 1000
+          );
+        }
+
+        running = false;
+        endTimestamp = null;
+
+        stopTicker();
+        updateUI();
+        saveTimerState();
+      }
+
+      function toggleTimer() {
+        running ? pauseTimer() : startTimer();
+      }
+
+      function resetCurrentSession() {
+        pauseTimer();
+
+        durationSeconds =
+          (mode === "focus"
+            ? focusMinutesSetting
+            : breakMinutesSetting) * 60;
+
+        remainingSeconds = durationSeconds;
+
+        updateUI();
+        saveTimerState();
+      }
+
+      function switchMode() {
+        pauseTimer();
+
+        mode = mode === "focus"
+          ? "break"
+          : "focus";
+
+        durationSeconds =
+          (mode === "focus"
+            ? focusMinutesSetting
+            : breakMinutesSetting) * 60;
+
+        remainingSeconds = durationSeconds;
+
+        updateUI();
+        saveTimerState();
+      }
+
+      function choosePreset(focus, brk, element) {
+        pauseTimer();
+
+        focusMinutesSetting = focus;
+        breakMinutesSetting = brk;
+        mode = "focus";
+        durationSeconds = focus * 60;
+        remainingSeconds = durationSeconds;
+        selectedPreset = `${focus}-${brk}`;
+
+        els.presets.forEach(btn => {
+          btn.classList.remove("active");
+        });
+
+        els.customToggle.classList.remove("active");
+        element.classList.add("active");
+        els.customPanel.classList.remove("visible");
+
+        updateUI();
+        saveTimerState();
+      }
+
+      function applyCustom() {
+        const focus = Math.min(
+          240,
+          Math.max(
+            1,
+            Number(els.customFocus.value) || 60
+          )
+        );
+
+        const brk = Math.min(
+          60,
+          Math.max(
+            1,
+            Number(els.customBreak.value) || 10
+          )
+        );
+
+        els.customFocus.value = focus;
+        els.customBreak.value = brk;
+
+        pauseTimer();
+
+        focusMinutesSetting = focus;
+        breakMinutesSetting = brk;
+        mode = "focus";
+        durationSeconds = focus * 60;
+        remainingSeconds = durationSeconds;
+        selectedPreset = "custom";
+
+        els.presets.forEach(btn => {
+          btn.classList.remove("active");
+        });
+
+        els.customToggle.classList.add("active");
+
+        updateUI();
+        saveTimerState();
+
+        showToast(
+          `Custom session set: ${focus}/${brk} minutes`
+        );
+      }
+
+      function restoreTimer() {
+        try {
+          const state = JSON.parse(
+            localStorage.getItem(STORAGE.timerState)
+          );
+
+          if (!state) return;
+
+          focusMinutesSetting =
+            Number(state.focusMinutesSetting) || 50;
+
+          breakMinutesSetting =
+            Number(state.breakMinutesSetting) || 10;
+
+          mode =
+            state.mode === "break"
+              ? "break"
+              : "focus";
+
+          durationSeconds =
+            Number(state.durationSeconds) ||
+            focusMinutesSetting * 60;
+
+          remainingSeconds =
+            Number(state.remainingSeconds) ||
+            durationSeconds;
+
+          running = Boolean(state.running);
+
+          endTimestamp =
+            Number(state.endTimestamp) || null;
+
+          selectedPreset =
+            state.selectedPreset || "50-10";
+
+          if (running && endTimestamp) {
+            remainingSeconds = Math.max(
+              0,
+              (endTimestamp - Date.now()) / 1000
+            );
+
+            if (remainingSeconds <= 0) {
+              running = false;
+              endTimestamp = null;
+              remainingSeconds = 0;
+              sessionFinished();
+            } else {
+              startTicker();
+            }
+          }
+
+          els.presets.forEach(btn => {
+            btn.classList.toggle(
+              "active",
+              `${btn.dataset.focus}-${btn.dataset.break}` ===
+                selectedPreset
+            );
+          });
+
+          if (selectedPreset === "custom") {
+            els.customToggle.classList.add("active");
+            els.customPanel.classList.add("visible");
+            els.customFocus.value = focusMinutesSetting;
+            els.customBreak.value = breakMinutesSetting;
+          }
+        } catch {}
+      }
+
+      function currentTheme() {
+        return els.html.dataset.theme === "dark"
+          ? "dark"
+          : "light";
+      }
+
+      function setTheme(theme) {
+        els.html.dataset.theme = theme;
+        localStorage.setItem(STORAGE.theme, theme);
+      }
+
+      function initTheme() {
+        const stored =
+          localStorage.getItem(STORAGE.theme);
+
+        const preferred =
+          stored ||
+          (
+            window.matchMedia(
+              "(prefers-color-scheme: dark)"
+            ).matches
+              ? "dark"
+              : "light"
+          );
+
+        setTheme(preferred);
+      }
+
+      els.themeToggle.addEventListener("click", () => {
+        setTheme(
+          currentTheme() === "dark"
+            ? "light"
+            : "dark"
+        );
+      });
+
+      els.intention.value =
+        localStorage.getItem(STORAGE.intention) || "";
+
+      els.intention.addEventListener("input", () => {
+        localStorage.setItem(
+          STORAGE.intention,
+          els.intention.value
+        );
+      });
+
+      els.startPauseBtn.addEventListener(
+        "click",
+        toggleTimer
+      );
+
+      els.resetBtn.addEventListener(
+        "click",
+        resetCurrentSession
+      );
+
+      els.switchBtn.addEventListener(
+        "click",
+        switchMode
+      );
+
+      els.presets.forEach(btn => {
+        btn.addEventListener("click", () => {
+          choosePreset(
+            Number(btn.dataset.focus),
+            Number(btn.dataset.break),
+            btn
+          );
+        });
+      });
+
+      els.customToggle.addEventListener("click", () => {
+        els.customPanel.classList.toggle("visible");
+      });
+
+      els.applyCustom.addEventListener(
+        "click",
+        applyCustom
+      );
+
+      els.resetStatsBtn.addEventListener("click", () => {
+        const okay = window.confirm(
+          "Reset the focus statistics stored in this browser? This cannot be undone."
+        );
+
+        if (!okay) return;
+
+        localStorage.removeItem(STORAGE.stats);
+        renderStats();
+        showToast("Local statistics reset.");
+      });
+
+      document.addEventListener("keydown", event => {
+        const target = event.target;
+
+        const typing =
+          target &&
+          (
+            target.tagName === "INPUT" ||
+            target.tagName === "TEXTAREA" ||
+            target.isContentEditable
+          );
+
+        if (
+          event.code === "Space" &&
+          !typing
+        ) {
+          event.preventDefault();
+          toggleTimer();
+        }
+      });
+
+      document.addEventListener(
+        "visibilitychange",
+        () => {
+          if (!document.hidden && running) {
+            tick();
+          }
+        }
+      );
+
+      window.addEventListener(
+        "beforeunload",
+        saveTimerState
+      );
+
+      initTheme();
+      restoreTimer();
+      renderStats();
+      updateUI();
+    })();
+  </script>
+</body>
+</html>
