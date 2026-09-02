@@ -1123,6 +1123,112 @@
       }
     }
 
+
+    /* ===== Stronger compression for right-side music cards ===== */
+
+    .side {
+      gap: 12px;
+    }
+
+    .stats-card,
+    .music-card {
+      padding: 16px !important;
+    }
+
+    .music-card h2,
+    .lofi-title {
+      margin-top: 4px;
+      margin-bottom: 6px;
+      font-size: 1.1rem !important;
+      line-height: 1.2;
+    }
+
+    .soundcloud-test-card .section-label,
+    .stats-card .section-label {
+      margin-bottom: 4px;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+    }
+
+    .music-intro,
+    .soundcloud-test-note {
+      font-size: 0.84rem;
+      line-height: 1.35;
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+
+    .soundcloud-test-note {
+      text-align: left;
+      margin-top: 8px;
+      margin-bottom: 0;
+    }
+
+    .music-card .station-switcher {
+      gap: 6px;
+      margin-bottom: 9px;
+    }
+
+    .station-btn {
+      min-height: 36px;
+      padding: 8px 10px;
+      font-size: 0.88rem;
+      border-radius: 14px;
+    }
+
+    .soundcloud-test-card .soundcloud-frame {
+      height: 118px !important;
+      border-radius: 12px;
+    }
+
+    .compact-lofi-card .lofi-frame {
+      height: 88px !important;
+    }
+
+    .compact-player-shell,
+    .soundcloud-frame {
+      margin-top: 2px;
+    }
+
+    .open-lofi-link {
+      margin-top: 8px;
+      font-size: 0.88rem;
+      display: inline-block;
+    }
+
+    .soundcloud-test-card {
+      padding-bottom: 14px !important;
+    }
+
+    .compact-lofi-card {
+      padding-bottom: 14px !important;
+    }
+
+    @media (max-width: 680px) {
+      .stats-card,
+      .music-card {
+        padding: 14px !important;
+      }
+
+      .music-card h2,
+      .lofi-title {
+        font-size: 1.02rem !important;
+      }
+
+      .music-intro,
+      .soundcloud-test-note {
+        font-size: 0.8rem;
+      }
+
+      .soundcloud-test-card .soundcloud-frame {
+        height: 110px !important;
+      }
+
+      .compact-lofi-card .lofi-frame {
+        height: 82px !important;
+      }
+    }
+
 </style>
 </head>
 
@@ -1248,7 +1354,7 @@
           <h2>Deep Focus Radio</h2>
 
           <p class="music-intro">
-            Smooth instrumental beats that pause on breaks and resume during focus.
+            Instrumental beats that auto-pause on breaks.
           </p>
 
           <div class="station-switcher">
@@ -1282,7 +1388,7 @@
           </iframe>
 
           <p class="soundcloud-test-note">
-            Press play once. During Pomodoro sessions, music pauses on breaks and resumes when focus starts again.
+            Press play once. Auto-pauses on breaks.
           </p>
 
         </section>
