@@ -579,7 +579,7 @@
 
       .stat strong { margin: 0; }
     }
-  
+
     /* ===== Refined Lofi Cafe card ===== */
 
     .music-card {
@@ -735,7 +735,7 @@
     }
 
 
-  
+
 
     /* ===== Six-station compact Lofi Cafe ===== */
 
@@ -1472,6 +1472,69 @@
       }
     }
 
+
+    /* ===== Flow State Radio transport controls ===== */
+
+    .sc-transport {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .sc-transport-btn {
+      min-height: 34px;
+      padding: 0 8px;
+
+      border: 1px solid var(--border);
+      border-radius: 11px;
+
+      background: var(--surface-strong);
+      color: var(--muted);
+
+      font-size: .76rem;
+      font-weight: 700;
+
+      transition:
+        transform .15s ease,
+        border-color .2s ease,
+        background .2s ease,
+        color .2s ease;
+    }
+
+    .sc-transport-btn:hover {
+      transform: translateY(-1px);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .sc-transport-btn:active {
+      transform: translateY(0);
+    }
+
+    .sc-shuffle-btn {
+      background: var(--accent-soft);
+      color: var(--accent);
+      border-color:
+        color-mix(
+          in srgb,
+          var(--accent) 30%,
+          var(--border)
+        );
+    }
+
+    /* Keep the whole card compact after adding controls */
+    .soundcloud-test-card .soundcloud-frame {
+      height: 96px !important;
+    }
+
+    @media (max-width: 420px) {
+      .sc-transport-btn {
+        font-size: .72rem;
+        padding: 0 5px;
+      }
+    }
+
 </style>
 </head>
 
@@ -1629,6 +1692,35 @@
             title="Flow State Radio"
             src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/chillhopdotcom/sets/chillhop-essentials-spring-2026&amp;color=%232563eb&amp;auto_play=false&amp;hide_related=true&amp;show_comments=false&amp;show_user=true&amp;show_reposts=false&amp;show_teaser=false&amp;show_artwork=false&amp;visual=false">
           </iframe>
+
+          <div class="sc-transport" aria-label="Music controls">
+
+            <button
+              id="scPrevBtn"
+              class="sc-transport-btn"
+              type="button"
+              title="Previous track">
+              ‹ Previous
+            </button>
+
+            <button
+              id="scShuffleBtn"
+              class="sc-transport-btn sc-shuffle-btn"
+              type="button"
+              title="Play a random track">
+              Shuffle
+            </button>
+
+            <button
+              id="scNextBtn"
+              class="sc-transport-btn"
+              type="button"
+              title="Next track">
+              Next ›
+            </button>
+
+          </div>
+
 </section>
       </aside>
     </section>
@@ -1641,7 +1733,7 @@
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-  
+
 
 
 
@@ -3150,7 +3242,128 @@
     frame.src =
       "https://loficafe.net/embed/" + station;
 
-    buttons.forEach(button => {
+
+  /*
+    Track navigation.
+
+    Previous and Next use SoundCloud's native playlist
+    controls. Shuffle selects a random track different
+    from the currently selected track.
+  */
+
+  function preserveTimerPlayback(action) {
+
+    if (!widgetReady) {
+      return;
+    }
+
+    const state =
+      timerState();
+
+    /*
+      During an active break, track navigation is allowed,
+      but audio must remain paused.
+    */
+    const mustRemainPaused =
+      state.running &&
+      state.mode === "break";
+
+    action();
+
+    if (mustRemainPaused) {
+
+      setTimeout(
+        () => {
+          automaticPause = true;
+          widget.pause();
+
+          setTimeout(() => {
+            automaticPause = false;
+          }, 700);
+        },
+        180
+      );
+    }
+  }
+
+
+  prevBtn?.addEventListener(
+    "click",
+    () => {
+
+      preserveTimerPlayback(
+        () => widget.prev()
+      );
+
+    }
+  );
+
+
+  nextBtn?.addEventListener(
+    "click",
+    () => {
+
+      preserveTimerPlayback(
+        () => widget.next()
+      );
+
+    }
+  );
+
+
+  shuffleBtn?.addEventListener(
+    "click",
+    () => {
+
+      if (!widgetReady) {
+        return;
+      }
+
+      widget.getSounds(
+        sounds => {
+
+          if (
+            !Array.isArray(sounds) ||
+            sounds.length < 2
+          ) {
+            return;
+          }
+
+          widget.getCurrentSoundIndex(
+            currentIndex => {
+
+              let randomIndex =
+                currentIndex;
+
+              /*
+                Guarantee a different track.
+              */
+              while (
+                randomIndex === currentIndex
+              ) {
+
+                randomIndex =
+                  Math.floor(
+                    Math.random()
+                    * sounds.length
+                  );
+              }
+
+              preserveTimerPlayback(
+                () => widget.skip(randomIndex)
+              );
+
+            }
+          );
+
+        }
+      );
+
+    }
+  );
+
+
+  buttons.forEach(button => {
 
       button.classList.toggle(
         "active",
@@ -3229,6 +3442,15 @@
 
   const widget =
     SC.Widget(frame);
+
+  const prevBtn =
+    document.getElementById("scPrevBtn");
+
+  const nextBtn =
+    document.getElementById("scNextBtn");
+
+  const shuffleBtn =
+    document.getElementById("scShuffleBtn");
 
   let selected =
     localStorage.getItem(STORAGE_KEY)
