@@ -899,6 +899,30 @@
     }
 
 
+
+    /* ===== Chillhop / SoundCloud test card ===== */
+
+    .soundcloud-test-card .station-switcher {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .soundcloud-test-card .soundcloud-frame {
+      display: block;
+      width: 100%;
+      height: 166px;
+      border: 0;
+      border-radius: 16px;
+      background: var(--surface-strong);
+    }
+
+    .soundcloud-test-note {
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: .73rem;
+      line-height: 1.5;
+      text-align: center;
+    }
+
 </style>
 </head>
 
@@ -1076,6 +1100,59 @@
           </a>
 
         </section>
+
+
+        <section
+          id="soundcloudTestCard"
+          class="card music-card soundcloud-test-card">
+
+          <div class="section-label">
+            Alternative player
+          </div>
+
+          <h2>Chillhop Music</h2>
+
+          <p class="music-intro">
+            Testing an audio-first player with Pomodoro control.
+          </p>
+
+          <div class="station-switcher">
+
+            <button
+              class="sc-station-btn station-btn active"
+              type="button"
+              data-sc-playlist="focus">
+              Focus
+            </button>
+
+            <button
+              class="sc-station-btn station-btn"
+              type="button"
+              data-sc-playlist="calm">
+              Calm
+            </button>
+
+          </div>
+
+          <iframe
+            id="soundcloudFrame"
+            class="soundcloud-frame"
+            width="100%"
+            height="166"
+            scrolling="no"
+            frameborder="no"
+            allow="autoplay"
+            title="Chillhop Music"
+            src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/chillhopdotcom/sets/chillhop-essentials-spring-2026&amp;color=%232563eb&amp;auto_play=false&amp;hide_related=true&amp;show_comments=false&amp;show_user=true&amp;show_reposts=false&amp;show_teaser=false&amp;show_artwork=false&amp;visual=false">
+          </iframe>
+
+          <p class="soundcloud-test-note">
+            Press play once. During an active Pomodoro,
+            music will pause on break and resume on focus.
+          </p>
+
+        </section>
+
       </aside>
     </section>
 
@@ -1184,6 +1261,12 @@
   let tickHandle = null;
 
   let selectedPreset = "25-5";
+
+  window.getFocusTimerState = () => ({
+    mode,
+    running
+  });
+
 
 
   /* =====================================================
@@ -1813,6 +1896,9 @@
       Date.now()
       + remainingSeconds * 1000;
 
+    window.focusMusic?.sync(mode, running);
+
+
 
     /*
       End alarm first,
@@ -1952,6 +2038,9 @@
       Date.now()
       + remainingSeconds * 1000;
 
+    window.focusMusic?.sync(mode, running);
+
+
 
     requestNotifications();
 
@@ -1985,6 +2074,9 @@
     endTimestamp = null;
 
     stopTicker();
+
+    window.focusMusic?.sync(mode, false);
+
 
     updateUI();
 
@@ -2620,6 +2712,341 @@
 
 })();
 </script>
+
+
+<script src="https://w.soundcloud.com/player/api.js"></script>
+
+<script>
+(() => {
+  "use strict";
+
+  const frame =
+    document.getElementById("soundcloudFrame");
+
+  const buttons =
+    [...document.querySelectorAll(
+      ".sc-station-btn[data-sc-playlist]"
+    )];
+
+  if (
+    !frame ||
+    !buttons.length ||
+    !window.SC ||
+    !SC.Widget
+  ) {
+    return;
+  }
+
+  const PLAYLISTS = {
+
+    focus:
+      "https://soundcloud.com/chillhopdotcom/sets/chillhop-essentials-spring-2026",
+
+    calm:
+      "https://soundcloud.com/chillhopdotcom/sets/underwater-lofi"
+
+  };
+
+  const STORAGE_KEY =
+    "phdFocus.soundcloudPlaylist";
+
+  const widget =
+    SC.Widget(frame);
+
+  let selected =
+    localStorage.getItem(STORAGE_KEY)
+    || "focus";
+
+  if (!PLAYLISTS[selected]) {
+    selected = "focus";
+  }
+
+  /*
+    Becomes true after the visitor manually presses Play.
+
+    We intentionally do NOT persist this across page reloads,
+    because browsers may block fresh autoplay.
+  */
+  let musicEnabled = false;
+
+  let widgetReady = false;
+  let switchingPlaylist = false;
+
+  let automaticPlay = false;
+  let automaticPause = false;
+
+
+  function timerState() {
+
+    if (
+      typeof window.getFocusTimerState
+      === "function"
+    ) {
+      return window.getFocusTimerState();
+    }
+
+    return {
+      mode: "focus",
+      running: false
+    };
+  }
+
+
+  function setActiveButton(key) {
+
+    buttons.forEach(button => {
+
+      button.classList.toggle(
+        "active",
+        button.dataset.scPlaylist === key
+      );
+
+    });
+  }
+
+
+  function autoPlay() {
+
+    if (
+      !widgetReady ||
+      !musicEnabled
+    ) {
+      return;
+    }
+
+    automaticPlay = true;
+
+    widget.play();
+
+    setTimeout(() => {
+      automaticPlay = false;
+    }, 1500);
+  }
+
+
+  function autoPause() {
+
+    if (!widgetReady) {
+      return;
+    }
+
+    automaticPause = true;
+
+    widget.pause();
+
+    setTimeout(() => {
+      automaticPause = false;
+    }, 1500);
+  }
+
+
+  function applyTimerState() {
+
+    const state =
+      timerState();
+
+    if (
+      musicEnabled &&
+      state.running &&
+      state.mode === "focus"
+    ) {
+
+      autoPlay();
+
+    } else if (
+      state.running &&
+      state.mode === "break"
+    ) {
+
+      autoPause();
+
+    } else if (!state.running) {
+
+      /*
+        Timer paused:
+        pause automatically if music had been active.
+      */
+      autoPause();
+    }
+  }
+
+
+  function loadPlaylist(key) {
+
+    if (!PLAYLISTS[key]) {
+      return;
+    }
+
+    selected = key;
+
+    localStorage.setItem(
+      STORAGE_KEY,
+      key
+    );
+
+    setActiveButton(key);
+
+    switchingPlaylist = true;
+
+    widget.load(
+      PLAYLISTS[key],
+      {
+        auto_play: false,
+        color: "#2563eb",
+        hide_related: true,
+        show_comments: false,
+        show_user: true,
+        show_reposts: false,
+        show_teaser: false,
+        show_artwork: false,
+        visual: false,
+
+        callback: () => {
+
+          widgetReady = true;
+          switchingPlaylist = false;
+
+          const state =
+            timerState();
+
+          /*
+            Continue playing when changing station during
+            Focus, or when previewing while timer is idle.
+          */
+          if (
+            musicEnabled &&
+            (
+              !state.running ||
+              state.mode === "focus"
+            )
+          ) {
+
+            autoPlay();
+          }
+        }
+      }
+    );
+  }
+
+
+  widget.bind(
+    SC.Widget.Events.READY,
+    () => {
+
+      widgetReady = true;
+
+      setActiveButton(selected);
+
+      if (selected !== "focus") {
+        loadPlaylist(selected);
+      }
+    }
+  );
+
+
+  /*
+    Manual Play:
+    remember that the visitor wants Chillhop enabled
+    for this page session.
+  */
+  widget.bind(
+    SC.Widget.Events.PLAY,
+    () => {
+
+      if (automaticPlay) {
+
+        automaticPlay = false;
+        return;
+      }
+
+      if (switchingPlaylist) {
+        return;
+      }
+
+      musicEnabled = true;
+
+      const state =
+        timerState();
+
+      /*
+        If Pomodoro is currently on an active break,
+        preserve the "music pauses on break" rule.
+      */
+      if (
+        state.running &&
+        state.mode === "break"
+      ) {
+
+        setTimeout(
+          autoPause,
+          100
+        );
+      }
+    }
+  );
+
+
+  /*
+    Manual Pause means:
+    do not auto-resume until visitor presses Play again.
+  */
+  widget.bind(
+    SC.Widget.Events.PAUSE,
+    () => {
+
+      if (automaticPause) {
+
+        automaticPause = false;
+        return;
+      }
+
+      if (switchingPlaylist) {
+        return;
+      }
+
+      musicEnabled = false;
+    }
+  );
+
+
+  buttons.forEach(button => {
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        loadPlaylist(
+          button.dataset.scPlaylist
+        );
+      }
+    );
+
+  });
+
+
+  window.focusMusic = {
+
+    sync(mode, running) {
+
+      if (
+        mode === "focus" &&
+        running &&
+        musicEnabled
+      ) {
+
+        autoPlay();
+
+      } else {
+
+        autoPause();
+      }
+    }
+
+  };
+
+})();
+</script>
+
 
 </body>
 </html>
