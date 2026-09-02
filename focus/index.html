@@ -1229,6 +1229,128 @@
       }
     }
 
+
+    /* ===== Sidebar ultra-compact refinement ===== */
+
+    .side {
+      gap: 10px !important;
+    }
+
+    .stats-card,
+    .music-card {
+      padding: 14px !important;
+      border-radius: 22px;
+    }
+
+    .stats-card .section-label,
+    .soundcloud-test-card .section-label {
+      margin-bottom: 4px;
+      font-size: 0.76rem;
+      letter-spacing: 0.12em;
+    }
+
+    /* TODAY card */
+    .stats-grid {
+      gap: 8px !important;
+      margin-top: 10px !important;
+      margin-bottom: 10px !important;
+    }
+
+    .stat {
+      padding: 10px 6px !important;
+      border-radius: 16px;
+      min-height: 70px;
+    }
+
+    .stat strong {
+      font-size: 1.05rem !important;
+      margin-bottom: 2px !important;
+      line-height: 1.1;
+    }
+
+    .stat span {
+      font-size: 0.83rem !important;
+    }
+
+    .stats-card p,
+    .stats-card a {
+      font-size: 0.88rem;
+      line-height: 1.35;
+    }
+
+    /* Music cards */
+    .music-card h2,
+    .lofi-title {
+      margin-top: 2px !important;
+      margin-bottom: 6px !important;
+      font-size: 1.02rem !important;
+      line-height: 1.15;
+    }
+
+    .music-intro,
+    .soundcloud-test-note {
+      font-size: 0.82rem !important;
+      line-height: 1.3 !important;
+      margin: 0 0 8px 0 !important;
+    }
+
+    .music-card .station-switcher {
+      gap: 6px !important;
+      margin-bottom: 8px !important;
+    }
+
+    .station-btn {
+      min-height: 34px !important;
+      padding: 7px 10px !important;
+      font-size: 0.84rem !important;
+      border-radius: 13px !important;
+    }
+
+    .soundcloud-test-card .station-switcher {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .compact-lofi-card .station-switcher {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .soundcloud-test-card .soundcloud-frame {
+      height: 104px !important;
+      border-radius: 12px !important;
+      margin-top: 2px !important;
+    }
+
+    .compact-lofi-card .lofi-frame,
+    .compact-player-shell iframe {
+      height: 78px !important;
+    }
+
+    .open-lofi-link {
+      margin-top: 7px !important;
+      font-size: 0.84rem !important;
+      display: inline-block;
+    }
+
+    @media (max-width: 680px) {
+      .stats-card,
+      .music-card {
+        padding: 13px !important;
+      }
+
+      .stat {
+        min-height: 64px;
+      }
+
+      .soundcloud-test-card .soundcloud-frame {
+        height: 98px !important;
+      }
+
+      .compact-lofi-card .lofi-frame,
+      .compact-player-shell iframe {
+        height: 74px !important;
+      }
+    }
+
 </style>
 </head>
 
@@ -1386,12 +1508,7 @@
             title="Deep Focus Radio"
             src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/chillhopdotcom/sets/chillhop-essentials-spring-2026&amp;color=%232563eb&amp;auto_play=false&amp;hide_related=true&amp;show_comments=false&amp;show_user=true&amp;show_reposts=false&amp;show_teaser=false&amp;show_artwork=false&amp;visual=false">
           </iframe>
-
-          <p class="soundcloud-test-note">
-            Press play once. Auto-pauses on breaks.
-          </p>
-
-        </section>
+</section>
 
         <section class="card music-card compact-lofi-card">
 
@@ -1419,22 +1536,7 @@
               data-station="chilling">
               Chilling
             </button>
-
-            <button
-              class="station-btn"
-              type="button"
-              data-station="gaming">
-              Gaming
-            </button>
-
-            <button
-              class="station-btn"
-              type="button"
-              data-station="sleeping">
-              Sleeping
-            </button>
-
-          </div>
+</div>
 
           <div class="compact-player-shell">
             <iframe
