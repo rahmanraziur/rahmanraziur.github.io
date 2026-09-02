@@ -923,6 +923,137 @@
       text-align: center;
     }
 
+
+    /* ===== Compact workspace layout ===== */
+
+    /* Move overall workspace upward */
+    main {
+      padding-top: 16px;
+      padding-bottom: 44px;
+    }
+
+    /* Compress hero */
+    .hero {
+      margin-bottom: 16px;
+    }
+
+    .eyebrow {
+      padding: 6px 10px;
+    }
+
+    h1 {
+      margin-top: 12px;
+      margin-bottom: 7px;
+    }
+
+    /* Bring cards closer together */
+    .workspace {
+      gap: 15px;
+    }
+
+    .side {
+      gap: 15px;
+    }
+
+    /* Main timer tile */
+    .timer-card {
+      padding: clamp(18px, 3vw, 28px);
+    }
+
+    .focus-top {
+      margin-bottom: 22px;
+    }
+
+    .timer {
+      margin-top: 12px;
+      margin-bottom: 18px;
+    }
+
+    .progress-track {
+      margin-bottom: 20px;
+    }
+
+    .timer-actions {
+      margin-bottom: 20px;
+    }
+
+    /* Smaller preset tiles */
+    .preset-row {
+      gap: 7px;
+    }
+
+    .preset {
+      min-height: 48px;
+    }
+
+    /* Right-side tiles */
+    .stats-card,
+    .music-card {
+      padding: 19px !important;
+    }
+
+    .stats-grid {
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .stat {
+      padding: 11px 8px;
+    }
+
+    .stat strong {
+      margin-bottom: 3px;
+    }
+
+    /* Music section */
+    .music-head {
+      margin-bottom: 14px;
+    }
+
+    .music-card .station-switcher {
+      gap: 6px;
+      margin-bottom: 11px;
+    }
+
+    .station-btn {
+      min-height: 38px;
+    }
+
+    /* Slightly tighter footer */
+    .footer {
+      padding-top: 20px;
+    }
+
+    @media (max-width: 680px) {
+      main {
+        padding-top: 12px;
+      }
+
+      .hero {
+        margin-bottom: 14px;
+      }
+
+      .workspace,
+      .side {
+        gap: 12px;
+      }
+
+      .timer-card,
+      .stats-card,
+      .music-card {
+        padding: 16px !important;
+      }
+
+      .focus-top {
+        margin-bottom: 18px;
+      }
+
+      .timer {
+        margin-top: 10px;
+        margin-bottom: 16px;
+      }
+    }
+
 </style>
 </head>
 
