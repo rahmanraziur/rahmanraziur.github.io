@@ -1579,6 +1579,38 @@
       }
     }
 
+
+    /* ===== Flow State Radio six stations ===== */
+
+    .soundcloud-test-card .station-switcher {
+      display: grid !important;
+      grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+      gap: 6px !important;
+      margin-bottom: 10px !important;
+    }
+
+    .soundcloud-test-card .sc-station-btn,
+    .soundcloud-test-card .sc-station-btn:nth-child(4),
+    .soundcloud-test-card .sc-station-btn:nth-child(5),
+    .soundcloud-test-card .sc-station-btn:nth-child(6) {
+      grid-column: auto !important;
+      min-width: 0;
+      min-height: 34px !important;
+      padding: 7px 4px !important;
+      font-size: .73rem !important;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 680px) {
+      .soundcloud-test-card .station-switcher {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      }
+
+      .soundcloud-test-card .sc-station-btn {
+        grid-column: auto !important;
+      }
+    }
+
 </style>
 </head>
 
@@ -1726,22 +1758,29 @@
             <button
               class="sc-station-btn station-btn"
               type="button"
-              data-sc-playlist="essentials">
-              Essentials
+              data-sc-playlist="reading">
+              Reading Room
             </button>
 
             <button
               class="sc-station-btn station-btn"
               type="button"
-              data-sc-playlist="uplift">
-              Mood Lift
+              data-sc-playlist="coffee">
+              Coffee Jazz
             </button>
 
             <button
               class="sc-station-btn station-btn"
               type="button"
-              data-sc-playlist="slow">
-              Slow Hours
+              data-sc-playlist="night">
+              Night Study
+            </button>
+
+            <button
+              class="sc-station-btn station-btn"
+              type="button"
+              data-sc-playlist="fresh">
+              Fresh Lofi
             </button>
 
           </div>
@@ -3375,37 +3414,23 @@
 
   const PLAYLISTS = {
 
-    /*
-      Current Chillhop Essentials.
-      Balanced instrumental mix for work.
-    */
     focus:
       "https://soundcloud.com/chillhopdotcom/sets/chillhop-essentials-spring-2026",
 
-    /*
-      Softer / lower-energy material.
-    */
     calm:
-      "https://soundcloud.com/chillhopdotcom/sets/underwater-lofi",
+      "https://soundcloud.com/chillhopdotcom/sets/calm-evenings-chill-ambient-lofi-beats-instrumental-mix",
 
-    /*
-      Curated highlights from the Essentials series.
-      Mix of lofi, jazzhop and boom bap.
-    */
-    essentials:
-      "https://soundcloud.com/chillhopdotcom/sets/the-best-of-essentials-spring",
+    reading:
+      "https://soundcloud.com/mindlight-relaxing-music/sets/lofi",
 
-    /*
-      Brighter and more energetic.
-    */
-    uplift:
-      "https://soundcloud.com/chillhopdotcom/sets/instant-mood-boost",
+    coffee:
+      "https://soundcloud.com/profimedia/sets/lo-fi-jazz-music-jazzy",
 
-    /*
-      Reflective / late-session listening.
-    */
-    slow:
-      "https://soundcloud.com/chillhopdotcom/sets/melancholy-hill"
+    night:
+      "https://soundcloud.com/chillhopdotcom/sets/late-night-essentials",
+
+    fresh:
+      "https://soundcloud.com/chillhopdotcom/sets/the-best-of-essentials-spring"
 
   };
 
