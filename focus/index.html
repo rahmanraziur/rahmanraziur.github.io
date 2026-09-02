@@ -1054,6 +1054,75 @@
       }
     }
 
+
+    /* ===== Compact music stack refinement ===== */
+
+    .side {
+      gap: 14px;
+    }
+
+    .music-card {
+      padding: 18px !important;
+    }
+
+    .music-card h2 {
+      margin-top: 6px;
+      margin-bottom: 8px;
+      font-size: 1.55rem;
+    }
+
+    .music-intro,
+    .soundcloud-test-note {
+      font-size: 0.92rem;
+      line-height: 1.45;
+      margin-top: 0;
+      margin-bottom: 12px;
+    }
+
+    .music-card .station-switcher {
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .station-btn {
+      min-height: 40px;
+      padding: 10px 12px;
+      font-size: 0.95rem;
+    }
+
+    .compact-player-shell,
+    .soundcloud-frame {
+      margin-top: 4px;
+    }
+
+    .soundcloud-test-card .section-label {
+      margin-bottom: 4px;
+    }
+
+    .soundcloud-test-card .soundcloud-frame {
+      height: 140px;
+      border-radius: 14px;
+    }
+
+    .compact-lofi-card .lofi-frame {
+      height: 96px;
+    }
+
+    .open-lofi-link {
+      margin-top: 10px;
+      display: inline-block;
+    }
+
+    @media (max-width: 680px) {
+      .music-card {
+        padding: 16px !important;
+      }
+
+      .soundcloud-test-card .soundcloud-frame {
+        height: 132px;
+      }
+    }
+
 </style>
 </head>
 
@@ -1168,9 +1237,59 @@
 
         </section>
 
+        <section
+          id="soundcloudTestCard"
+          class="card music-card soundcloud-test-card">
+
+          <div class="section-label">
+            Smart Audio
+          </div>
+
+          <h2>Deep Focus Radio</h2>
+
+          <p class="music-intro">
+            Smooth instrumental beats that pause on breaks and resume during focus.
+          </p>
+
+          <div class="station-switcher">
+
+            <button
+              class="sc-station-btn station-btn active"
+              type="button"
+              data-sc-playlist="focus">
+              Focus
+            </button>
+
+            <button
+              class="sc-station-btn station-btn"
+              type="button"
+              data-sc-playlist="calm">
+              Calm
+            </button>
+
+          </div>
+
+          <iframe
+            id="soundcloudFrame"
+            class="soundcloud-frame"
+            width="100%"
+            height="166"
+            scrolling="no"
+            frameborder="no"
+            allow="autoplay"
+            title="Deep Focus Radio"
+            src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/chillhopdotcom/sets/chillhop-essentials-spring-2026&amp;color=%232563eb&amp;auto_play=false&amp;hide_related=true&amp;show_comments=false&amp;show_user=true&amp;show_reposts=false&amp;show_teaser=false&amp;show_artwork=false&amp;visual=false">
+          </iframe>
+
+          <p class="soundcloud-test-note">
+            Press play once. During Pomodoro sessions, music pauses on breaks and resumes when focus starts again.
+          </p>
+
+        </section>
+
         <section class="card music-card compact-lofi-card">
 
-          <h2 class="lofi-title">Lofi Cafe</h2>
+          <h2 class="lofi-title">Lo-fi Room</h2>
 
           <div class="station-switcher six-stations">
 
@@ -1227,63 +1346,10 @@
             href="https://loficafe.net/"
             target="_blank"
             rel="noopener noreferrer">
-            Open full Lofi Cafe ↗
+            Open full Lo-fi Cafe ↗
           </a>
 
         </section>
-
-
-        <section
-          id="soundcloudTestCard"
-          class="card music-card soundcloud-test-card">
-
-          <div class="section-label">
-            Alternative player
-          </div>
-
-          <h2>Chillhop Music</h2>
-
-          <p class="music-intro">
-            Testing an audio-first player with Pomodoro control.
-          </p>
-
-          <div class="station-switcher">
-
-            <button
-              class="sc-station-btn station-btn active"
-              type="button"
-              data-sc-playlist="focus">
-              Focus
-            </button>
-
-            <button
-              class="sc-station-btn station-btn"
-              type="button"
-              data-sc-playlist="calm">
-              Calm
-            </button>
-
-          </div>
-
-          <iframe
-            id="soundcloudFrame"
-            class="soundcloud-frame"
-            width="100%"
-            height="166"
-            scrolling="no"
-            frameborder="no"
-            allow="autoplay"
-            title="Chillhop Music"
-            src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/chillhopdotcom/sets/chillhop-essentials-spring-2026&amp;color=%232563eb&amp;auto_play=false&amp;hide_related=true&amp;show_comments=false&amp;show_user=true&amp;show_reposts=false&amp;show_teaser=false&amp;show_artwork=false&amp;visual=false">
-          </iframe>
-
-          <p class="soundcloud-test-note">
-            Press play once. During an active Pomodoro,
-            music will pause on break and resume on focus.
-          </p>
-
-        </section>
-
       </aside>
     </section>
 
