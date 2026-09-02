@@ -3308,125 +3308,6 @@
       "https://loficafe.net/embed/" + station;
 
 
-  /*
-    Track navigation.
-
-    Previous and Next use SoundCloud's native playlist
-    controls. Shuffle selects a random track different
-    from the currently selected track.
-  */
-
-  function preserveTimerPlayback(action) {
-
-    if (!widgetReady) {
-      return;
-    }
-
-    const state =
-      timerState();
-
-    /*
-      During an active break, track navigation is allowed,
-      but audio must remain paused.
-    */
-    const mustRemainPaused =
-      state.running &&
-      state.mode === "break";
-
-    action();
-
-    if (mustRemainPaused) {
-
-      setTimeout(
-        () => {
-          automaticPause = true;
-          widget.pause();
-
-          setTimeout(() => {
-            automaticPause = false;
-          }, 700);
-        },
-        180
-      );
-    }
-  }
-
-
-  prevBtn?.addEventListener(
-    "click",
-    () => {
-
-      preserveTimerPlayback(
-        () => widget.prev()
-      );
-
-    }
-  );
-
-
-  nextBtn?.addEventListener(
-    "click",
-    () => {
-
-      preserveTimerPlayback(
-        () => widget.next()
-      );
-
-    }
-  );
-
-
-  shuffleBtn?.addEventListener(
-    "click",
-    () => {
-
-      if (!widgetReady) {
-        return;
-      }
-
-      widget.getSounds(
-        sounds => {
-
-          if (
-            !Array.isArray(sounds) ||
-            sounds.length < 2
-          ) {
-            return;
-          }
-
-          widget.getCurrentSoundIndex(
-            currentIndex => {
-
-              let randomIndex =
-                currentIndex;
-
-              /*
-                Guarantee a different track.
-              */
-              while (
-                randomIndex === currentIndex
-              ) {
-
-                randomIndex =
-                  Math.floor(
-                    Math.random()
-                    * sounds.length
-                  );
-              }
-
-              preserveTimerPlayback(
-                () => widget.skip(randomIndex)
-              );
-
-            }
-          );
-
-        }
-      );
-
-    }
-  );
-
 
   buttons.forEach(button => {
 
@@ -3534,14 +3415,6 @@
   const widget =
     SC.Widget(frame);
 
-  const prevBtn =
-    document.getElementById("scPrevBtn");
-
-  const nextBtn =
-    document.getElementById("scNextBtn");
-
-  const shuffleBtn =
-    document.getElementById("scShuffleBtn");
 
   let selected =
     localStorage.getItem(STORAGE_KEY)
@@ -3837,6 +3710,212 @@
 })();
 </script>
 
+
+
+<script id="scTransportController">
+(() => {
+  "use strict";
+
+  const frame =
+    document.getElementById("soundcloudFrame");
+
+  const prevBtn =
+    document.getElementById("scPrevBtn");
+
+  const shuffleBtn =
+    document.getElementById("scShuffleBtn");
+
+  const nextBtn =
+    document.getElementById("scNextBtn");
+
+  if (
+    !frame ||
+    !prevBtn ||
+    !shuffleBtn ||
+    !nextBtn ||
+    !window.SC ||
+    !SC.Widget
+  ) {
+    console.warn(
+      "SoundCloud transport controls could not initialize."
+    );
+    return;
+  }
+
+  const widget =
+    SC.Widget(frame);
+
+  const controls = [
+    prevBtn,
+    shuffleBtn,
+    nextBtn
+  ];
+
+  let ready = false;
+
+  controls.forEach(button => {
+    button.disabled = true;
+  });
+
+
+  function timerRequiresPause() {
+
+    if (
+      typeof window.getFocusTimerState
+      !== "function"
+    ) {
+      return false;
+    }
+
+    const state =
+      window.getFocusTimerState();
+
+    return (
+      state.running &&
+      state.mode === "break"
+    );
+  }
+
+
+  /*
+    Preserve the state the listener had before pressing
+    Previous / Next / Shuffle.
+
+    - Playing -> continue playing
+    - Paused -> remain paused
+    - Active Pomodoro break -> always remain paused
+  */
+  function navigate(action) {
+
+    if (!ready) {
+      return;
+    }
+
+    widget.isPaused(
+      wasPaused => {
+
+        const forcePause =
+          timerRequiresPause();
+
+        action();
+
+        setTimeout(
+          () => {
+
+            if (
+              forcePause ||
+              wasPaused
+            ) {
+
+              widget.pause();
+
+            } else {
+
+              widget.play();
+            }
+
+          },
+          250
+        );
+      }
+    );
+  }
+
+
+  prevBtn.addEventListener(
+    "click",
+    () => {
+
+      navigate(
+        () => widget.prev()
+      );
+
+    }
+  );
+
+
+  nextBtn.addEventListener(
+    "click",
+    () => {
+
+      navigate(
+        () => widget.next()
+      );
+
+    }
+  );
+
+
+  shuffleBtn.addEventListener(
+    "click",
+    () => {
+
+      if (!ready) {
+        return;
+      }
+
+      widget.getSounds(
+        sounds => {
+
+          if (
+            !Array.isArray(sounds) ||
+            sounds.length < 2
+          ) {
+            return;
+          }
+
+          widget.getCurrentSoundIndex(
+            currentIndex => {
+
+              let randomIndex;
+
+              do {
+
+                randomIndex =
+                  Math.floor(
+                    Math.random()
+                    * sounds.length
+                  );
+
+              } while (
+                randomIndex ===
+                currentIndex
+              );
+
+              navigate(
+                () => widget.skip(
+                  randomIndex
+                )
+              );
+
+            }
+          );
+
+        }
+      );
+
+    }
+  );
+
+
+  widget.bind(
+    SC.Widget.Events.READY,
+    () => {
+
+      ready = true;
+
+      controls.forEach(button => {
+        button.disabled = false;
+      });
+
+      console.log(
+        "SoundCloud transport controls ready."
+      );
+    }
+  );
+
+})();
+</script>
 
 </body>
 </html>
