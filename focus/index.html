@@ -1710,6 +1710,87 @@
       }
     }
 
+
+    /* ===== Proper dark glass theme ===== */
+
+    html[data-theme="dark"] .study-background-overlay {
+      background:
+        linear-gradient(
+          180deg,
+          rgba(5, 10, 20, .58) 0%,
+          rgba(5, 10, 20, .66) 52%,
+          rgba(5, 10, 20, .74) 100%
+        ) !important;
+    }
+
+    html[data-theme="dark"] .card {
+      background: rgba(11, 18, 32, .82) !important;
+      border-color: rgba(255, 255, 255, .10) !important;
+
+      box-shadow:
+        0 18px 45px rgba(0, 0, 0, .30),
+        inset 0 1px 0 rgba(255, 255, 255, .04);
+
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    /* Flow State Radio has its own hard-coded light background,
+       so it needs a separate dark override */
+    html[data-theme="dark"] .soundcloud-test-card {
+      background:
+        linear-gradient(
+          145deg,
+          rgba(15, 24, 42, .92),
+          rgba(8, 14, 27, .90)
+        ) !important;
+    }
+
+    html[data-theme="dark"] .soundcloud-test-card::before {
+      background: rgba(110, 168, 254, .10) !important;
+    }
+
+    html[data-theme="dark"] .soundcloud-test-card .section-label {
+      color: #aebdd5 !important;
+    }
+
+    /* Keep inner controls clearly separated from the glass cards */
+    html[data-theme="dark"] .stat,
+    html[data-theme="dark"] .preset,
+    html[data-theme="dark"] .secondary-btn,
+    html[data-theme="dark"] .station-btn,
+    html[data-theme="dark"] .sc-transport-btn {
+      background: rgba(13, 23, 41, .94) !important;
+      border-color: rgba(255, 255, 255, .10) !important;
+    }
+
+    html[data-theme="dark"] .preset.active,
+    html[data-theme="dark"] .station-btn.active,
+    html[data-theme="dark"] .sc-shuffle-btn {
+      background: rgba(110, 168, 254, .14) !important;
+      border-color: rgba(110, 168, 254, .55) !important;
+    }
+
+    /* Better readability for secondary text */
+    html[data-theme="dark"] .subtitle,
+    html[data-theme="dark"] .privacy-note,
+    html[data-theme="dark"] .music-intro,
+    html[data-theme="dark"] .footer,
+    html[data-theme="dark"] .preset small,
+    html[data-theme="dark"] .stat span {
+      color: #b8c5d9 !important;
+    }
+
+    @media (max-width: 680px) {
+      html[data-theme="dark"] .study-background-overlay {
+        background: rgba(5, 10, 20, .76) !important;
+      }
+
+      html[data-theme="dark"] .card {
+        background: rgba(10, 17, 30, .90) !important;
+      }
+    }
+
 </style>
 </head>
 
