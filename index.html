@@ -744,7 +744,7 @@ body.dark .hero-badges .venue-chip > i:first-child {
 }
 
 
-/* PMAS: balanced four-item research layout */
+/* Featured research layout */
 .highlights-grid,
 .featured-projects {
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -826,6 +826,15 @@ body.dark .hero-badges .venue-chip > i:first-child {
      aria-label="Open the PMAS project overview">
     <i class="fa-solid fa-satellite-dish" aria-hidden="true"></i>
     <span>IEEE GLOBECOM 2026</span>
+    <i class="fa-solid fa-arrow-up-right-from-square chip-arrow"
+       aria-hidden="true"></i>
+  </a>
+
+  <a class="venue-chip"
+     href="projects/marc-6tisch.html"
+     aria-label="Open the MARC-6TiSCH project overview">
+    <i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i>
+    <span>IEEE ANTS 2026</span>
     <i class="fa-solid fa-arrow-up-right-from-square chip-arrow"
        aria-hidden="true"></i>
   </a>
@@ -948,6 +957,14 @@ Prof. Wei Xiang
   <div class="highlights-grid">
     <article class="highlight-card" data-aos="fade-up">
       <span class="highlight-date">2026</span>
+      <h3>MARC-6TiSCH accepted at IEEE ANTS</h3>
+      <p>
+        Churn-bounded rescheduling control for sustainable mobile 6TiSCH
+        networks accepted for presentation at IEEE ANTS 2026.
+      </p>
+    </article>
+    <article class="highlight-card" data-aos="fade-up">
+      <span class="highlight-date">2026</span>
       <h3>PMAS accepted at IEEE GLOBECOM</h3>
       <p>
         Predictive Mobility-Aware Scheduling accepted for presentation at
@@ -1004,7 +1021,7 @@ Prof. Wei Xiang
 <section id="research">
   <h2>Featured Research</h2>
   <p class="section-intro">
-    Four peer-reviewed research contributions spanning adaptive slotframe control, topology-aware resource allocation, and predictive mobility-aware scheduling in 6TiSCH networks.
+    Five peer-reviewed research contributions spanning adaptive slotframe control, topology-aware resource allocation, and mobility-aware scheduling and rescheduling in 6TiSCH networks.
   </p>
 
   <div class="featured-projects">
@@ -1083,6 +1100,35 @@ Prof. Wei Xiang
         <a href="projects/pmas.html">Project Overview</a>
 
         <a href="https://globecom2026.ieee-globecom.org/"
+           target="_blank"
+           rel="noopener noreferrer">
+          Conference
+        </a>
+      </div>
+    </article>
+
+    <article class="featured-project-card"
+             data-aos="fade-up"
+             data-aos-delay="320">
+      <div class="project-topline">
+        <span class="project-acronym">MARC-6TiSCH</span>
+        <span class="project-badge">Accepted</span>
+      </div>
+
+      <p class="project-meta">IEEE ANTS 2026</p>
+
+      <h3>Churn-bounded mobility rescheduling</h3>
+
+      <p>
+        Regulates 6P-based schedule reconfiguration under mobility to
+        bound control churn, manage stale cells, and improve reliability
+        and latency in mobile 6TiSCH networks.
+      </p>
+
+      <div class="project-actions">
+        <a href="projects/marc-6tisch.html">Project Overview</a>
+
+        <a href="https://ants2026.ieee-ants.org/"
            target="_blank"
            rel="noopener noreferrer">
           Conference
@@ -1303,10 +1349,16 @@ Prof. Wei Xiang
       </p>
 
       <a href="projects/marc-6tisch.html"
-         class="pub-link"
+         class="pub-link">
+         Project Overview
+      </a>
+
+      <br><br>
+
+      <a href="https://ants2026.ieee-ants.org/"
          target="_blank"
          rel="noopener noreferrer">
-         Project Overview
+        IEEE ANTS 2026
       </a>
 
     </div>
