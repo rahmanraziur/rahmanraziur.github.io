@@ -57,7 +57,7 @@
     ],
     "knowsAbout": [
       "6TiSCH", "IEEE 802.15.4e TSCH", "Internet of Things", "Adaptive Scheduling",
-      "Resource Allocation", "Low-Power Wireless Networks", "Smart-City IoT Networks"
+      "Resource Allocation", "Deadline-Aware Scheduling", "Low-Power Wireless Networks", "Smart-City IoT Networks"
     ],
     "sameAs": [
       "https://scholars.latrobe.edu.au/r3rahman/about",
@@ -1004,12 +1004,13 @@ section[id] { scroll-margin-top: 80px; }
       </p>
 
       <p class="proof">
-        Five peer-reviewed papers, at
+        Six peer-reviewed papers, at
         <a href="#pub-flexiframe">IEEE GLOBECOM Workshops 2025</a>,
         <a href="#pub-tara">IEEE ANTS 2025</a>,
         <a href="#pub-ascp">IEEE ICC 2026</a>,
-        <a href="#pub-pmas">IEEE GLOBECOM 2026</a> and
-        <a href="#pub-marc">IEEE ANTS 2026</a>.
+        <a href="#pub-pmas">IEEE GLOBECOM 2026</a>,
+        <a href="#pub-marc">IEEE ANTS 2026</a> and
+        <a href="#pub-dash">IEEE DELCON 2026</a>.
       </p>
 
       <ul class="links">
@@ -1163,7 +1164,7 @@ section[id] { scroll-margin-top: 80px; }
     <h2>Publications</h2>
     <div class="content">
       <p class="lead">
-        Five peer-reviewed contributions, grouped by the three questions they answer.
+        Six peer-reviewed contributions, grouped by the four questions they answer.
         Each has a project page with the method, results and figures.
       </p>
 
@@ -1277,6 +1278,32 @@ section[id] { scroll-margin-top: 80px; }
             <p class="actions">
               <a href="projects/marc-6tisch.html">Project overview</a>
               <a href="https://ants2026.ieee-ants.org/" target="_blank" rel="noopener noreferrer">Conference site</a>
+            </p>
+          </div>
+        </article>
+      </div>
+
+      <div class="group">
+        <h3>Deadline-aware scheduling</h3>
+        <p class="gdesc">
+          Some traffic has to arrive before a deadline, not just eventually. Extra cells
+          only help if they become usable in time, so the scheduler must weigh how fast
+          each mechanism activates against how much capacity it adds.
+        </p>
+
+        <article class="pub" id="pub-dash">
+          <div class="year">2026</div>
+          <div>
+            <h4>DASH: Deadline-Aware Scheduling with Hybrid Resource Adaptation in 6TiSCH Networks</h4>
+            <p class="authors"><b>Raziur Rahman</b>, Nikumani Choudhury, Wei Xiang</p>
+            <p class="venue">IEEE DELCON 2026. Accepted, to appear.</p>
+            <p class="summary">
+              An activation-aware planner that chooses, link by link, between baseline
+              service, 6P-negotiated cells and controller-managed cells, and picks the
+              lowest-cost plan that still delivers a deadline-critical burst on time.
+            </p>
+            <p class="actions">
+              <a href="projects/dash.html">Project overview</a>
             </p>
           </div>
         </article>

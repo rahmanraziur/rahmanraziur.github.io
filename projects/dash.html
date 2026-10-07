@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>DASH | Deadline-Aware Scheduling with Hybrid Resource Adaptation | Raziur Rahman</title>
+
+<meta name="description"
+content="DASH is a deadline-aware scheduling framework for 6TiSCH networks that selects baseline, 6P-negotiated, controller-managed, or mixed cell augmentation by modelling setup delay and cell activation on a common ASN timeline.">
+
+<meta name="robots" content="index, follow">
+
+<link rel="canonical"
+      href="https://rahmanraziur.github.io/projects/dash.html">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap"
+      rel="stylesheet">
+
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+
+<body>
+
+<nav>
+  <a href="../index.html">Home</a>
+  <a href="../index.html#publications">Publications</a>
+  <a href="../index.html#contact">Contact</a>
+</nav>
+
+<div class="project-hero">
+
+  <p class="project-subtitle">
+    IEEE DELCON 2026
+  </p>
+
+  <h1>
+    DASH: Deadline-Aware Scheduling with Hybrid Resource Adaptation in 6TiSCH Networks
+  </h1>
+
+  <p class="project-authors">
+    Raziur Rahman • Nikumani Choudhury • Wei Xiang
+  </p>
+
+  <div class="project-tags">
+    <span>6TiSCH</span>
+    <span>TSCH</span>
+    <span>Deadline-Aware Scheduling</span>
+    <span>Hybrid Scheduling</span>
+    <span>6P</span>
+    <span>Resource Adaptation</span>
+  </div>
+
+</div>
+
+<section>
+
+  <div class="card">
+
+    <h2>Overview</h2>
+
+    <p>
+      DASH is a deadline-aware framework for temporarily augmenting the schedule
+      of a 6TiSCH network when a deadline-critical demand, such as a control
+      transaction or a short traffic burst, cannot be served in time by the
+      installed schedule alone.
+    </p>
+
+    <p>
+      Autonomous cells, 6P-negotiated cells, and controller-managed cells differ in
+      activation delay, signalling cost, and coordination scope, so the mechanism
+      with the most eventual capacity is not always the one that helps before the
+      deadline. DASH builds baseline-only, 6P-only, managed-only, and mixed
+      link-level plans, models setup outcomes, cell activation, and packet
+      forwarding on a common Absolute Slot Number (ASN) timeline, and selects the
+      lowest-cost plan that meets the timely-reliability target.
+    </p>
+
+  </div>
+
+  <div class="card">
+
+    <h2>Key Highlights</h2>
+
+    <ul>
+      <li>
+        Formulates activation-aware hybrid schedule augmentation for finite
+        deadline-critical demands
+      </li>
+
+      <li>
+        Combines baseline service, 6P-negotiated soft cells, and controller-managed
+        hard cells on different links of the same route
+      </li>
+
+      <li>
+        Removes temporally useless cells whose occurrences cannot form a causal
+        forwarding path before the deadline
+      </li>
+
+      <li>
+        Uses bounded beam search to avoid exhaustive enumeration of resource plans
+      </li>
+
+      <li>
+        ASN-ordered finite-state evaluator for joint timely reliability and expected
+        adaptation cost
+      </li>
+
+      <li>
+        Evaluated in Contiki-NG/Cooja: higher delivery, lower delay, radio duty
+        cycle, and scheduling-control overhead than MSF and HPS
+      </li>
+    </ul>
+
+  </div>
+
+  <div class="card pub-box">
+
+    <h2>Publication</h2>
+
+    <p>
+      <b>
+        DASH: Deadline-Aware Scheduling with Hybrid Resource Adaptation in 6TiSCH Networks
+      </b>
+    </p>
+
+    <p>
+      Raziur Rahman, Nikumani Choudhury, Wei Xiang
+    </p>
+
+    <p>
+      Accepted for presentation at IEEE DELCON 2026
+    </p>
+
+    <p>
+      <em>
+        The IEEE Xplore link will be added after the conference paper is published.
+      </em>
+    </p>
+
+  </div>
+
+</section>
+
+<footer>
+  © 2026 Raziur Rahman
+</footer>
+
+</body>
+</html>
