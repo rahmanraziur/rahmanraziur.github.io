@@ -15,6 +15,13 @@ My research is on adaptive scheduling and resource allocation for 6TiSCH-based s
 | **MARC-6TiSCH**: Churn-Bounded Rescheduling Control for Sustainable Mobile 6TiSCH Networks | IEEE ANTS 2026 (to appear) | [marc-6tisch.html](https://rahmanraziur.github.io/projects/marc-6tisch.html) |
 | **DASH**: Deadline-Aware Scheduling with Hybrid Resource Adaptation in 6TiSCH Networks | IEEE DELCON 2026 (to appear) | [dash.html](https://rahmanraziur.github.io/projects/dash.html) |
 
+### Co-authored papers
+
+| Paper | Venue | Link |
+|---|---|---|
+| Delay-Bounded Adaptive MAC for IEEE 802.15.4e DSME Networks: Enhancing Resilience under Bursty and Dynamic IoT Traffic | IEEE ANTS 2025 | [IEEE Xplore](https://doi.org/10.1109/ANTS66931.2025.11429936) |
+| A Physics-Informed Digital Twin for Asphalt Pavement Health Monitoring in IoT Environments | IEEE ANTS 2025 (6DCIoT Workshop) | [IEEE Xplore](https://doi.org/10.1109/ANTS66931.2025.11430118) |
+
 Full author lists and links are on the website and on [Google Scholar](https://scholar.google.com/citations?user=FUXiS7UAAAAJ&hl=en).
 
 ## What's on the site
